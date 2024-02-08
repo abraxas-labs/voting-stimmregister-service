@@ -1,0 +1,18 @@
+{
+  "Name": "Save SgManager UpdateExisting WithoutCriteria",
+  "Description": "description",
+  "MunicipalityId": 3203,
+  "TenantId": null,
+  "LatestVersion": null,
+  "FilterVersions": [],
+  "FilterCriterias": [],
+  "AuditInfo": {
+    "CreatedById": "default-user-id",
+    "CreatedByName": "MockDataSeeder",
+    "CreatedAt": "2020-01-10T13:12:10.2Z",
+    "ModifiedById": "default-user-id",
+    "ModifiedByName": "default username",
+    "ModifiedAt": "2020-01-10T13:12:10.2Z"
+  },
+  "Id": "c8c056c5-620e-44e8-a9c1-d9f42535e077"
+}

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(EfCoreVersion)" Condition="'$(Configuration)' != 'Release'" PrivateAssets="All" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
+    <PackageReference Include="Voting.Lib.Database" Version="$(VotingLibVersion)" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Voting.Stimmregister.Domain\Voting.Stimmregister.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <SonarQubeSetting Include="sonar.cpd.exclusions">
+      <Value>Data/Entities/*Entity.cs</Value>
+    </SonarQubeSetting>
+  </ItemGroup>
+
+</Project>

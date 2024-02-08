@@ -1,0 +1,41 @@
+{
+  "Name": "Save SgManager CreateNew WithCriteria",
+  "Description": "description",
+  "MunicipalityId": 3203,
+  "TenantId": "SC-KANTON-SG",
+  "LatestVersion": null,
+  "FilterVersions": [],
+  "FilterCriterias": [
+    {
+      "ReferenceId": 8,
+      "FilterValue": "Kurt",
+      "FilterType": 1,
+      "FilterOperator": 1,
+      "SortIndex": 0,
+      "FilterId": null,
+      "FilterVersionId": null,
+      "LastSearchParameterId": null,
+      "Filter": null,
+      "FilterVersion": null,
+      "LastSearchParameter": null,
+      "AuditInfo": {
+        "CreatedById": "default-user-id",
+        "CreatedByName": "default username",
+        "CreatedAt": "2020-01-10T13:12:10.2Z",
+        "ModifiedById": null,
+        "ModifiedByName": null,
+        "ModifiedAt": null
+      },
+      "Id": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "AuditInfo": {
+    "CreatedById": "default-user-id",
+    "CreatedByName": "default username",
+    "CreatedAt": "2020-01-10T13:12:10.2Z",
+    "ModifiedById": null,
+    "ModifiedByName": null,
+    "ModifiedAt": null
+  },
+  "Id": "00000000-0000-0000-0000-000000000000"
+}

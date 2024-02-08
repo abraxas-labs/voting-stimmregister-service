@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Voting.Lib.Cryptography" Version="$(VotingLibVersion)" />
+    <PackageReference Include="Voting.Lib.Cryptography.Mocks" Version="$(VotingLibVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Voting.Stimmregister.Abstractions.Adapter\Voting.Stimmregister.Abstractions.Adapter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
+</Project>

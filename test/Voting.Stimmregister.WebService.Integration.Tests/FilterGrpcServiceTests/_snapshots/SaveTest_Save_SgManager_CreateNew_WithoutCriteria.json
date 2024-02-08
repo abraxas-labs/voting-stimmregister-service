@@ -1,0 +1,18 @@
+{
+  "Name": "Save SgManager CreateNew WithoutCriteria",
+  "Description": "description",
+  "MunicipalityId": 3203,
+  "TenantId": "SC-KANTON-SG",
+  "LatestVersion": null,
+  "FilterVersions": [],
+  "FilterCriterias": [],
+  "AuditInfo": {
+    "CreatedById": "default-user-id",
+    "CreatedByName": "default username",
+    "CreatedAt": "2020-01-10T13:12:10.2Z",
+    "ModifiedById": null,
+    "ModifiedByName": null,
+    "ModifiedAt": null
+  },
+  "Id": "00000000-0000-0000-0000-000000000000"
+}

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="prometheus-net" Version="8.1.1" />
+    <PackageReference Include="Voting.Lib.Iam" Version="$(VotingLibVersion)" />
+    <PackageReference Include="Voting.Lib.Scheduler" Version="$(VotingLibVersion)" />
+    <PackageReference Include="Voting.Lib.VotingExports" Version="$(VotingLibVersion)" />
+    <PackageReference Include="Voting.Lib.Database" Version="$(VotingLibVersion)" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Files\Utils\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Files\Utils\BFSCountryList.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Utils\LogantoCountryList.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+{
+  "Ahvn13": "7568731784109",
+  "BfsCanton": 17,
+  "BfsMunicipality": 1,
+  "EVoterFlag": true,
+  "ContextId": null,
+  "CreatedBy": "default-user-id",
+  "CreatedAt": "2020-01-10T13:12:10.2Z",
+  "ModifiedAt": null,
+  "ModifiedBy": null,
+  "Audits": [
+    {
+      "BfsCanton": 17,
+      "BfsMunicipality": 1,
+      "EVoterFlag": true,
+      "ContextId": null,
+      "StatusMessage": "lorem ipsum",
+      "StatusCode": 100,
+      "EVoterCreatedAt": "0001-01-01T00:00:00",
+      "EVoterCreatedBy": "",
+      "EVoterModifiedAt": null,
+      "EVoterModifiedBy": null,
+      "CreatedAt": "2020-01-10T13:12:10.2Z",
+      "CreatedBy": "default-user-id"
+    }
+  ]
+}

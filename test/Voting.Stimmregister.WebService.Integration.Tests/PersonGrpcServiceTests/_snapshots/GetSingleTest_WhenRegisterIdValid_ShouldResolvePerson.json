@@ -1,0 +1,123 @@
+{
+  "Latest": {
+    "Id": "5457877c-b57b-46d8-926c-9d8b6d13705b",
+    "Vn": 0,
+    "DomainOfInfluenceId": "7354",
+    "SourceSystemId": "04999781365",
+    "OfficialName": "Lavigne",
+    "FirstName": "Natalie",
+    "Sex": 3,
+    "DateOfBirth": {
+      "Seconds": 946512000,
+      "Nanos": 0
+    },
+    "DateOfBirthAdjusted": false,
+    "OriginalName": "",
+    "AllianceName": "Meyerhans",
+    "AliasName": "",
+    "OtherName": "",
+    "CallName": "Nati",
+    "LanguageOfCorrespondence": "",
+    "Religion": "Unknown",
+    "RestrictedVotingAndElectionRightFederation": false,
+    "Country": "CH",
+    "EVoting": false,
+    "MunicipalityName": "St. Gallen",
+    "MunicipalityId": 3203,
+    "TypeOfResidence": "0",
+    "ResidencePermit": "",
+    "ResidencePermitValidFrom": null,
+    "ResidencePermitValidTill": null,
+    "ResidenceEntryDate": null,
+    "ContactAddressExtensionLine1": "",
+    "ContactAddressExtensionLine2": "",
+    "ContactAddressStreet": "Achslenstr.",
+    "ContactAddressHouseNumber": "3",
+    "ContactAddressPostOfficeBoxText": "",
+    "ContactAddressLine1": "",
+    "ContactAddressLine2": "",
+    "ContactAddressLine3": "",
+    "ContactAddressLine4": "",
+    "ContactAddressLine5": "",
+    "ContactAddressLine6": "",
+    "ContactAddressLine7": "",
+    "ContactAddressTown": "St. Gallen",
+    "ContactAddressLocality": "",
+    "ContactAddressZipCode": "9016",
+    "ResidenceAddressExtensionLine1": "",
+    "ResidenceAddressExtensionLine2": "",
+    "ResidenceAddressStreet": "",
+    "ResidenceAddressHouseNumber": "",
+    "ResidenceAddressPostOfficeBoxText": "",
+    "ResidenceAddressTown": "",
+    "ResidenceCountry": "",
+    "ResidenceAddressZipCode": "",
+    "MoveInArrivalDate": null,
+    "MoveInMunicipalityName": "",
+    "MoveInCantonAbbreviation": "",
+    "MoveInComesFrom": "",
+    "MoveInCountryNameShort": "",
+    "MoveInUnknown": false,
+    "IsVotingAllowed": true,
+    "Actuality": true,
+    "ActualityDate": {
+      "Seconds": 1578661930,
+      "Nanos": 200000000
+    },
+    "HasValidationErrors": false,
+    "ValidationErrors": {},
+    "IsBirthDateValidForVotingRights": true,
+    "ResidenceCantonAbbreviation": "SG",
+    "CountryNameShort": "Schweiz",
+    "RegisterId": "d13ea9e8-ce71-4d8f-9121-05bba13033a8",
+    "IsNationalityValidForVotingRights": true,
+    "IsSwissAbroad": false,
+    "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
+    "SourceSystemName": 1,
+    "ContactAddressPostOfficeBoxNumber": null
+  },
+  "LatestDomainOfInfluences": [
+    {
+      "Name": "Kanton St.Gallen eidgenössisch",
+      "Identifier": "1",
+      "Canton": 1,
+      "DomainOfInfluenceType": 1
+    },
+    {
+      "Name": "Kanton St.Gallen kantonal",
+      "Identifier": "17",
+      "Canton": 1,
+      "DomainOfInfluenceType": 2
+    },
+    {
+      "Name": "Gerichtskreis St.Gallen",
+      "Identifier": "",
+      "Canton": 1,
+      "DomainOfInfluenceType": 3
+    },
+    {
+      "Name": "Wahlkreis St.Gallen",
+      "Identifier": "",
+      "Canton": 1,
+      "DomainOfInfluenceType": 3
+    },
+    {
+      "Name": "St.Gallen",
+      "Identifier": "3203",
+      "Canton": 1,
+      "DomainOfInfluenceType": 4
+    },
+    {
+      "Name": "Osten",
+      "Identifier": "O",
+      "Canton": 1,
+      "DomainOfInfluenceType": 5
+    },
+    {
+      "Name": "Teufen",
+      "Identifier": "",
+      "Canton": 17,
+      "DomainOfInfluenceType": 8
+    }
+  ]
+}

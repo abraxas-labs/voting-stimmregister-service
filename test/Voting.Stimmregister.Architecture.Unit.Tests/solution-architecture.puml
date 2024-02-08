@@ -1,0 +1,75 @@
+@startuml solution-architecture
+
+[WebService] <<Voting.Stimmregister.WebService.*>>
+
+[Core] <<Voting.Stimmregister.Core.*>>
+[Import-Innosolv] <<Voting.Stimmregister.Import.Innosolv.*>>
+[Import-Loganto] <<Voting.Stimmregister.Import.Loganto.*>>
+
+[Adapter-Data] <<Voting.Stimmregister.Adapter.Data.*>>
+[Adapter-Ech] <<Voting.Stimmregister.Adapter.Ech.*>>
+[Adapter-EVotingKewr] <<Voting.Stimmregister.Adapter.EVoting.Kewr.*>>
+[Adapter-EVotingLoganto] <<Voting.Stimmregister.Adapter.EVoting.Loganto.*>>
+[Adapter-Hsm] <<Voting.Stimmregister.Adapter.Hsm.*>>
+[Adapter-VotingBasis] <<Voting.Stimmregister.Adapter.VotingBasis.*>>
+[Adapter-VotingIam] <<Voting.Stimmregister.Adapter.VotingIam.*>>
+
+[Abstractions-Adapter] <<Voting.Stimmregister.Abstractions.Adapter.*>>
+[Abstractions-Core] <<Voting.Stimmregister.Abstractions.Core.*>>
+[Abstractions-Import] <<Voting.Stimmregister.Abstractions.Import.*>>
+
+[Domain] <<Voting.Stimmregister.Domain.*>>
+
+[WebService] --> [Core]
+[WebService] --> [Import-Innosolv]
+[WebService] --> [Import-Loganto]
+[WebService] --> [Adapter-Data]
+[WebService] --> [Adapter-Ech]
+[WebService] --> [Adapter-EVotingKewr]
+[WebService] --> [Adapter-EVotingLoganto]
+[WebService] --> [Adapter-Hsm]
+[WebService] --> [Adapter-VotingBasis]
+[WebService] --> [Adapter-VotingIam]
+[WebService] --> [Abstractions-Adapter]
+[WebService] --> [Abstractions-Core]
+[WebService] --> [Domain]
+
+[Core] --> [Abstractions-Adapter]
+[Core] --> [Abstractions-Core]
+[Core] --> [Abstractions-Import]
+[Core] --> [Domain]
+
+[Import-Innosolv] --> [Abstractions-Adapter]
+[Import-Innosolv] --> [Abstractions-Import]
+[Import-Innosolv] --> [Domain]
+
+[Import-Loganto] --> [Abstractions-Adapter]
+[Import-Loganto] --> [Abstractions-Import]
+[Import-Loganto] --> [Domain]
+
+[Adapter-Data] --> [Abstractions-Adapter]
+[Adapter-Data] --> [Domain]
+
+[Adapter-Ech] --> [Abstractions-Adapter]
+[Adapter-Ech] --> [Domain]
+
+[Adapter-EVotingKewr] --> [Abstractions-Adapter]
+[Adapter-EVotingKewr] --> [Domain]
+[Adapter-EVotingLoganto] --> [Abstractions-Adapter]
+[Adapter-EVotingLoganto] --> [Domain]
+
+[Adapter-Hsm] --> [Abstractions-Adapter]
+[Adapter-Hsm] --> [Domain]
+
+[Adapter-VotingBasis] --> [Abstractions-Adapter]
+[Adapter-VotingBasis] --> [Domain]
+
+[Adapter-VotingIam] --> [Abstractions-Adapter]
+[Adapter-VotingIam] --> [Domain]
+
+[Abstractions-Adapter] --> [Domain]
+[Abstractions-Core] --> [Domain]
+[Abstractions-Import] --> [Abstractions-Adapter]
+[Abstractions-Import] --> [Domain]
+
+@enduml

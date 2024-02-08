@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Abstractions.Core\Voting.Stimmregister.Abstractions.Core.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Core\Voting.Stimmregister.Core.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Domain\Voting.Stimmregister.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\Supporting\Signing\" />
+  </ItemGroup>
+  
+</Project>

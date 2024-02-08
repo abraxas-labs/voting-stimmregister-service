@@ -1,0 +1,147 @@
+<voterDelivery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+  <deliveryHeader>
+    <senderId xmlns="http://www.ech.ch/xmlns/eCH-0058/5">ABX-VOTING</senderId>
+    <messageId xmlns="http://www.ech.ch/xmlns/eCH-0058/5">mock-id</messageId>
+    <messageType xmlns="http://www.ech.ch/xmlns/eCH-0058/5">1710967</messageType>
+    <sendingApplication xmlns="http://www.ech.ch/xmlns/eCH-0058/5">
+      <manufacturer>Abraxas Informatik AG</manufacturer>
+      <product>Voting.Stimmregister</product>
+      <productVersion>0.0.0.1</productVersion>
+    </sendingApplication>
+    <messageDate xmlns="http://www.ech.ch/xmlns/eCH-0058/5">2020-01-10T13:12:10.2Z</messageDate>
+    <action xmlns="http://www.ech.ch/xmlns/eCH-0058/5">1</action>
+    <testDeliveryFlag xmlns="http://www.ech.ch/xmlns/eCH-0058/5">true</testDeliveryFlag>
+  </deliveryHeader>
+  <voterList>
+    <reportingAuthority>
+      <cantonalRegister>
+        <registerIdentification>SG</registerIdentification>
+        <cantonAbbreviation>SG</cantonAbbreviation>
+        <registerName>Stehendes Stimmregister</registerName>
+      </cantonalRegister>
+    </reportingAuthority>
+    <numberOfVoters>1</numberOfVoters>
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+      <person>
+        <swiss>
+          <swissDomesticPerson>
+            <personIdentification>
+              <localPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC.EW</personIdCategory>
+                <personId>04999781365</personId>
+              </localPersonId>
+              <otherPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC</personIdCategory>
+                <personId>d13ea9e8-ce71-4d8f-9121-05bba13033a8</personId>
+              </otherPersonId>
+              <otherPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC.REV</personIdCategory>
+                <personId>5457877c-b57b-46d8-926c-9d8b6d13705b</personId>
+              </otherPersonId>
+              <officialName xmlns="http://www.ech.ch/xmlns/eCH-0044/4">Lavigne-Meyerhans</officialName>
+              <firstName xmlns="http://www.ech.ch/xmlns/eCH-0044/4">Nati</firstName>
+              <sex xmlns="http://www.ech.ch/xmlns/eCH-0044/4">3</sex>
+              <dateOfBirth xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <yearMonthDay>1999-12-30</yearMonthDay>
+              </dateOfBirth>
+            </personIdentification>
+            <languageOfCorrespondance>de</languageOfCorrespondance>
+            <placeOfOrigin>
+              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Teufen</originName>
+              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">AR</canton>
+            </placeOfOrigin>
+          </swissDomesticPerson>
+          <municipality>
+            <municipalityId xmlns="http://www.ech.ch/xmlns/eCH-0007/6">3203</municipalityId>
+            <municipalityName xmlns="http://www.ech.ch/xmlns/eCH-0007/6">St. Gallen</municipalityName>
+          </municipality>
+        </swiss>
+      </person>
+      <dataLock>0</dataLock>
+      <electoralAddress>
+        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <firstName>Nati</firstName>
+          <lastName>Lavigne-Meyerhans</lastName>
+        </person>
+        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <street>Achslenstr.</street>
+          <houseNumber>3</houseNumber>
+          <dwellingNumber>4</dwellingNumber>
+          <town>St. Gallen</town>
+          <swissZipCode>9016</swissZipCode>
+          <country>
+            <countryIdISO2>CH</countryIdISO2>
+            <countryNameShort>Schweiz</countryNameShort>
+          </country>
+        </addressInformation>
+      </electoralAddress>
+      <deliveryAddress>
+        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <firstName>Nati</firstName>
+          <lastName>Lavigne-Meyerhans</lastName>
+        </person>
+        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <street>Achslenstr.</street>
+          <houseNumber>3</houseNumber>
+          <dwellingNumber>4</dwellingNumber>
+          <town>St. Gallen</town>
+          <swissZipCode>9016</swissZipCode>
+          <country>
+            <countryIdISO2>CH</countryIdISO2>
+            <countryNameShort>Schweiz</countryNameShort>
+          </country>
+        </addressInformation>
+      </deliveryAddress>
+      <isEvoter>false</isEvoter>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">CH</domainOfInfluenceType>
+          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">1</localDomainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Kanton St.Gallen eidgenössisch</domainOfInfluenceName>
+        </domainOfInfluence>
+      </domainOfInfluenceInfo>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">CT</domainOfInfluenceType>
+          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">17</localDomainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Kanton St.Gallen kantonal</domainOfInfluenceName>
+        </domainOfInfluence>
+      </domainOfInfluenceInfo>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">BZ</domainOfInfluenceType>
+          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Gerichtskreis St.Gallen</domainOfInfluenceName>
+        </domainOfInfluence>
+      </domainOfInfluenceInfo>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">BZ</domainOfInfluenceType>
+          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Wahlkreis St.Gallen</domainOfInfluenceName>
+        </domainOfInfluence>
+      </domainOfInfluenceInfo>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">MU</domainOfInfluenceType>
+          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">3203</localDomainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">St.Gallen</domainOfInfluenceName>
+        </domainOfInfluence>
+      </domainOfInfluenceInfo>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">SK</domainOfInfluenceType>
+          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">O</localDomainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Osten</domainOfInfluenceName>
+        </domainOfInfluence>
+      </domainOfInfluenceInfo>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
+          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Teufen</domainOfInfluenceName>
+        </domainOfInfluence>
+      </domainOfInfluenceInfo>
+    </voter>
+  </voterList>
+</voterDelivery>

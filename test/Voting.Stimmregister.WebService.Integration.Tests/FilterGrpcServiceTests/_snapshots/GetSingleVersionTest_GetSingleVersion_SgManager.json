@@ -1,0 +1,35 @@
+{
+  "Filter": {
+    "Id": "c8c056c5-620e-44e8-a9c1-d9f42535e077",
+    "Name": "Filter_3203",
+    "Description": "",
+    "LatestVersion": null,
+    "Criteria": [],
+    "Versions": []
+  },
+  "FilterVersion": {
+    "Id": "3333d8dd-057c-4449-9630-12dacc12ba05",
+    "Name": "Other Filter Version 2",
+    "AuditInfo": {
+      "CreatedById": "default-user-id",
+      "CreatedByName": "MockDataSeeder",
+      "CreatedAt": {
+        "Seconds": 1578489130,
+        "Nanos": 200000000
+      },
+      "ModifiedById": "default-user-id",
+      "ModifiedByName": "MockDataSeeder",
+      "ModifiedAt": {
+        "Seconds": 1578661930,
+        "Nanos": 200000000
+      }
+    },
+    "Deadline": {
+      "Seconds": 1578614400,
+      "Nanos": 0
+    },
+    "Count": 30,
+    "CountOfInvalidPersons": 0,
+    "Criteria": []
+  }
+}

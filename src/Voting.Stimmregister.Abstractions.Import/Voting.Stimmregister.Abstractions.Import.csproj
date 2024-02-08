@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Voting.Stimmregister.Abstractions.Adapter\Voting.Stimmregister.Abstractions.Adapter.csproj" />
+    <ProjectReference Include="..\Voting.Stimmregister.Domain\Voting.Stimmregister.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.2.1" />
+  </ItemGroup>
+</Project>

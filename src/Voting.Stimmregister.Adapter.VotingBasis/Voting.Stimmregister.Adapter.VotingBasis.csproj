@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.2.1" />
+    <PackageReference Include="NCrontab.Signed" Version="3.3.2" />
+    <PackageReference Include="Grpc.AspNetCore" Version="$(GrpcAspNetCoreVersion)" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="$(GrpcAspNetCoreVersion)" />
+    <PackageReference Include="Grpc.AspNetCore.Web" Version="$(GrpcAspNetCoreVersion)" />
+    <PackageReference Include="Grpc.Net.Client.Web" Version="$(GrpcAspNetCoreVersion)" />
+    <PackageReference Include="Voting.Lib.Grpc" Version="$(VotingLibVersion)" />
+    <PackageReference Include="Voting.Basis.Service.Proto" Version="$(VotingBasisServiceProtoVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Voting.Stimmregister.Abstractions.Adapter\Voting.Stimmregister.Abstractions.Adapter.csproj" />
+  </ItemGroup>
+</Project>

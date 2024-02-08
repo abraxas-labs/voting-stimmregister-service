@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>;CS1591;SA0001</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TngTech.ArchUnitNET.xUnit" Version="0.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Abstractions.Adapter\Voting.Stimmregister.Abstractions.Adapter.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Abstractions.Core\Voting.Stimmregister.Abstractions.Core.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Adapter.Data\Voting.Stimmregister.Adapter.Data.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Import.Loganto\Voting.Stimmregister.Import.Loganto.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Adapter.VotingIam\Voting.Stimmregister.Adapter.VotingIam.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Import.Innosolv\Voting.Stimmregister.Import.Innosolv.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Core\Voting.Stimmregister.Core.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Domain\Voting.Stimmregister.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.WebService\Voting.Stimmregister.WebService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="solution-architecture.puml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Voting.Lib.Ech.Ech0045_4_0" Version="$(VotingLibVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Voting.Stimmregister.Abstractions.Adapter\Voting.Stimmregister.Abstractions.Adapter.csproj" />
+    <ProjectReference Include="..\Voting.Stimmregister.Domain\Voting.Stimmregister.Domain.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,67 @@
+{
+  "FilterId": "c8c056c5-620e-44e8-a9c1-d9f42535e077",
+  "Name": "CreateVersion SgManager CreateNew",
+  "Deadline": "2012-04-12T00:00:00Z",
+  "Count": 2,
+  "AuditInfo": {
+    "CreatedById": "default-user-id",
+    "CreatedByName": "default username",
+    "CreatedAt": "2020-01-10T13:12:10.2Z",
+    "ModifiedById": null,
+    "ModifiedByName": null,
+    "ModifiedAt": null
+  },
+  "CountOfInvalidPersons": 0,
+  "FilterVersionPersons": [],
+  "FilterCriterias": [
+    {
+      "ReferenceId": 8,
+      "FilterValue": "Natalie",
+      "FilterType": 1,
+      "FilterOperator": 1,
+      "SortIndex": 0,
+      "FilterId": null,
+      "FilterVersionId": null,
+      "LastSearchParameterId": null,
+      "Filter": null,
+      "FilterVersion": null,
+      "LastSearchParameter": null,
+      "AuditInfo": {
+        "CreatedById": "default-user-id",
+        "CreatedByName": "MockDataSeeder",
+        "CreatedAt": "2020-01-10T13:12:10.2Z",
+        "ModifiedById": "default-user-id",
+        "ModifiedByName": "MockDataSeeder",
+        "ModifiedAt": "2020-01-10T13:12:10.2Z"
+      },
+      "Id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ReferenceId": 2,
+      "FilterValue": "3203",
+      "FilterType": 4,
+      "FilterOperator": 2,
+      "SortIndex": 0,
+      "FilterId": null,
+      "FilterVersionId": null,
+      "LastSearchParameterId": null,
+      "Filter": null,
+      "FilterVersion": null,
+      "LastSearchParameter": null,
+      "AuditInfo": {
+        "CreatedById": "default-user-id",
+        "CreatedByName": "MockDataSeeder",
+        "CreatedAt": "2020-01-10T13:12:10.2Z",
+        "ModifiedById": "default-user-id",
+        "ModifiedByName": "MockDataSeeder",
+        "ModifiedAt": "2020-01-10T13:12:10.2Z"
+      },
+      "Id": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "Filter": null,
+  "SignatureVersion": 1,
+  "SignatureKeyId": "VOSR_ECDSA_PUBLIC_KEY_PRE",
+  "Signature": "",
+  "Id": "00000000-0000-0000-0000-000000000000"
+}

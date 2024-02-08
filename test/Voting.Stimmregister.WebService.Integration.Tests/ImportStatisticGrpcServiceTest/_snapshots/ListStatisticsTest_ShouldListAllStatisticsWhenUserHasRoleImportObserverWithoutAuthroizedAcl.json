@@ -1,0 +1,41 @@
+{
+  "ImportStatistics": [
+    {
+      "Id": "79425de7-a2d2-47e4-b34f-b4b0f9b5a762",
+      "SourceSystem": 1,
+      "ImportRecordsCountTotal": 10,
+      "DatasetsCountCreated": 7,
+      "DatasetsCountUpdated": 2,
+      "DatasetsCountDeleted": 1,
+      "AuditInfo": {
+        "CreatedById": "default-user-id",
+        "CreatedByName": "MockDataSeeder",
+        "CreatedAt": {
+          "Seconds": 1578661930,
+          "Nanos": 200000000
+        },
+        "ModifiedById": "default-user-id",
+        "ModifiedByName": "MockDataSeeder",
+        "ModifiedAt": {
+          "Seconds": 1578661930,
+          "Nanos": 200000000
+        }
+      },
+      "FinishedDate": {
+        "Seconds": 1578661930,
+        "Nanos": 200000000
+      },
+      "TotalElapsedMilliseconds": "0",
+      "MunicipalityId": 3203,
+      "MunicipalityName": "",
+      "ProcessingErrors": "",
+      "HasValidationErrors": false,
+      "EntitiesWithValidationErrors": [],
+      "RecordNumbersWithValidationErrors": [],
+      "RecordValidationErrors": [],
+      "ImportStatus": 5,
+      "ImportType": 1
+    }
+  ],
+  "TotalCount": 1
+}
