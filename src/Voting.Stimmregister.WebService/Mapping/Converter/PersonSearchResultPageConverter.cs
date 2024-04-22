@@ -8,10 +8,10 @@ using Voting.Stimmregister.Domain.Models.Utils;
 
 namespace Voting.Stimmregister.WebService.Mapping.Converter;
 
-public class PersonSearchResultPageConverter<TSource, TTarget> : PageConverter<TSource, TTarget>, ITypeConverter<PersonSearchResultPage<TSource>, PersonSearchResultPage<TTarget>>
+public class PersonSearchResultPageConverter<TSource, TTarget> : PageConverter<TSource, TTarget>, ITypeConverter<PersonSearchResultPageModel<TSource>, PersonSearchResultPageModel<TTarget>>
     where TSource : PersonEntity
     where TTarget : PersonEntity
 {
-    public PersonSearchResultPage<TTarget> Convert(PersonSearchResultPage<TSource> source, PersonSearchResultPage<TTarget> destination, ResolutionContext context)
-        => new PersonSearchResultPage<TTarget>(context.Mapper.Map<Page<TTarget>>(source), source.InvalidPersonsCount);
+    public PersonSearchResultPageModel<TTarget> Convert(PersonSearchResultPageModel<TSource> source, PersonSearchResultPageModel<TTarget> destination, ResolutionContext context)
+        => new PersonSearchResultPageModel<TTarget>(context.Mapper.Map<Page<TTarget>>(source), source.InvalidPersonsCount);
 }

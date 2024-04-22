@@ -26,6 +26,7 @@ public static class DatabaseUtil
     /// </summary>
     /// <param name="db">The database context.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "EF1002:Risk of vulnerability to SQL injection.", Justification = "Referencing hardened inerpolated string parameters.")]
     public static async Task Truncate(DataContext db)
     {
         await EnsureMigrated(db);

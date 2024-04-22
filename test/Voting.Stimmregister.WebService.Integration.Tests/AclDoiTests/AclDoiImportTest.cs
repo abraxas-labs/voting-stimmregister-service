@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Voting.Lib.Testing.Utils;
@@ -133,6 +132,24 @@ public class AclDoiImportTest : BaseAclDoiTest
         doi.TenantId = $"{doi.TenantId} (updated)";
         doi.Type = DomainOfInfluenceType.Mu;
         doi.Canton = DomainOfInfluenceCanton.Tg;
+
+        await ImportAcl(doi);
+
+        var result = await RunScoped<IAccessControlListDoiRepository, IEnumerable<AccessControlListDoiEntity>>(async r =>
+            await r.Query().OrderBy(a => a.Id).ToListAsync());
+
+        result.MatchSnapshot(e => e.ImportStatisticId!);
+    }
+
+    [Fact]
+    public async Task ShouldImportAclsAndUpdateAddressInformation()
+    {
+        // Full import
+        await ImportAcl(AclDoiVotingBasisMockedData.SG_Kanton_StGallen_L1_CH);
+
+        // Update information
+        var doi = AclDoiVotingBasisMockedData.SG_Kanton_StGallen_L1_CH;
+        doi.ReturnAddress.AddressLine1 = "Staatskanzlei St. Gallen (updated)";
 
         await ImportAcl(doi);
 

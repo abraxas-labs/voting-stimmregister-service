@@ -56,6 +56,15 @@ public static class FilterVersionPersonMockedData
             FilterVersionId = FilterVersionMockedData.SomeFilterVersion_MunicipalityIdOther2.Id,
         };
 
+    public static FilterVersionPersonEntity SomeFilterVersionAuslandschweizer1_9170_SG
+        => new()
+        {
+            Id = Guid.Parse("15AD8926-D700-4B18-A402-BD24562A8ED3"),
+            PersonId = PersonMockedData.Person_9170_Auslandschweizer_1.Id,
+            AuditInfo = MockedAuditInfo.Get(),
+            FilterVersionId = FilterVersionMockedData.SomeFilterVersion_MunicipalityIdOther2.Id,
+        };
+
     public static FilterVersionPersonEntity SomeFilterVersionPerson_WithFilterVersionPersons
         => new()
         {
@@ -73,6 +82,7 @@ public static class FilterVersionPersonMockedData
             yield return SomeFilterVersionPerson_MunicipalityIdOther;
             yield return SomeFilterVersionPerson1_3203_SG;
             yield return SomeFilterVersionPerson3_3203_SG;
+            yield return SomeFilterVersionAuslandschweizer1_9170_SG;
             yield return SomeFilterVersionPerson_WithFilterVersionPersons;
         }
     }
@@ -96,9 +106,6 @@ public static class FilterVersionPersonMockedData
                 FirstName = "Max",
                 OfficialName = "Muster",
                 Sex = SexType.Male,
-                SignatureVersion = 1,
-                SignatureKeyId = "SomeSignatureKeyId",
-                Signature = new byte[] { 1, 0, 1 },
             });
             db.FilterVersionPersons.AddRange(All);
             await db.SaveChangesAsync();

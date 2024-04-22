@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Voting.Lib.Testing.Mocks;
 using Voting.Stimmregister.Abstractions.Adapter.Data.DataContexts;
-using Voting.Stimmregister.Domain.Cryptography;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 
@@ -23,7 +22,7 @@ namespace Voting.Stimmregister.Test.Utils.MockData;
 ///  > 2 persons for the municipality 'Jona' with municipality id 3340.
 /// </para>
 /// If data is adjusted, the persons signature and <see cref="BfsIntegrityMockedData"/>
-/// need adjustments too <seealso cref="ApplySignatures"/>.
+/// need adjustments too <seealso cref="ApplyDoisToPersons"/>.
 /// </summary>
 public static class PersonMockedData
 {
@@ -41,33 +40,6 @@ public static class PersonMockedData
 
     public const short CantonBfsStGallen = 17;
 
-    private static readonly IReadOnlyDictionary<Guid, string> _signatures = new Dictionary<Guid, string>
-    {
-        [Guid.Parse("5457877c-b57b-46d8-926c-9d8b6d13705b")] = "AKP1S8O6b5iXvBbT/wfSmEPcV78MNqjc8tYH9wpIzAuBtv2P7JtWfPUAC+GlHMoQjFGCL5FRndQNnnChg7hMes5kAI+RwWPb6tX8d4RLOJyaftE7ga9P1OclaqZU5cSXvhmeSv+uHgzrLMvARkImPjSzrTF+2B6Wx0FLw2sqhPgQbTiY",
-        [Guid.Parse("9f6a783f-8dd0-4fca-b339-397a3173d2a0")] = "ATeHpuwihA+i+YfJqX7Xbq9OQ2IWk2nxTLL9Qi3ts+nxc3dhwsvMd6perjj2QmA74NX9c1EpE78E1gwCejGNJu3UAe+dNGCDktr6aBsrVVwH1zAstUDBaEj/bn6p7fmk0te3GBiKGst+0cy5ljnsDhrCU+i8iHwVB278HZNz2NK9H50G",
-        [Guid.Parse("079d124d-7085-4967-ae47-747aa1eca6b1")] = "Aeo49kF1JazpYXmwoN6iCZ/10vVR3CBjYK15Bk5biHXRUqCUbZDK+l1mjyiTiR6oGjE6s0ciOIUQEILyfJUlrxJVAFJT/W0McH/nqv0cpnsBfHUoXt10p3MPOqTbU0Q1B8DS/7PDfOTJaRHJWw6P0o578b2DAkFcyMfVN67YD5tp4jIx",
-        [Guid.Parse("55c578fc-66df-42eb-9adf-157f884eb450")] = "AMazhfUZjjWBW4qwRtwvmPVyrg32V9LsJgC5C4ayS//SCb54pjkqmGdCSZGIe1Z35uKfyCrbZWwlLuC59TfyHVWRAMNfvEdne8jFVeeee3rs8ek1foMoCqWc71+yxbb2GlW8F6kTafMzbzyiUVAXpMULbgY/V0SM7Vvnr5krvd4KgIHG",
-        [Guid.Parse("33cf78fc-66df-42eb-9adf-157f884eb360")] = "ATOeD87BdRmWT9wiobU6ClD1w4o8HerJbQZwhtqMVDmLbvlkcAxnvkXgD9URerjqsUWVcL90w07GXEagTUouKj6UAe6XabM8I4RHqCsA5dAzfm2qUJW3ozIYkLVewuVWeUPoJ03u8Cz9gNOj/eatGwRzbJYwBaT4inU2YlkwACYqCUPT",
-        [Guid.Parse("1bcf78fc-66df-42eb-9adf-157f884eb360")] = "AGsFgxeMGvID1fLmPDjBEuX1t+akkiPaHFQedYsINzsgLXKjheOFnjqsdLRTmRss1VmEshkfdRbZBKe2rnitQQqJAMn231ph6e8qcZQCQPbQGoDKCGpnVpv5eZLQLFL/UyTjXNsIbPm2povvvYlwLkYM5SHBYnT8+A0jKai1VZHW++FK",
-        [Guid.Parse("bf3fd8ad-b603-44a8-a778-e994e1df4d61")] = "AfEeygqc9OR01ltz6CO+Lbpa09xP1pSMivlH09qY8es90f8Fqv+zRXpFd4gPX7yIgVg3VIcjJrdV7kFyWxifsnMEAb9DiGdQEX+QgbS9oND1KN+ToRV2b1P7V1AGjZaXAszBuX8Uu+7rO7MyykjHILfLJ+VTtWNFUGtXGA28RWatLp/V",
-        [Guid.Parse("589a05e8-9548-4f64-96b2-8cce5fb55c2d")] = "AWD9THbTJ0HkJw76gLp/3CL25VDuOC4lIBevLhjUdo9crlS22M3ptZpprZYUyu58I1l9+IWZWesdakRDVe6MCwF1AeWrhU1BdLf+4IKvn+G34ZdcZnQf6LQhJLMT+XXR0QDQMgQiLX/o4yRzNTLpJvxgKpBzXE++SU5RyeEe2nQHnh/i",
-        [Guid.Parse("26372c45-11d2-49fd-9c04-b55d167bebd2")] = "AcjL0jYYn2QpOX3xUiOh1gVGpRy63Jk0Oi1zZuwWWeudHhQ2rZK4qgG2jCM2GLoOtgqjMoSBCDYaNwAArjyGfw7dAbSTgLwEpp2IRfh/U24RVy2PQOYAjqHXxo6d+gfkH1boPHyKRkxTA1S0wYRfn6DL27HWgmJYCOtJD5GZXR7AgIza",
-        [Guid.Parse("93735eae-92a2-47e3-846d-fc50350b1c16")] = "AfNyoaz381wpDO6F2wjgadD8qvAUEtgf1wf4djtSJ2nU5R3cJEp99Wp1KbFAYgioXjSO3B4MOc4P2Tcso+fjmKmWAfKjNYy/FBUGPp7MIysWM+zPRBi0C7Gt/NqhidbOHYRIBCUy5ou0jJbAyuxL4TTiDWgaG6Wj3xJd/ej/fnzmorJL",
-        [Guid.Parse("bf3fd8ad-b603-44a2-a778-e994eedfdd61")] = "AXzrmIkqo3p8SjiKKBhyDB7mCbVeTcIP+758MiV9hCSAbwlhdMVt4SzWx7rZfd4u80wYA+6bV1Y7NFs/2u3tgeefAdW5XOBtHTZEpZ5Z3ZW3wr2L4UPUJlacf2eNsx9ukV6KxJ2C+x0EesCfBuCc+JxiYEyAOZX5v/nC73+oY5dVxWvS",
-        [Guid.Parse("12359c10-3767-4045-b310-d0d12580e08e")] = "AdmD/UOuZLBdT+H3IWWmhIK4a9VRUUU9M8L83NiQKMBhrGV7aMsjA4KLsA2+rINm3mR30hoVQASTyO2rX8PBP9pVAA+gGLYrxnIjjgXBISvEmt7gf47yJPrlJUaeQ92tjJ+CjWEfn40m3yJutxIowGoCYLUoqAH2kOx8JDta9T72Ke5K",
-        [Guid.Parse("118f61a6-7e85-49d4-ba10-237dcb6fa221")] = "AXgGc+vK5zYbEd4i6M4SpNaWhnzYYXYEaWe2Tho4mLDgL5SS22ef9A2WqdEhpOnFz4EfBRJd+xRVt/hKe9omLQVMAMwdla+d5XGywe+zhK2zrOC5y0597OwJAh32kKzck368GsHHJwMvwuhXE0gSEBefGBQ4TcTjZ31i5KVK0xnyfO2I",
-        [Guid.Parse("67de7b86-71a8-43d3-b5e4-a17fa008d41a")] = "Ab6ZKK2F0bsANo+NtpQAbvv6z2oIDtr1dt24+NFsPNA9tOX3R/uTqrnVi4NDvxwSTW9V5rsHQEuH4gNp/lQtqj0/ARvJe/Ol03yeW7jp4Z9KkvEaLyM5RcIRQk8QfuMaNnyK8Siqou1EocvffU9IMOK6SYaa941brd1+B8lo+UcbMOuy",
-        [Guid.Parse("37595c68-3535-419d-8f18-6e2f6a7d9ede")] = "AXAODJqewe4L2+Iod098mnXxR1uwqFWhhqHlqSac8uK0nbfM2Wk9dp0KpAvt0bIzuiNU+tbcVbsXSuVrJe0wEQ2pAJNXHf4H1CYFBtsAQq7agTj9YAQZoeBB9jiT3G3p256DrVLe31+z+t7LKsr5dUnoPnpF6FKh2SWJP0HnIp5AmUbV",
-        [Guid.Parse("56a7200f-e210-443e-9895-a601a5e9ec47")] = "AMeHwoSbZiKSoQMyVdOwIUgS4qFLhO9TPq4a3Y8fE8WXGhtibGl1mrLOBTNjPsVxCecpTE0necWNEkuD3pae3fx/AAVAeutWUNbt5T7sguzmb4QLoO6BSGTb4UPHkfaFb83Cyl0iTDCpNqb6hlJdUOimkv0x1mIfBMjlHniLn7Qg23Wm",
-        [Guid.Parse("b180a66c-7d19-423b-9060-3f81bedeca02")] = "AGvnso/P8JZ8i1P+U0VfZz1DEVFS6aQYza2bdtHUkRYqJtBfeUxW3q3pjEu/M4GV0x5Jr5uHZhitA9t2+tWYeyySAAvlkeuP62r6EhOepIvr3md9MwiOgdKtuAYuqSChi04nw1+JSXsgEFQLX5ichdZPbPXu1GSlVclqZS9Aa0F2B/wr",
-        [Guid.Parse("b8727d7d-ae58-4c64-8deb-4b6bb20bd92a")] = "ATLhKmU+JiQTsvIvCtstsDjIHyHLrAiewlTg/u0kOQFKeB2I1HHTEiCwxNT+FhHHOR2+wdXswr/DzkzQAhGpiPAwAKhtVmcdDf7LxubaJF/jxX+oTqfDEZl+lUjWzh1cNRCmal/P8UqlzMd8pVOyOLtJCHeKgFxdGvR8iZ7+EcxVS/ri",
-        [Guid.Parse("ef3fd8ad-b603-44a8-a7cc-e994e1df4222")] = "AUleYzR0//qRkjzoEodN/CFQ+eGbKF7uhwUdJl0CyFb+emEGtkmEj6j60sHNUJV1CNaeDIb7NV2DwH5EExa+/rG/ASPL+E0SZKzVxhUvY4B+QYp6GcJ13no0iHmuyjLPB9ucoIPK7Z/Nz99cI9wA4crbFJoGgPtRDmFZUrXfV+/WgdSl",
-        [Guid.Parse("e44fd8ad-b603-44a8-a7cc-e994e1df4222")] = "ACfNQjFF/n2DwP+y1iZqqW81srpIm5TBAHpsBBxW4G5klnfWOoj4F9FXtJP3k+qS6yAH8tAKTRvAPZd2J3CjcAChAdYm8WuOd3Wszs84/z1/2AawROqVmSVWKDfKeS1W/HpNLQ1f1ftrHWzvuELxpu3IRp01V/q0qJqlnc8/jSIuspD7",
-        [Guid.Parse("555fd8ad-b603-44a8-a7cc-e994e1df4222")] = "ATXm+7QgEgqoRDogqUPVnI8E6iZ1yHTspR8tMZU8JA0daE9J02kKS5TNNvJ3f42sGMrkpjyaOcAM40vJ6d2tnydaARKwhTjMitLZnYF0+b0LliEFwwwBbrI6viy6pnHM76tDE4Mfki4K4adbMv++NFPRaMwX5k/ojK0/g4V7/rsb5Mws",
-        [Guid.Parse("e44f11ad-b603-44a8-a7cc-e994e1df4222")] = "AP68fseQWFU/eUY0dinI4/awc1XYZ15PPkGKb8raHtfosjNpESqcI2mR7t/Ze7upNVTjS2An9fR03AsofT+mljoKAccvjFeQHnt84oToriEfxAY/da6EffSP6G0M7vOiseVSX6jhf5joq24A1Z/4/rP+61az1g3AARBFD7oQP9cOguIn",
-        [Guid.Parse("ff4fd8ad-b603-44a8-a7cc-e994e1df4211")] = "AGAvYKOOBZFEtvtjxdznEcYtQwXV+IRh8rar9rQRxCuPHApnHrwhdcXyfJdpqrP/hGfsWIYzcvJG6cfl6TYunGS6AVtWkZiRsmUz24ouqlYO8sG0EcNQduwR4ZY8XUV4qO24tvMhaETzzX33EsA3ESe+peNOsx8RBwjFXcuEx82p+Iru",
-    };
-
     public static PersonEntity Person_3203_StGallen_1
         => new()
         {
@@ -80,7 +52,7 @@ public static class PersonMockedData
             DomainOfInfluenceId = 7354,
             FirstName = "Natalie",
             OfficialName = "Lavigne",
-            AllianceName = "Meyerhans",
+            AllianceName = "Lavigne-Meyerhans",
             CallName = "Nati",
             DateOfBirth = new DateOnly(1999, 12, 30),
             ContactAddressStreet = "Achslenstr.",
@@ -89,6 +61,7 @@ public static class PersonMockedData
             ContactAddressZipCode = "9016",
             ContactAddressTown = "St. Gallen",
             ContactCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
@@ -96,8 +69,10 @@ public static class PersonMockedData
             IsLatest = true,
             DeletedDate = null,
             ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
+            VersionCount = 1,
         };
 
     public static PersonEntity Person_3203_StGallen_OldVersion_1
@@ -117,15 +92,18 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "3",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = false,
             DeletedDate = null,
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
+            VersionCount = 0,
         };
 
     public static PersonEntity Person_3203_StGallen_2
@@ -145,13 +123,15 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "31",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
             DeletedDate = null,
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SendVotingCardsToDomainOfInfluenceReturnAddress = true,
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
@@ -176,12 +156,14 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "12",
             ResidenceAddressZipCode = "9002",
             ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
             DeletedDate = null,
             ResidencePermit = "02", // Aufenthalter
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -205,6 +187,8 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "12",
             ResidenceAddressZipCode = "9002",
             ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             RestrictedVotingAndElectionRightFederation = false,
             ResidencePermitValidFrom = new DateOnly(2000, 1, 1),
             ResidencePermitValidTill = new DateOnly(2001, 1, 1),
@@ -212,7 +196,7 @@ public static class PersonMockedData
             IsLatest = true,
             DeletedDate = null,
             ResidencePermit = "02", // Aufenthalter
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -237,13 +221,15 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "12",
             ResidenceAddressZipCode = "9002",
             ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             ResidencePermitValidFrom = MockedClock.NowDateOnly.AddDays(-20),
             ResidencePermitValidTill = MockedClock.NowDateOnly.AddDays(20),
             IsValid = true,
             IsLatest = true,
             DeletedDate = null,
             ResidencePermit = "02", // Aufenthalter
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -267,6 +253,8 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "13",
             ResidenceAddressZipCode = "9000",
             ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             RestrictedVotingAndElectionRightFederation = false,
             Country = "CH",
             CountryNameShort = "Schweiz",
@@ -277,8 +265,8 @@ public static class PersonMockedData
             Sex = SexType.Female,
             TypeOfResidence = ResidenceType.HWS,
             ValidationErrors = "{\"FirstName\":[\"Validation errors message 1\", \"Validation errors message 2\", \"Validation errors message 3\"], \"OfficialName\":[\"The length must be greater than or equal to 6. You have entered 4 characters.\"]}",
-            ResidenceCantonAbbreviation = "SG",
             ContactCantonAbbreviation = "TG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -325,7 +313,7 @@ public static class PersonMockedData
             DomainOfInfluenceId = 652348,
             FirstName = "Katharina",
             OfficialName = "Jackson",
-            AllianceName = "Mercury",
+            AllianceName = "Jackson-Mercury",
             AliasName = "Catherina",
             CallName = "Cathy",
             OriginalName = "Katherina",
@@ -337,7 +325,7 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "27",
             ResidenceAddressZipCode = "9015",
             ResidenceAddressTown = "Winkeln SG",
-            ResidenceCountry = "Schweiz",
+            ResidenceCountry = "CH",
             ResidenceCantonAbbreviation = "SG",
             ResidenceAddressDwellingNumber = "27",
             ResidenceAddressExtensionLine1 = "Madame",
@@ -376,12 +364,46 @@ public static class PersonMockedData
             ContactAddressZipCode = "9015",
             ContactAddressPostOfficeBoxText = "Postfach",
             ContactAddressPostOfficeBoxNumber = 1,
+            ContactAddressCountryIdIso2 = "CH",
             MoveInUnknown = false,
             MoveInMunicipalityName = "Basel",
             MoveInArrivalDate = new DateOnly(2001, 2, 22),
             MoveInComesFrom = "Basel",
             MoveInCantonAbbreviation = "BS",
             MoveInCountryNameShort = "Schweiz",
+            CantonBfs = CantonBfsStGallen,
+        };
+
+    public static PersonEntity Person_3203_StGallen_Duplicate_Of_Goldach_1
+        => new()
+        {
+            Id = Guid.Parse("73682f27-6ff2-449d-923a-e912e18c8e41"),
+            RegisterId = Guid.Parse("c7e3855c-7357-4b3b-9520-3498f1b82800"),
+            SourceSystemId = "04977989856",
+            CreatedDate = MockedClock.GetDate().AddDays(-1),
+            ModifiedDate = MockedClock.GetDate().AddDays(-1),
+            Vn = 7563149003309,
+            MunicipalityId = MunicipalityIdStGallen,
+            MunicipalityName = MunicipalityNameStGallen,
+            DomainOfInfluenceId = 54468,
+            FirstName = "Mikael",
+            OfficialName = "Ross",
+            DateOfBirth = new DateOnly(1959, 02, 01),
+            ResidenceAddressStreet = "Bahnhofstrasse",
+            ResidenceAddressHouseNumber = "20a",
+            ResidenceAddressZipCode = "9000",
+            ResidenceAddressTown = "St.Gallen",
+            ResidenceCantonAbbreviation = string.Empty,
+            ResidenceCountry = "CH",
+            Country = "CH",
+            CountryNameShort = "Schweiz",
+            RestrictedVotingAndElectionRightFederation = false,
+            IsValid = true,
+            IsLatest = true,
+            DeletedDate = null,
+            ContactCantonAbbreviation = "ZH",
+            ContactAddressCountryIdIso2 = "CH",
+            SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
 
@@ -392,6 +414,8 @@ public static class PersonMockedData
             RegisterId = Guid.Parse("129813d0-8077-4f5e-995a-7ca7e0080a5b"),
             SourceSystemId = "04977989856",
             CreatedDate = MockedClock.GetDate(),
+            ModifiedDate = MockedClock.GetDate(),
+            Vn = 7563149003309,
             MunicipalityId = MunicipalityIdGoldach,
             MunicipalityName = MunicipalityNameGoldach,
             DomainOfInfluenceId = 858,
@@ -402,14 +426,16 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "6",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "Goldach",
+            ResidenceCantonAbbreviation = string.Empty,
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
             DeletedDate = null,
-            ResidenceCantonAbbreviation = string.Empty,
             ContactCantonAbbreviation = "ZH",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -433,6 +459,9 @@ public static class PersonMockedData
             ContactAddressHouseNumber = "1",
             ContactAddressZipCode = "5555",
             ContactAddressTown = "Wien",
+            ContactAddressCountryIdIso2 = "CH",
+            ContactCantonAbbreviation = "ZH",
+            ResidenceCantonAbbreviation = string.Empty,
             ResidenceCountry = "AT",
             IsSwissAbroad = true,
             EVoting = true,
@@ -442,8 +471,6 @@ public static class PersonMockedData
             IsValid = true,
             IsLatest = true,
             DeletedDate = null,
-            ResidenceCantonAbbreviation = string.Empty,
-            ContactCantonAbbreviation = "ZH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -465,6 +492,8 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "12",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "Goldach",
+            ResidenceCantonAbbreviation = string.Empty,
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
@@ -472,8 +501,8 @@ public static class PersonMockedData
             IsLatest = true,
             DeletedDate = null,
             EVoting = true,
-            ResidenceCantonAbbreviation = string.Empty,
             ContactCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -495,14 +524,16 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "23",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "Goldach",
+            ResidenceCantonAbbreviation = "AG",
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
             DeletedDate = null,
-            ResidenceCantonAbbreviation = "AG",
             ContactCantonAbbreviation = string.Empty,
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -524,13 +555,15 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "9",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "Goldach",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
             DeletedDate = null,
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -552,13 +585,15 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "5",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "Goldach",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
             DeletedDate = null,
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -580,6 +615,7 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "5",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "Goldach",
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             IsValid = true,
@@ -588,12 +624,13 @@ public static class PersonMockedData
             Sex = SexType.Male,
             TypeOfResidence = ResidenceType.HWS,
             ContactAddressZipCode = "9016",
+            ContactAddressCountryIdIso2 = "CH",
             MoveInArrivalDate = new DateOnly(2021, 1, 1),
             RestrictedVotingAndElectionRightFederation = false,
             ResidenceCantonAbbreviation = "SG",
             PersonDois = new HashSet<PersonDoiEntity>()
             {
-                new PersonDoiEntity { Identifier = "SG", Canton = "SG", Name = "Goldach", DomainOfInfluenceType = DomainOfInfluenceType.Og },
+                new() { Identifier = "SG", Canton = "SG", Name = "Goldach", DomainOfInfluenceType = DomainOfInfluenceType.Og },
             },
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
@@ -616,6 +653,8 @@ public static class PersonMockedData
            ResidenceAddressHouseNumber = "3",
            ResidenceAddressZipCode = "9016",
            ResidenceAddressTown = "St. Gallen",
+           ResidenceCantonAbbreviation = "SG",
+           ResidenceCountry = "CH",
            Country = "CH",
            CountryNameShort = "Schweiz",
            RestrictedVotingAndElectionRightFederation = false,
@@ -623,10 +662,8 @@ public static class PersonMockedData
            IsLatest = true,
            IsDeleted = true,
            DeletedDate = MockedClock.GetDate(),
-           ResidenceCantonAbbreviation = "SG",
+           ContactAddressCountryIdIso2 = "CH",
            SourceSystemName = ImportSourceSystem.Loganto,
-           SignatureVersion = 1,
-           SignatureKeyId = "VOSR_ECDSA_PUBLIC_KEY_PRE",
            CantonBfs = CantonBfsStGallen,
        };
 
@@ -647,12 +684,14 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "3",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             IsValid = true,
             IsLatest = true,
             RestrictedVotingAndElectionRightFederation = false,
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -673,13 +712,15 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "7b",
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
             Country = "CH",
             CountryNameShort = "Schweiz",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = false,
             IsLatest = true,
             DeletedDate = null,
-            ResidenceCantonAbbreviation = "SG",
+            ContactAddressCountryIdIso2 = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
@@ -707,6 +748,8 @@ public static class PersonMockedData
             CountryNameShort = "Schweiz",
             Sex = SexType.Female,
             DateOfBirthAdjusted = true,
+            ContactAddressExtensionLine1 = "Appartement 2",
+            ContactAddressExtensionLine2 = "Stockwerk 10",
             ContactAddressStreet = "Petrusstr.",
             ContactAddressHouseNumber = "3",
             ContactAddressZipCode = "90316",
@@ -718,6 +761,7 @@ public static class PersonMockedData
             ContactAddressLine5 = string.Empty,
             ContactAddressLine6 = "Berlin ",
             ContactAddressLine7 = "EH3 9QN ",
+            ContactAddressCountryIdIso2 = "DE",
             Religion = ReligionType.Unknown,
             MoveInArrivalDate = DateOnly.Parse("2020-01-10"),
             MoveInComesFrom = "Wartau",
@@ -725,6 +769,7 @@ public static class PersonMockedData
             ResidenceCantonAbbreviation = "SG",
             SourceSystemName = ImportSourceSystem.Cobra,
             CantonBfs = CantonBfsStGallen,
+            EVoting = true,
         };
 
     public static PersonEntity Person_9170_Auslandschweizer_2
@@ -745,7 +790,7 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "5",
             ResidenceAddressZipCode = "9031",
             ResidenceAddressTown = "London",
-            ResidenceCountry = "UK",
+            ResidenceCountry = "GB",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
@@ -764,6 +809,7 @@ public static class PersonMockedData
             ContactAddressLine5 = string.Empty,
             ContactAddressLine6 = "Edinburgh ",
             ContactAddressLine7 = "EH3 9QN ",
+            ContactAddressCountryIdIso2 = "GB",
             Religion = ReligionType.Unknown,
             MoveInArrivalDate = DateOnly.Parse("2019-01-10"),
             MoveInComesFrom = "Wittenbach",
@@ -771,6 +817,7 @@ public static class PersonMockedData
             ResidenceCantonAbbreviation = "SG",
             SourceSystemName = ImportSourceSystem.Cobra,
             CantonBfs = CantonBfsStGallen,
+            EVoting = true,
         };
 
     public static PersonEntity Person_9170_Auslaender
@@ -791,7 +838,7 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "5",
             ResidenceAddressZipCode = "9017",
             ResidenceAddressTown = "London",
-            ResidenceCountry = "UK",
+            ResidenceCountry = "GB",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
@@ -810,6 +857,7 @@ public static class PersonMockedData
             ContactAddressLine5 = string.Empty,
             ContactAddressLine6 = "Edinburgh ",
             ContactAddressLine7 = "EH3 9QN ",
+            ContactAddressCountryIdIso2 = "GB",
             Religion = ReligionType.Unknown,
             MoveInArrivalDate = DateOnly.Parse("2021-01-10"),
             MoveInComesFrom = "Wittenbach",
@@ -837,7 +885,8 @@ public static class PersonMockedData
             ResidenceAddressHouseNumber = "5",
             ResidenceAddressZipCode = "3317",
             ResidenceAddressTown = "London",
-            ResidenceCountry = "UK",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "GB",
             RestrictedVotingAndElectionRightFederation = false,
             IsValid = true,
             IsLatest = true,
@@ -856,13 +905,14 @@ public static class PersonMockedData
             ContactAddressLine5 = string.Empty,
             ContactAddressLine6 = "Edinburgh ",
             ContactAddressLine7 = "EH3 9QN ",
+            ContactAddressCountryIdIso2 = "GB",
             Religion = ReligionType.Unknown,
             MoveInArrivalDate = DateOnly.Parse("2021-01-10"),
             MoveInComesFrom = "Wittenbach",
             TypeOfResidence = ResidenceType.HWS,
-            ResidenceCantonAbbreviation = "SG",
             SourceSystemName = ImportSourceSystem.Cobra,
             CantonBfs = CantonBfsStGallen,
+            EVoting = true,
         };
 
     public static PersonEntity Person_9170_RestrictedVoting =>
@@ -892,8 +942,9 @@ public static class PersonMockedData
             DateOfBirthAdjusted = true,
             ContactAddressStreet = "Champs Elisee",
             ContactAddressHouseNumber = "5",
-            ContactAddressZipCode = "9017",
+            ContactAddressZipCode = "4643",
             ContactAddressTown = "Paris",
+            ContactAddressCountryIdIso2 = "FR",
             Religion = ReligionType.Catholic,
             MoveInArrivalDate = DateOnly.Parse("2021-01-10"),
             MoveInComesFrom = "St. Gallen",
@@ -902,6 +953,7 @@ public static class PersonMockedData
             ResidenceCantonAbbreviation = "SG",
             SourceSystemName = ImportSourceSystem.Cobra,
             CantonBfs = CantonBfsStGallen,
+            EVoting = true,
         };
 
     public static IEnumerable<PersonEntity> All
@@ -920,6 +972,7 @@ public static class PersonMockedData
             yield return Person_3203_StGallen_5;
             yield return Person_3203_StGallen_Under18;
             yield return Person_3203_StGallen_Invalid;
+            yield return Person_3203_StGallen_Duplicate_Of_Goldach_1;
             yield return Person_3213_Goldach_1;
             yield return Person_3213_Goldach_2;
             yield return Person_3213_Goldach_eVoter;
@@ -946,55 +999,20 @@ public static class PersonMockedData
             var db = sp.GetRequiredService<IDataContext>();
 
             var all = All.ToList();
-            ApplySignatures(sp, all);
+            ApplyDoisToPersons(all);
 
             db.Persons.AddRange(all);
             await db.SaveChangesAsync();
         });
     }
 
-    private static void ApplySignatures(IServiceProvider sp, IReadOnlyCollection<PersonEntity> allPersons)
+    private static void ApplyDoisToPersons(IReadOnlyCollection<PersonEntity> allPersons)
     {
-        // apply stored signatures
-        foreach (var person in allPersons)
-        {
-            if (!_signatures.TryGetValue(person.Id, out var signatureB64))
-            {
-                continue;
-            }
-
-            person.Signature = Convert.FromBase64String(signatureB64);
-            person.SignatureVersion = 1;
-            person.SignatureKeyId = "VOSR_ECDSA_PUBLIC_KEY_PRE";
-        }
-
-        // assign dois
         var personDois = PersonDoiMockedData.All.ToList();
         var doisPerPerson = personDois.GroupBy(x => x.PersonId).ToDictionary(x => x.Key, x => x.ToList());
         foreach (var person in allPersons)
         {
             person.PersonDois = doisPerPerson.GetValueOrDefault(person.Id) ?? new List<PersonDoiEntity>();
-        }
-
-        var signer = sp.GetRequiredService<ICreateSignatureService>();
-        var signatureVerifier = sp.GetRequiredService<IVerifySigningService>();
-
-        // sign persons with missing signatures
-        var personsToSign = allPersons.Where(x => x.Signature.Length == 0).ToList();
-        signer.BulkSignPersons(personsToSign);
-
-        // all persons should have a valid signature
-        // otherwise the mock data is not valid!
-        // If a person or dependent data is added/modified,
-        // delete its signature from the mock data,
-        // copy the exception dictionary initializer text
-        // and update the Signatures dictionary.
-        signatureVerifier.EnsurePersonSignaturesValid(allPersons);
-
-        if (personsToSign.Count > 0)
-        {
-            var missingSignatures = string.Join(Environment.NewLine, personsToSign.Select(p => $"[Guid.Parse(\"{p.Id}\")] = \"{Convert.ToBase64String(p.Signature)}\","));
-            throw new InvalidOperationException("Not all persons have a signature, add these missing signatures: " + Environment.NewLine + missingSignatures);
         }
     }
 }

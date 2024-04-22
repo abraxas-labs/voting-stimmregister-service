@@ -6,7 +6,9 @@
       "Description": "",
       "LatestVersion": null,
       "Criteria": [],
-      "Versions": []
+      "Versions": [],
+      "TenantName": "",
+      "TenantId": ""
     },
     {
       "Id": "a287456a-9007-418f-9eea-72f943119396",
@@ -14,7 +16,9 @@
       "Description": "",
       "LatestVersion": null,
       "Criteria": [],
-      "Versions": []
+      "Versions": [],
+      "TenantName": "",
+      "TenantId": ""
     },
     {
       "Id": "c8c056c5-620e-44e8-a9c1-d9f42535e077",
@@ -46,7 +50,9 @@
         "Criteria": []
       },
       "Criteria": [],
-      "Versions": []
+      "Versions": [],
+      "TenantName": "",
+      "TenantId": ""
     }
   ]
 }

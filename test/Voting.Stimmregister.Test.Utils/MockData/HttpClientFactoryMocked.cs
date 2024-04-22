@@ -131,7 +131,7 @@ public class HttpClientFactoryMocked : IHttpClientFactory
             new PersonModel
             {
                 ResidentNr = 1,
-                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsAllowedForEVoting,
+                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsStGallen,
                 Ahvn13 = string.Empty,
                 Nationality = "Schweiz",
                 NonVoting = false,
@@ -145,7 +145,7 @@ public class HttpClientFactoryMocked : IHttpClientFactory
             new PersonModel
             {
                 ResidentNr = 1,
-                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsAllowedForEVoting,
+                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsStGallen,
                 Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
                 Nationality = "Schweiz",
                 NonVoting = true,
@@ -165,7 +165,7 @@ public class HttpClientFactoryMocked : IHttpClientFactory
             new PersonModel
             {
                 ResidentNr = 1,
-                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsAllowedForEVoting,
+                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsStGallen,
                 Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
                 Nationality = "Schweiz",
                 NonVoting = false,
@@ -185,7 +185,7 @@ public class HttpClientFactoryMocked : IHttpClientFactory
             new PersonModel
             {
                 ResidentNr = 1,
-                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsAllowedForEVoting,
+                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsStGallen,
                 Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
                 Nationality = "Österreich",
                 NonVoting = false,
@@ -205,7 +205,7 @@ public class HttpClientFactoryMocked : IHttpClientFactory
             new PersonModel
             {
                 ResidentNr = 1,
-                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsAllowedForEVoting,
+                LocalCommunityBfs = EVotingBfsMunicipalityMockedData.BfsStGallen,
                 Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
                 Nationality = "Schweiz",
                 NonVoting = false,

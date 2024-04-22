@@ -9,9 +9,9 @@ namespace Voting.Stimmregister.Domain.Models;
 public class FilterVersionEntity : BaseEntityWithSignature, IAuditedEntity
 {
     /// <summary>
-    /// Gets or sets the filter id.
+    /// Gets or sets the audit info of this entity.
     /// </summary>
-    public Guid FilterId { get; set; }
+    public AuditInfo AuditInfo { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the name of the filter version.
@@ -29,11 +29,6 @@ public class FilterVersionEntity : BaseEntityWithSignature, IAuditedEntity
     public int Count { get; set; }
 
     /// <summary>
-    /// Gets or sets the audit info of this entity.
-    /// </summary>
-    public AuditInfo AuditInfo { get; set; } = new();
-
-    /// <summary>
     /// Gets or sets the count of invalid persons assigned to this filter version.
     /// </summary>
     public int CountOfInvalidPersons { get; set; }
@@ -41,6 +36,11 @@ public class FilterVersionEntity : BaseEntityWithSignature, IAuditedEntity
     public HashSet<FilterVersionPersonEntity> FilterVersionPersons { get; set; } = new();
 
     public HashSet<FilterCriteriaEntity> FilterCriterias { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the filter id.
+    /// </summary>
+    public Guid FilterId { get; set; }
 
     public FilterEntity? Filter { get; set; }
 }

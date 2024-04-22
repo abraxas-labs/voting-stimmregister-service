@@ -1,0 +1,34 @@
+{
+  "MunicipalityRegistrationStatistics": [
+    {
+      "MunicipalityId": 3213,
+      "MunicipalityName": "Goldach",
+      "RegistrationStatistic": {
+        "EvoterRegistrationCount": 0,
+        "EvoterDeregistrationCount": 0,
+        "EvoterTotalCount": 0,
+        "VoterTotalCount": 9000,
+        "EvoterShare": 0.0
+      }
+    },
+    {
+      "MunicipalityId": 3203,
+      "MunicipalityName": "St. Gallen",
+      "RegistrationStatistic": {
+        "EvoterRegistrationCount": 20000,
+        "EvoterDeregistrationCount": 200,
+        "EvoterTotalCount": 18000,
+        "VoterTotalCount": 90000,
+        "EvoterShare": 20.0
+      }
+    }
+  ],
+  "TotalRegistrationStatistic": {
+    "EvoterRegistrationCount": 20000,
+    "EvoterDeregistrationCount": 200,
+    "EvoterTotalCount": 18000,
+    "VoterTotalCount": 99000,
+    "EvoterShare": 18.181818
+  },
+  "IsTopLevelAuthority": true
+}

@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
@@ -55,10 +56,21 @@ public class DeleteTest : BaseWriteableDbGrpcTest<FilterService.FilterServiceCli
     }
 
     [Fact]
-    public async Task Delete_SgReader_DeleteExisting_ShouldFail()
+    public async Task Delete_RoleUnauthorized_DeleteExisting_ShouldPermissionDenied()
     {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+            Roles.Reader,
+        };
+
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
         await Delete_Test(
-            SgReaderClient,
+            client,
             FilterMockedData.SomeFilter_MunicipalityIdOther2.Id,
             expectThrows: true,
             expectedStatusCode: StatusCode.PermissionDenied);

@@ -42,6 +42,8 @@ public class PermissionService : IPermissionService
 
     public string TenantId => _auth.Tenant.Id;
 
+    public string TenantName => _auth.Tenant.Name;
+
     public IReadOnlyCollection<string> BfsAccessControlList { get; private set; } = Array.Empty<string>();
 
     /// <inheritdoc/>

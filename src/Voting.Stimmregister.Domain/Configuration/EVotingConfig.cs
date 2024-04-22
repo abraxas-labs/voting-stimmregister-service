@@ -22,4 +22,9 @@ public class EVotingConfig
     public Dictionary<string, int> LogantoOeidToOrgUnitMapping { get; set; } = new();
 
     public bool EnableKewrAndLoganto { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a list of municipality ids to skip forwarding of the e-voter flag to loganto.
+    /// </summary>
+    public HashSet<short> SkipForwardingEVoterFlag { get; set; } = new();
 }

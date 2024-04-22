@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
 using Voting.Stimmregister.Test.Utils.Helpers;
@@ -61,10 +62,21 @@ public class DuplicateTest : BaseWriteableDbGrpcTest<FilterService.FilterService
     }
 
     [Fact]
-    public Task Duplicate_SgReader_DuplicateExisting_ShouldFail()
+    public Task Duplicate_RoleUnauthorized_DuplicateExisting_ShouldPermissionDenied()
     {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+            Roles.Reader,
+        };
+
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
         return AssertStatus(
-            async () => await SgReaderClient.DuplicateAsync(new FilterServiceDuplicateFilterRequest
+            async () => await client.DuplicateAsync(new FilterServiceDuplicateFilterRequest
             {
                 FilterId = FilterMockedData.SomeFilter_MunicipalityIdOther2.Id.ToString(),
             }),

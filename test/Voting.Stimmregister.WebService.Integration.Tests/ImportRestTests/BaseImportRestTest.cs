@@ -6,7 +6,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Test.Utils.Helpers;
+using Voting.Stimmregister.Test.Utils.MockData;
 using Xunit;
 using static Voting.Stimmregister.Test.Utils.Helpers.RessourceHelper;
 
@@ -31,6 +33,23 @@ public abstract class BaseImportRestTest : BaseWriteableDbRestTest
         using var content = new MultipartFormDataContent();
         using var response = await ApiImporterClient.PostAsync(ImportEndpointUrl, content);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task WhenRoleUnauthorizedShouldReturnForbidden()
+    {
+        var rolesArray = new[]
+        {
+            Roles.Reader,
+            Roles.Manager,
+            Roles.ApiExporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+        };
+        var client = CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray);
+        using var content = new MultipartFormDataContent();
+        using var response = await client.PostAsync(ImportEndpointUrl, content);
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
     protected override Task<HttpResponseMessage> AuthorizationTestCall(HttpClient httpClient)

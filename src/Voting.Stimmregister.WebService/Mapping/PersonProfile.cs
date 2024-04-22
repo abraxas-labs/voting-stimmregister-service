@@ -64,12 +64,12 @@ public class PersonProfile : Profile
             .ForMember(dest => dest.HasValidationErrors, opt => opt.MapFrom(src => !src.IsValid))
 
             .ForAllMembers(opts => opts.Condition((_, _, srcMember) => srcMember != null)); // Skiping mapping of nullable members
-        CreateMap<PersonSearchResultPage<PersonEntityModel>, Proto.V1.Services.Responses.PersonServiceGetAllResponse>()
+        CreateMap<PersonSearchResultPageModel<PersonEntityModel>, Proto.V1.Services.Responses.PersonServiceGetAllResponse>()
             .ForMember(dst => dst.TotalCount, opt => opt.MapFrom(src => src.TotalItemsCount))
             .ForMember(dst => dst.People, opt => opt.MapFrom(src => src.Items));
         CreateMap<LastSearchParameterEntity, PersonServiceGetLastUsedParametersResponse>()
             .ForMember(dst => dst.Criteria, opts => opts.MapFrom(src => src.FilterCriteria));
-        CreateMap(typeof(PersonSearchResultPage<>), typeof(PersonSearchResultPage<>))
+        CreateMap(typeof(PersonSearchResultPageModel<>), typeof(PersonSearchResultPageModel<>))
             .ConvertUsing(typeof(PersonSearchResultPageConverter<,>));
 
         // Proto to Domain
@@ -77,22 +77,32 @@ public class PersonProfile : Profile
             .ForMember(dest => dest.Page, opt => opt.MapFrom(src => src.PageIndex + 1))
             .ReverseMap()
             .ForMember(dst => dst.PageIndex, opt => opt.MapFrom(src => src.Page - 1));
+
         CreateMap<PersonServiceGetSingleRequest, PersonSearchSingleParametersModel>();
         CreateMap<PersonServiceGetAllRequest, PersonSearchParametersModel>();
         CreateMap<PersonServiceGetByFilterIdRequest, PersonSearchFilterIdParametersModel>();
         CreateMap<PersonServiceGetByFilterVersionIdRequest, PersonSearchFilterIdParametersModel>()
             .ForMember(dest => dest.FilterId, opt => opt.Ignore());
+
         CreateMap<FilterCriteriaModel, PersonSearchFilterCriteriaModel>()
             .ForMember(dest => dest.ReferenceId, opt => opt.MapFrom(src => src.ReferenceId))
-            .ForMember(dest => dest.FilterValue, opt => opt.MapFrom(src => src.FilterValue))
-            .ForMember(dest => dest.FilterOperator, opt => opt.MapFrom(src => src.FilterOperator))
             .ForMember(dest => dest.FilterType, opt => opt.MapFrom(src => src.FilterDataType))
-            .ForAllOtherMembers(opt => opt.Ignore());
+            .ForMember(dest => dest.FilterOperator, opt => opt.MapFrom(src => src.FilterOperator))
+            .ForMember(dest => dest.FilterValue, opt => opt.MapFrom(src => src.FilterValue));
+
         CreateMap<PersonSearchFilterCriteriaModel, FilterCriteriaEntity>()
             .ForMember(dst => dst.FilterOperator, opts => opts.MapFrom(src => src.FilterOperator))
             .ForMember(dst => dst.ReferenceId, opts => opts.MapFrom(src => src.ReferenceId))
             .ForMember(dst => dst.FilterType, opts => opts.MapFrom(src => src.FilterType))
             .ForMember(dst => dst.FilterValue, opts => opts.MapFrom(src => src.FilterValue))
-            .ForAllOtherMembers(opt => opt.Ignore());
+            .ForMember(dest => dest.SortIndex, opt => opt.Ignore())
+            .ForMember(dest => dest.FilterId, opt => opt.Ignore())
+            .ForMember(dest => dest.FilterVersionId, opt => opt.Ignore())
+            .ForMember(dest => dest.LastSearchParameterId, opt => opt.Ignore())
+            .ForMember(dest => dest.Filter, opt => opt.Ignore())
+            .ForMember(dest => dest.FilterVersion, opt => opt.Ignore())
+            .ForMember(dest => dest.LastSearchParameter, opt => opt.Ignore())
+            .ForMember(dest => dest.AuditInfo, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }

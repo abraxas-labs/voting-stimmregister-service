@@ -5,7 +5,9 @@
     "Description": "",
     "LatestVersion": null,
     "Criteria": [],
-    "Versions": []
+    "Versions": [],
+    "TenantName": "",
+    "TenantId": ""
   },
   "FilterVersion": {
     "Id": "3333d8dd-057c-4449-9630-12dacc12ba05",

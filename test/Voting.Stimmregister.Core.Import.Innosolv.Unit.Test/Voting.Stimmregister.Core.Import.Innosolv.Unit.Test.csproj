@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <None Update="_files\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Core.Import.Innosolv\Voting.Stimmregister.Core.Import.Innosolv.csproj" />
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Domain\Voting.Stimmregister.Domain.csproj" />
+    <ProjectReference Include="..\Voting.Stimmregister.Test.Utils\Voting.Stimmregister.Test.Utils.csproj" />
+  </ItemGroup>
+
+</Project>

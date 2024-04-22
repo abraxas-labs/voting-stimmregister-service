@@ -21,10 +21,10 @@ public static class FilterVersionMockedData
 {
     private static readonly IReadOnlyDictionary<Guid, string> _signatures = new Dictionary<Guid, string>
     {
-        [Guid.Parse("2ddf8718-be9e-4730-a3ad-81253a16f5f7")] = "ARk6miSYfdJGRPBIEXw3W53x9FXLowpYQQQt+F65/batiSr/M7q+LtyK9F68V12EfbbIY8selZBgn39JahPTdzuKAVUPrhCIEbdkYpbWIWRAwtlFHS3/eyhtuKhs7GKVBIIV/enlRSkKGIiLoBOt+H4LxVN2ybzbD/3uoENBxzfAdVTQ",
-        [Guid.Parse("3333d8dd-057c-4449-9630-12dacc12ba05")] = "AAqKjJEvv0Q6CO3UiyZDDK7DYXkAVsrrV3ETCCaznhRqTCHsGb8j4oTnk/CagvTN0eudCUs+XXoIJnP9Spk54E7MAVSfEle63MeuyJYn+3fh1DQPFbZtAj5GZwmGDDFX7GYMylwjOcWZWGpdfSBbIWZflqEq7dttvyjBKNygRa48bOrE",
-        [Guid.Parse("5ee3d8dd-057c-4449-9630-7cdacc12ba04")] = "AVGW1KfMgCPO11FkwVO5TsDfXJUiWXdRM63dn4URYB/Jbd+j8DbzmlV7t2kze/0ELmtGM1aQifEToGtPXvtW1YXkAVytOKN9gOO5fB1aKdqQ2Ss4vKAB+0LnTBVp/XxsZHBkOnQp+4YSJNUABsn2KFabNGyBqoH1LeXF/ek9G64U8Hxx",
-        [Guid.Parse("82a3d8dd-057c-4449-9630-12dacc12ba05")] = "APxBPwHQxz75lPwdN1gi0zlITcO7h3Bymm+UnwAUOFvYk0813nXxej7ej8x55K8GdNbbcpKmMKWoU9DzQsbD+NjGARnLSoEex8wCZLlZDbMjkA++Dp/nvlNsKIU+ZY+g7FDG/QIqZJtCc6DldHgoISr9LewSOf6NHJmZZX5AZanu5TFC",
+        [Guid.Parse("2ddf8718-be9e-4730-a3ad-81253a16f5f7")] = "AVCJSSQaT/6GRdInr+bN1mIv+qKhSmzk0j7o0TDVP2qjZuh0sjnEhltwfZr58l5J5b5qnCboxK4yNn1SOJioNRTrABdYQmDRe7ovpvc9mCG4TJU2RZFmK64j0AKjgzK8AlVZLggRKpZcxI0sJONuvKzKiTNAXPUJwUZ8U2DS8x3ZZVyF",
+        [Guid.Parse("3333d8dd-057c-4449-9630-12dacc12ba05")] = "AS6h6tnqaWR4f0Xm6IHobE0jL8awOBAdIPVkkGXxl2RDmtL70Zvej652LtNta3qehOQA2SDVvY6eXi9ONCNAJcKVADhURCtLQtGcqZt9YGYRqudLxr9D5isn3108tI9XgMfyYTysbHE310fpcPATAQVYn6zSh1lvKL7t4daE83GlzUIK",
+        [Guid.Parse("5ee3d8dd-057c-4449-9630-7cdacc12ba04")] = "AH3i7V+Y82g+GbhNpFo0JaB1HYjfNMsSC86IB6jEx1WQvbySzzsH91JmPvC90WdVQv54FTCVMeOyTEoKpzh3/MghAcbkE4M4E70sDJqY9/KVvQ+v4RuBs0JPmNhXR/FoUL/cX/pKDmPZF+/sFl7C6VP8VXfyunnCSVHiwJqHZz4t/By1",
+        [Guid.Parse("82a3d8dd-057c-4449-9630-12dacc12ba05")] = "AbAfO8s7eImxcCPOFbamemx9CIsHL2kUGrdfpsoxnSSFGFVchwfkqYsNA6/4j1bbfwclAUdD5wAhEKP0HDmiwaHPAdT+VC4aCCte9HOJ4gtHg6FaZS7glcyUN8aFjVbQU1Fm8PHwM7m4eZDZjdxfjaIDmYiAup0HT1NPYUOLlXlmPcqs",
     };
 
     public static int MunicipalityId => FilterMockedData.MunicipalityId;

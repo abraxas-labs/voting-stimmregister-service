@@ -61,7 +61,7 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
     }
 
     /// <inheritdoc />
-    public async Task<PersonSearchResultPage<PersonEntity>> GetPersonByFilter(IReadOnlyCollection<FilterCriteriaEntity> criteria, DateOnly referenceKeyDate, bool includeDois, Pageable? paging)
+    public async Task<PersonSearchResultPageModel<PersonEntity>> GetPersonByFilter(IReadOnlyCollection<FilterCriteriaEntity> criteria, DateOnly referenceKeyDate, bool includeDois, Pageable? paging)
     {
         var queryable = QueryIsLatest();
         if (includeDois)
@@ -86,7 +86,7 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
     }
 
     /// <inheritdoc />
-    public async Task<PersonSearchResultPage<PersonEntity>> GetPersonsByFilterVersionId(Guid filterVersionId, Pageable? paging)
+    public async Task<PersonSearchResultPageModel<PersonEntity>> GetPersonsByFilterVersionId(Guid filterVersionId, Pageable? paging)
     {
         var queryable = Context.FilterVersionPersons
             .Where(version => version.FilterVersionId == filterVersionId)
@@ -126,11 +126,12 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
     }
 
     /// <inheritdoc />
-    public async Task<PersonEntity?> GetSingleOrDefaultWithVotingRightsByVnAndCantonBfsIgnoreAcl(long vn, short cantonBfs)
+    public async Task<PersonEntity?> GetMostRecentWithVotingRightsByVnAndCantonBfsIgnoreAcl(long vn, short cantonBfs)
     {
         return await Set
             .IgnoreQueryFilters()
-            .SingleOrDefaultAsync(p => p.IsLatest && !p.IsDeleted && !p.RestrictedVotingAndElectionRightFederation && p.Vn == vn && p.CantonBfs == cantonBfs);
+            .OrderByDescending(p => p.ModifiedDate)
+            .FirstOrDefaultAsync(p => p.IsLatest && !p.IsDeleted && !p.RestrictedVotingAndElectionRightFederation && p.Vn == vn && p.CantonBfs == cantonBfs);
     }
 
     /// <inheritdoc />
@@ -285,12 +286,16 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         }
     }
 
-    private static Expression<Func<PersonEntity, bool>> BuildFilterExpressionForAge(
-       ParameterExpression parameterExpression,
-       MemberExpression memberExpression,
-       FilterCriteriaEntity filterCriteria,
-       DateOnly referenceKeyDate)
+    private static IQueryable<PersonEntity> AgeFilter(IQueryable<PersonEntity> q, FilterCriteriaEntity filterCriteria, DateOnly referenceKeyDate)
     {
+        if (filterCriteria.FilterOperator is not (FilterOperatorType.Equals or FilterOperatorType.LessEqual
+            or FilterOperatorType.GreaterEqual or FilterOperatorType.Less or FilterOperatorType.Greater))
+        {
+            throw new InvalidSearchFilterCriteriaException($"FilterOperator '{filterCriteria.FilterOperator}' is not valid for filter '{FilterReference.Age}'");
+        }
+
+        EnsureIsFilterDataType(filterCriteria, FilterDataType.Numeric);
+
         if (!int.TryParse(filterCriteria.FilterValue, out var parsedAgeValue))
         {
             throw new InvalidSearchFilterCriteriaException($"Value '{filterCriteria.FilterValue}' not parsable into member type '{nameof(Int32)}'");
@@ -299,58 +304,45 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         var ageDate = referenceKeyDate.AddYears(-parsedAgeValue);
         return filterCriteria.FilterOperator switch
         {
-            FilterOperatorType.Equals =>
-                BuildFilterExpressionForDateOnlyBetween(parameterExpression, memberExpression, ageDate.AddYears(-1).AddDays(1), ageDate),
-            FilterOperatorType.LessEqual =>
-                BuildFilterExpressionForDateOnlyBetween(parameterExpression, memberExpression, ageDate.AddYears(-1).AddDays(1), DateOnly.MaxValue),
-            FilterOperatorType.Less =>
-                BuildFilterExpressionForDateOnlyBetween(parameterExpression, memberExpression, ageDate.AddDays(1), DateOnly.MaxValue),
-            FilterOperatorType.GreaterEqual =>
-                BuildFilterExpressionForDateOnlyBetween(parameterExpression, memberExpression, DateOnly.MinValue, ageDate),
-            FilterOperatorType.Greater =>
-                BuildFilterExpressionForDateOnlyBetween(parameterExpression, memberExpression, DateOnly.MinValue, ageDate.AddYears(-1)),
-            _ => throw new Exception(),
+            // On 12. Feb 2024 every person which is born between 13. Feb 2005 and 12. Feb 2006 is 18 years old.
+            // 13. Feb 2005 is calculated like "12. Feb 2024 - 18 years - 1 year + 1 day"
+            //
+            // Visualization:
+            //
+            // Equals 18:       ------------------[~~~~~~~~~~~~~]--------------------------------
+            // LessEquals 18:   ------------------[~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // Less 18:         ---------------------------------[~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // GreaterEqual 18: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]--------------------------------
+            // Greater 18:      ~~~~~~~~~~~~~~~~~]-----------------------------------------------
+            //                  -----------------01-------------23-------------------------------4
+            // (0: 12.02.2005)  (1: 13.02.2005)  (2: 12.02.2006)  (3: 13.02.2006)  (4: 12.02.2024)
+            FilterOperatorType.Equals => q.Where(p => p.DateOfBirth >= ageDate.AddYears(-1).AddDays(1) && p.DateOfBirth <= ageDate),
+            FilterOperatorType.LessEqual => q.Where(p => p.DateOfBirth >= ageDate.AddYears(-1).AddDays(1)),
+            FilterOperatorType.Less => q.Where(p => p.DateOfBirth >= ageDate.AddDays(1)),
+            FilterOperatorType.GreaterEqual => q.Where(p => p.DateOfBirth <= ageDate),
+            FilterOperatorType.Greater => q.Where(p => p.DateOfBirth <= ageDate.AddYears(-1)),
+            _ => throw new InvalidSearchFilterCriteriaException(),
         };
     }
 
-    private static Expression<Func<PersonEntity, bool>> BuildFilterExpressionForDateOnlyBetween(
-        ParameterExpression parameterExpression,
-        MemberExpression memberExpression,
-        DateOnly fromDate,
-        DateOnly toDate)
+    private static IQueryable<PersonEntity> HasValidationErrorsFilter(IQueryable<PersonEntity> q, FilterCriteriaEntity filterCriteria)
     {
-        var gteFromDateExpression = Expression.GreaterThanOrEqual(
-            memberExpression, Expression.Constant(fromDate));
-        var lteToDateExpression = Expression.LessThanOrEqual(
-            memberExpression, Expression.Constant(toDate));
-        var methodCall = Expression.And(gteFromDateExpression, lteToDateExpression);
-        return Expression.Lambda<Func<PersonEntity, bool>>(methodCall, parameterExpression);
-    }
+        EnsureIsFilterDataType(filterCriteria, FilterDataType.Boolean);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
 
-    private static Expression<Func<PersonEntity, bool>> BuildFilterExpressionForHasValidationErrors(
-        ParameterExpression parameterExpression,
-        MemberExpression memberExpression,
-        FilterCriteriaEntity filterCriteria)
-    {
         if (!bool.TryParse(filterCriteria.FilterValue, out var parsedHasValidationErrorsValue))
         {
             throw new InvalidSearchFilterCriteriaException($"Value '{filterCriteria.FilterValue}' not parsable into member type '{nameof(Boolean)}'");
         }
 
-        Expression methodCall = Expression.Call(memberExpression, typeof(bool).GetMethod(nameof(bool.Equals), new[] { typeof(bool), })!, Expression.Constant(!parsedHasValidationErrorsValue));
-        return Expression.Lambda<Func<PersonEntity, bool>>(methodCall, parameterExpression);
+        return q.Where(p => p.IsValid == !parsedHasValidationErrorsValue);
     }
 
-    private static Expression<Func<PersonEntity, bool>>? BuildFilterExpressionForSwissCitizenship(
-        ParameterExpression parameterExpression,
-        Expression countryMemberExpression,
-        DateOnly referenceKeyDate,
-        FilterCriteriaEntity filterCriteria)
+    private static IQueryable<PersonEntity> SwissCitizenshipFilter(IQueryable<PersonEntity> q, FilterCriteriaEntity filterCriteria, DateOnly referenceKeyDate)
     {
-        var residencePermitValidFromMemberExpression =
-            Expression.Property(parameterExpression, nameof(PersonEntity.ResidencePermitValidFrom));
-        var residencePermitValidTillMemberExpression =
-            Expression.Property(parameterExpression, nameof(PersonEntity.ResidencePermitValidTill));
+        EnsureIsFilterDataType(filterCriteria, FilterDataType.Select);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
+        AssertFilterValueIsValidForFilterDataType(filterCriteria.FilterValue, filterCriteria.FilterType);
 
         if (!Enum.TryParse(filterCriteria.FilterValue, true, out SwissCitizenship parsedSwissCitizenshipValue))
         {
@@ -359,63 +351,103 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
 
         if (parsedSwissCitizenshipValue == SwissCitizenship.Undefined)
         {
-            return null;
+            return q;
         }
 
-        Expression methodCall = Expression.Call(
-            countryMemberExpression,
-            typeof(string).GetMethod(nameof(string.Equals), new[] { typeof(string), })!,
-            Expression.Constant(Countries.Switzerland));
-
-        if (parsedSwissCitizenshipValue == SwissCitizenship.No)
-        {
-            methodCall = Expression.Not(methodCall);
-            var residencePermitDateInRangeExpression = ResidencePermitDateInRangeExpression(residencePermitValidFromMemberExpression, residencePermitValidTillMemberExpression, referenceKeyDate);
-            methodCall = Expression.And(methodCall, residencePermitDateInRangeExpression);
-        }
-
-        return Expression.Lambda<Func<PersonEntity, bool>>(methodCall, parameterExpression);
+        return parsedSwissCitizenshipValue != SwissCitizenship.No
+            ? q.Where(p => p.Country == Countries.Switzerland)
+            : q.Where(p =>
+                p.Country != Countries.Switzerland &&
+                (p.ResidencePermitValidFrom == null || referenceKeyDate >= p.ResidencePermitValidFrom) &&
+                (p.ResidencePermitValidTill == null || referenceKeyDate <= p.ResidencePermitValidTill));
     }
 
-    private static BinaryExpression ResidencePermitDateInRangeExpression(
-        Expression residencePermitValidFromMemberExpression,
-        Expression residencePermitValidTillMemberExpression,
-        DateOnly referenceKeyDate)
+    private static IQueryable<PersonEntity> PersonDoiNameFilter(IQueryable<PersonEntity> q, FilterCriteriaEntity filterCriteria, DomainOfInfluenceType domainOfInfluenceType)
     {
-        var gteResidencePermitValidFromExpression = Expression.GreaterThanOrEqual(
-            Expression.Constant(referenceKeyDate),
-            Expression.Coalesce(residencePermitValidFromMemberExpression, Expression.Constant(DateOnly.MinValue)));
-        var lteResidencePermitValidTillExpression = Expression.LessThanOrEqual(
-            Expression.Constant(referenceKeyDate),
-            Expression.Coalesce(residencePermitValidTillMemberExpression, Expression.Constant(DateOnly.MaxValue)));
-        var gteResidencePermitValidFromExpressionWithNullCheck = Expression.Condition(
-            Expression.Equal(residencePermitValidFromMemberExpression, Expression.Constant(null)),
-            Expression.Constant(true),
-            gteResidencePermitValidFromExpression);
-        var lteResidencePermitValidTillExpressionWithNullCheck = Expression.Condition(
-            Expression.Equal(residencePermitValidTillMemberExpression, Expression.Constant(null)),
-            Expression.Constant(true),
-            lteResidencePermitValidTillExpression);
-        return Expression.And(gteResidencePermitValidFromExpressionWithNullCheck, lteResidencePermitValidTillExpressionWithNullCheck);
+        EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
+        var filterValue = filterCriteria.FilterValue.ToUpper();
+        return filterCriteria.FilterOperator switch
+        {
+            FilterOperatorType.Equals => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Name.ToUpper().Equals(filterValue))),
+            FilterOperatorType.Contains => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Name.ToUpper().Contains(filterValue))),
+            FilterOperatorType.StartsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Name.ToUpper().StartsWith(filterValue))),
+            FilterOperatorType.EndsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Name.ToUpper().EndsWith(filterValue))),
+            _ => throw new InvalidSearchFilterCriteriaException(),
+        };
     }
 
-    private static Expression<Func<PersonEntity, bool>> BuildFilterExpressionForMultipleStrings(
-        ParameterExpression parameterExpression,
-        IEnumerable<MemberExpression> memberExpressions,
-        FilterCriteriaEntity filterCriteria)
+    private static IQueryable<PersonEntity> PersonDoiCantonFilter(IQueryable<PersonEntity> q, FilterCriteriaEntity filterCriteria, DomainOfInfluenceType domainOfInfluenceType)
     {
-        var methodInfo = typeof(string).GetMethod(filterCriteria.FilterOperator.ToString(), new Type[] { typeof(string), });
-        AssertMethodNotNull<string>(filterCriteria, methodInfo);
-        var orExpression = memberExpressions.Aggregate(default(Expression), (exp, memberExpression) =>
+        EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
+        var filterValue = filterCriteria.FilterValue.ToUpper();
+        return filterCriteria.FilterOperator switch
         {
-            Expression expression = memberExpression;
-            var filterValue = filterCriteria.FilterValue;
-            ApplyStringCaseInsensitive(ref expression, ref filterValue); // case insensitive search workaround:
+            FilterOperatorType.Equals => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Canton.ToUpper().Equals(filterValue))),
+            FilterOperatorType.Contains => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Canton.ToUpper().Contains(filterValue))),
+            FilterOperatorType.StartsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Canton.ToUpper().StartsWith(filterValue))),
+            FilterOperatorType.EndsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Canton.ToUpper().EndsWith(filterValue))),
+            _ => throw new InvalidSearchFilterCriteriaException(),
+        };
+    }
 
-            var methodCall = Expression.Call(expression, methodInfo!, Expression.Constant(filterValue));
-            return exp == null ? methodCall : Expression.Or(exp, methodCall);
-        });
-        return Expression.Lambda<Func<PersonEntity, bool>>(orExpression!, parameterExpression);
+    private static IQueryable<PersonEntity> PersonDoiIdentifierFilter(IQueryable<PersonEntity> q, FilterCriteriaEntity filterCriteria, DomainOfInfluenceType domainOfInfluenceType)
+    {
+        EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
+        var filterValue = filterCriteria.FilterValue.ToUpper();
+        return filterCriteria.FilterOperator switch
+        {
+            FilterOperatorType.Equals => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Identifier.ToUpper().Equals(filterValue))),
+            FilterOperatorType.Contains => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Identifier.ToUpper().Contains(filterValue))),
+            FilterOperatorType.StartsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Identifier.ToUpper().StartsWith(filterValue))),
+            FilterOperatorType.EndsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Identifier.ToUpper().EndsWith(filterValue))),
+            _ => throw new InvalidSearchFilterCriteriaException(),
+        };
+    }
+
+    private static IQueryable<PersonEntity> ContactAddressFilter(IQueryable<PersonEntity> q, FilterCriteriaEntity filterCriteria)
+    {
+        EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
+        var filterValue = filterCriteria.FilterValue.ToUpper();
+        return filterCriteria.FilterOperator switch
+        {
+            FilterOperatorType.Equals => q.Where(p =>
+                (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().Equals(filterValue)) ||
+                (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().Equals(filterValue)) ||
+                (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().Equals(filterValue)) ||
+                (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().Equals(filterValue)) ||
+                (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().Equals(filterValue)) ||
+                (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().Equals(filterValue)) ||
+                (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().Equals(filterValue))),
+            FilterOperatorType.Contains => q.Where(p =>
+                (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().Contains(filterValue)) ||
+                (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().Contains(filterValue)) ||
+                (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().Contains(filterValue)) ||
+                (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().Contains(filterValue)) ||
+                (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().Contains(filterValue)) ||
+                (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().Contains(filterValue)) ||
+                (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().Contains(filterValue))),
+            FilterOperatorType.StartsWith => q.Where(p =>
+                (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().StartsWith(filterValue)) ||
+                (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().StartsWith(filterValue)) ||
+                (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().StartsWith(filterValue)) ||
+                (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().StartsWith(filterValue)) ||
+                (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().StartsWith(filterValue)) ||
+                (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().StartsWith(filterValue)) ||
+                (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().StartsWith(filterValue))),
+            FilterOperatorType.EndsWith => q.Where(p =>
+                (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().EndsWith(filterValue)) ||
+                (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().EndsWith(filterValue)) ||
+                (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().EndsWith(filterValue)) ||
+                (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().EndsWith(filterValue)) ||
+                (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().EndsWith(filterValue)) ||
+                (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().EndsWith(filterValue)) ||
+                (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().EndsWith(filterValue))),
+            _ => throw new InvalidSearchFilterCriteriaException(),
+        };
     }
 
     private static void AssertMethodNotNull<T>(FilterCriteriaEntity filterCriteria, MethodInfo? method)
@@ -790,18 +822,22 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         return await queryable.ToPageAsync(paging);
     }
 
-    private static async Task<PersonSearchResultPage<PersonEntity>> ExecuteSearchQueryWithInvalidCount(IQueryable<PersonEntity> queryable, Pageable? paging)
+    private static async Task<PersonSearchResultPageModel<PersonEntity>> ExecuteSearchQueryWithInvalidCount(IQueryable<PersonEntity> queryable, Pageable? paging)
     {
         var page = await ExecuteSearchQuery(queryable, paging);
         var invalidCount = await queryable.CountAsync(x => !x.IsValid);
-        return new PersonSearchResultPage<PersonEntity>(page, invalidCount);
+        return new PersonSearchResultPageModel<PersonEntity>(page, invalidCount);
     }
 
-    private static MethodInfo GetEnumerableAnyMethodInfo() =>
-        typeof(Enumerable)
-            .GetMethods()
-            .Single(method => method.Name == "Any" && method.GetParameters().Length == 2)
-            .MakeGenericMethod(typeof(PersonDoiEntity));
+    private static void EnsureIsFilterDataType(FilterCriteriaEntity filterCriteria, FilterDataType filterDataType)
+    {
+        if (filterCriteria.FilterType == filterDataType)
+        {
+            return;
+        }
+
+        throw new InvalidSearchFilterCriteriaException($"FilterDataType '{filterCriteria.FilterType}' is not valid for filter '{filterCriteria.ReferenceId}'");
+    }
 
     private IQueryable<PersonEntity> FilterForCriterias(
         IQueryable<PersonEntity> queryable,
@@ -824,117 +860,28 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
        FilterCriteriaEntity filterCriteria,
        DateOnly referenceKeyDate)
     {
-        var parameterExpression = Expression.Parameter(typeof(PersonEntity), "p");
-
-        Expression<Func<PersonEntity, bool>> filterExpression;
-        if (filterCriteria.ReferenceId == FilterReference.Age)
+        if (IsCircleIdProperty(filterCriteria.ReferenceId))
         {
-            if (filterCriteria.FilterOperator is not (FilterOperatorType.Equals or FilterOperatorType.LessEqual
-                or FilterOperatorType.GreaterEqual or FilterOperatorType.Less or FilterOperatorType.Greater))
-            {
-                throw new InvalidSearchFilterCriteriaException($"FilterOperator '{filterCriteria.FilterOperator}' is not valid for filter '{FilterReference.Age}'");
-            }
-
-            EnsureIsFilterDataType(filterCriteria, FilterDataType.Numeric);
-            var memberExpression = Expression.Property(parameterExpression, nameof(PersonEntity.DateOfBirth));
-            filterExpression = BuildFilterExpressionForAge(parameterExpression, memberExpression, filterCriteria, referenceKeyDate);
-        }
-        else if (filterCriteria.ReferenceId == FilterReference.HasValidationErrors)
-        {
-            EnsureIsFilterDataType(filterCriteria, FilterDataType.Boolean);
-            AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-            var memberExpression = Expression.Property(parameterExpression, nameof(PersonEntity.IsValid));
-            filterExpression = BuildFilterExpressionForHasValidationErrors(parameterExpression, memberExpression, filterCriteria);
-        }
-        else if (filterCriteria.ReferenceId == FilterReference.SwissCitizenship)
-        {
-            EnsureIsFilterDataType(filterCriteria, FilterDataType.Select);
-            var memberExpression = Expression.Property(parameterExpression, nameof(PersonEntity.Country));
-            AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-            AssertFilterValueIsValidForFilterDataType(filterCriteria.FilterValue, filterCriteria.FilterType);
-            var expression = BuildFilterExpressionForSwissCitizenship(
-                parameterExpression,
-                memberExpression,
-                referenceKeyDate,
-                filterCriteria);
-            if (expression == null)
-            {
-                return queryable;
-            }
-
-            filterExpression = expression;
-        }
-        else if (filterCriteria.ReferenceId == FilterReference.OriginName17)
-        {
-            EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
-            var memberExpression = Expression.Property(parameterExpression, nameof(PersonEntity.PersonDois));
-            filterExpression = BuildFilterExpressionForPersonDoi(memberExpression, filterCriteria, parameterExpression, nameof(PersonDoiEntity.Name), DomainOfInfluenceType.Og);
-        }
-        else if (filterCriteria.ReferenceId == FilterReference.OriginOnCanton17)
-        {
-            EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
-            var memberExpression = Expression.Property(parameterExpression, nameof(PersonEntity.PersonDois));
-            filterExpression = BuildFilterExpressionForPersonDoi(memberExpression, filterCriteria, parameterExpression, nameof(PersonDoiEntity.Canton), DomainOfInfluenceType.Og);
-        }
-        else if (IsCircleIdProperty(filterCriteria.ReferenceId))
-        {
-            EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
-            AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-            var memberExpression = Expression.Property(parameterExpression, nameof(PersonEntity.PersonDois));
             var domainOfInfluenceType = GetDomainOfInfluenceTypeByReferenceId(filterCriteria.ReferenceId);
-            filterExpression = BuildFilterExpressionForPersonDoi(memberExpression, filterCriteria, parameterExpression, nameof(PersonDoiEntity.Identifier), domainOfInfluenceType);
+            return PersonDoiIdentifierFilter(queryable, filterCriteria, domainOfInfluenceType);
         }
-        else if (IsCircleNameProperty(filterCriteria.ReferenceId))
+
+        if (IsCircleNameProperty(filterCriteria.ReferenceId))
         {
-            EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
-            AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-            var memberExpression = Expression.Property(parameterExpression, nameof(PersonEntity.PersonDois));
             var domainOfInfluenceType = GetDomainOfInfluenceTypeByReferenceId(filterCriteria.ReferenceId);
-            filterExpression = BuildFilterExpressionForPersonDoi(memberExpression, filterCriteria, parameterExpression, nameof(PersonDoiEntity.Name), domainOfInfluenceType);
+            return PersonDoiNameFilter(queryable, filterCriteria, domainOfInfluenceType);
         }
-        else if (filterCriteria.ReferenceId == FilterReference.ContactAddressLine17)
+
+        return filterCriteria.ReferenceId switch
         {
-            EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
-            var memberExpressions = (new string[]
-            {
-                nameof(PersonEntity.ContactAddressLine1), nameof(PersonEntity.ContactAddressLine2), nameof(PersonEntity.ContactAddressLine3),
-                nameof(PersonEntity.ContactAddressLine4), nameof(PersonEntity.ContactAddressLine5), nameof(PersonEntity.ContactAddressLine6), nameof(PersonEntity.ContactAddressLine7),
-            }).Select(name => Expression.Property(parameterExpression, name)).ToArray();
-
-            AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-            filterExpression = BuildFilterExpressionForMultipleStrings(parameterExpression, memberExpressions, filterCriteria);
-        }
-        else
-        {
-            throw new InvalidSearchFilterCriteriaException($"No filter expression builder available for ReferenceId {filterCriteria.ReferenceId}");
-        }
-
-        _logger.LogDebug("Built expression: {Expression}", filterExpression.ToString());
-        return queryable.Where(filterExpression);
-    }
-
-    private Expression<Func<PersonEntity, bool>> BuildFilterExpressionForPersonDoi(
-        MemberExpression memberExpression,
-        FilterCriteriaEntity filterCriteria,
-        ParameterExpression parameterExpression,
-        string personDoiPropertyName,
-        DomainOfInfluenceType domainOfInfluenceType)
-    {
-        AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-        var personDoiParameterExpression = Expression.Parameter(typeof(PersonDoiEntity), "pd");
-        var domainOfInfluenceTypeMemberExpression = Expression.Property(personDoiParameterExpression, nameof(PersonDoiEntity.DomainOfInfluenceType));
-        var stringOperatorMethodInfo = typeof(string).GetMethod(filterCriteria.FilterOperator.ToString(), new[] { typeof(string), });
-        AssertMethodNotNull<string>(filterCriteria, stringOperatorMethodInfo);
-        Expression nameMemberExpression = Expression.Property(personDoiParameterExpression, personDoiPropertyName);
-        var filterValue = filterCriteria.FilterValue;
-        ApplyStringCaseInsensitive(ref nameMemberExpression, ref filterValue);
-        var domainOfInfluenceTypeEqualsExpression = Expression.Equal(domainOfInfluenceTypeMemberExpression, Expression.Constant(domainOfInfluenceType));
-        var operatorMethodCall = Expression.Call(nameMemberExpression, stringOperatorMethodInfo!, Expression.Constant(filterValue));
-        var personDoiFilterExpression = Expression.And(operatorMethodCall, domainOfInfluenceTypeEqualsExpression);
-        var personDoiLambda = Expression.Lambda<Func<PersonDoiEntity, bool>>(personDoiFilterExpression, personDoiParameterExpression);
-        var anyMethodInfo = GetEnumerableAnyMethodInfo();
-        var anyMethodCall = Expression.Call(null, anyMethodInfo, memberExpression, personDoiLambda);
-        return Expression.Lambda<Func<PersonEntity, bool>>(anyMethodCall, parameterExpression);
+            FilterReference.Age => AgeFilter(queryable, filterCriteria, referenceKeyDate),
+            FilterReference.HasValidationErrors => HasValidationErrorsFilter(queryable, filterCriteria),
+            FilterReference.SwissCitizenship => SwissCitizenshipFilter(queryable, filterCriteria, referenceKeyDate),
+            FilterReference.OriginName17 => PersonDoiNameFilter(queryable, filterCriteria, DomainOfInfluenceType.Og),
+            FilterReference.OriginOnCanton17 => PersonDoiCantonFilter(queryable, filterCriteria, DomainOfInfluenceType.Og),
+            FilterReference.ContactAddressLine17 => ContactAddressFilter(queryable, filterCriteria),
+            _ => throw new InvalidSearchFilterCriteriaException($"No filter expression builder available for ReferenceId {filterCriteria.ReferenceId}"),
+        };
     }
 
     private Expression<Func<PersonEntity, bool>> BuildFilterExpressionForMultiselectString(
@@ -1049,15 +996,5 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
             .Include(p => p.PersonDois)
             .OrderBy(i => i.MunicipalityId)
             .ThenBy(p => p.Id);
-    }
-
-    private void EnsureIsFilterDataType(FilterCriteriaEntity filterCriteria, FilterDataType filterDataType)
-    {
-        if (filterCriteria.FilterType == filterDataType)
-        {
-            return;
-        }
-
-        throw new InvalidSearchFilterCriteriaException($"FilterDataType '{filterCriteria.FilterType}' is not valid for filter '{filterCriteria.ReferenceId}'");
     }
 }

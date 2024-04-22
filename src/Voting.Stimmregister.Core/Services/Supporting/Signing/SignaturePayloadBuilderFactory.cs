@@ -37,24 +37,4 @@ public class SignaturePayloadBuilderFactory
             _ => throw new InvalidOperationException($"Unsupported integrity signature version {integrity.SignatureVersion}"),
         };
     }
-
-    internal ISignaturePayloadBuilder<PersonEntity> Get(PersonEntity person)
-    {
-        return person.SignatureVersion switch
-        {
-            1 => _serviceProvider.GetRequiredService<PersonSignaturePayloadBuilderV1>(),
-            LatestVersion => _serviceProvider.GetRequiredService<PersonSignaturePayloadBuilderV1>(),
-            _ => throw new InvalidOperationException($"Unsupported person signature version {person.SignatureVersion}"),
-        };
-    }
-
-    internal ISignaturePayloadBuilder<DomainOfInfluenceEntity> Get(DomainOfInfluenceEntity doi)
-    {
-        return doi.SignatureVersion switch
-        {
-            1 => _serviceProvider.GetRequiredService<DomainOfInfluenceSignaturePayloadBuilderV1>(),
-            LatestVersion => _serviceProvider.GetRequiredService<DomainOfInfluenceSignaturePayloadBuilderV1>(),
-            _ => throw new InvalidOperationException($"Unsupported doi signature version {doi.SignatureVersion}"),
-        };
-    }
 }

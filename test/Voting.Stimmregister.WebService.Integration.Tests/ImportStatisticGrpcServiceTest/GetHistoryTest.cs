@@ -3,7 +3,9 @@
 
 using System;
 using System.Threading.Tasks;
+using Grpc.Core;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Models;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
@@ -35,6 +37,24 @@ public class GetHistoryTest : BaseWriteableDbGrpcTest<ImportStatisticService.Imp
 
         Assert.True(response.ImportStatistics.Count > 0);
         response.MatchSnapshot();
+    }
+
+    [Fact]
+    public async Task WhenRoleUnauthorizedShouldReturnPermissionDenied()
+    {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+        };
+
+        var request = NewValidGetAllRequest();
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
+        await AssertStatus(
+            async () => await client.GetHistoryAsync(request), StatusCode.PermissionDenied);
     }
 
     protected override async Task AuthorizationTestCall(ImportStatisticService.ImportStatisticServiceClient service)

@@ -161,6 +161,12 @@ public class PersonCsvExportModel
     public string ContactAddressZipCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the contact address country iso2 code, i.e. 'CH'.
+    /// </summary>
+    [Name("Zustelladresse - Land (iso)")]
+    public string ContactAddressCountryIdIso2 { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the , i.e. ''.
     /// </summary>
     [Name("Zustelladresse - Gebiet")]

@@ -4,6 +4,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Voting.Lib.Database.Interceptors;
 using Voting.Stimmregister.Abstractions.Adapter.Data.DataContexts;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Adapter.Data.Configuration;
@@ -28,7 +29,7 @@ public static class ServiceCollectionExtensions
         DataConfig dataConfig,
         Action<DbContextOptionsBuilder> optionsBuilder)
     {
-        services.AddDbContext<IDataContext, DataContext>(db =>
+        services.AddDbContext<IDataContext, DataContext>((serviceProvider, db) =>
         {
             if (dataConfig.EnableDetailedErrors)
             {
@@ -40,10 +41,20 @@ public static class ServiceCollectionExtensions
                 db.EnableSensitiveDataLogging();
             }
 
+            if (dataConfig.EnableMonitoring)
+            {
+                db.AddInterceptors(serviceProvider.GetRequiredService<DatabaseQueryMonitoringInterceptor>());
+            }
+
             db.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
             optionsBuilder(db);
         });
+
+        if (dataConfig.EnableMonitoring)
+        {
+            services.AddDataMonitoring(dataConfig.Monitoring);
+        }
 
         return services
             .AddSingleton(dataConfig)
@@ -62,6 +73,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPersonRepository, PersonRepository>()
             .AddScoped<IPersonDoiRepository, PersonDoiRepository>()
             .AddScoped<ILastSearchParameterRepository, LastSearchParameterRepository>()
+            .AddScoped<IBfsStatisticRepository, BfsStatisticRepository>()
             .AddVotingLibDatabase<DataContext>();
     }
 }

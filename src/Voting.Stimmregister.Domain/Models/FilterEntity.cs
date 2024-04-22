@@ -17,13 +17,23 @@ public class FilterEntity : AuditedEntity
     /// </summary>
     public string Description { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets the municipalitz id.
+    /// This value is used to determine the access authorization level for the calling tenant.
+    /// </summary>
     public int MunicipalityId { get; set; }
 
     /// <summary>
-    /// Gets or sets the tenant id of the creator's tenant.
+    /// Gets or sets the tenant id of the creator.
     /// <c>null</c> if the filter was created, before this feature was introduced.
     /// </summary>
     public string? TenantId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the tenant name of the creator's tenant.
+    /// <c>null</c> if the filter was created, before this feature was introduced.
+    /// </summary>
+    public string? TenantName { get; set; }
 
     /// <summary>
     /// Gets or sets the latest version of the filter.

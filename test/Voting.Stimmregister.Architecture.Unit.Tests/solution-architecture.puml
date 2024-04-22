@@ -3,8 +3,6 @@
 [WebService] <<Voting.Stimmregister.WebService.*>>
 
 [Core] <<Voting.Stimmregister.Core.*>>
-[Import-Innosolv] <<Voting.Stimmregister.Import.Innosolv.*>>
-[Import-Loganto] <<Voting.Stimmregister.Import.Loganto.*>>
 
 [Adapter-Data] <<Voting.Stimmregister.Adapter.Data.*>>
 [Adapter-Ech] <<Voting.Stimmregister.Adapter.Ech.*>>
@@ -16,13 +14,10 @@
 
 [Abstractions-Adapter] <<Voting.Stimmregister.Abstractions.Adapter.*>>
 [Abstractions-Core] <<Voting.Stimmregister.Abstractions.Core.*>>
-[Abstractions-Import] <<Voting.Stimmregister.Abstractions.Import.*>>
 
 [Domain] <<Voting.Stimmregister.Domain.*>>
 
 [WebService] --> [Core]
-[WebService] --> [Import-Innosolv]
-[WebService] --> [Import-Loganto]
 [WebService] --> [Adapter-Data]
 [WebService] --> [Adapter-Ech]
 [WebService] --> [Adapter-EVotingKewr]
@@ -36,16 +31,7 @@
 
 [Core] --> [Abstractions-Adapter]
 [Core] --> [Abstractions-Core]
-[Core] --> [Abstractions-Import]
 [Core] --> [Domain]
-
-[Import-Innosolv] --> [Abstractions-Adapter]
-[Import-Innosolv] --> [Abstractions-Import]
-[Import-Innosolv] --> [Domain]
-
-[Import-Loganto] --> [Abstractions-Adapter]
-[Import-Loganto] --> [Abstractions-Import]
-[Import-Loganto] --> [Domain]
 
 [Adapter-Data] --> [Abstractions-Adapter]
 [Adapter-Data] --> [Domain]
@@ -67,9 +53,9 @@
 [Adapter-VotingIam] --> [Abstractions-Adapter]
 [Adapter-VotingIam] --> [Domain]
 
-[Abstractions-Adapter] --> [Domain]
+[Abstractions-Core] --> [Abstractions-Adapter]
 [Abstractions-Core] --> [Domain]
-[Abstractions-Import] --> [Abstractions-Adapter]
-[Abstractions-Import] --> [Domain]
+
+[Abstractions-Adapter] --> [Domain]
 
 @enduml

@@ -29,7 +29,7 @@ public interface IPersonService
     /// <param name="requiredValidPageSize">if set to true, a page validation value is checked, which must be between 1 and 100.</param>
     /// <param name="includeDois">Whether to include the domain of influences.</param>
     /// <returns>A list of resolved people.</returns>
-    Task<PersonSearchResultPage<PersonEntityModel>> GetAll(PersonSearchParametersModel searchParameters, bool requiredValidPageSize = true, bool includeDois = false);
+    Task<PersonSearchResultPageModel<PersonEntityModel>> GetAll(PersonSearchParametersModel searchParameters, bool requiredValidPageSize = true, bool includeDois = false);
 
     /// <summary>
     /// Gets the data of a single person based on the register Id including all it's assigned domain of influences.
@@ -40,12 +40,11 @@ public interface IPersonService
 
     /// <summary>
     /// Gets the data of a single person with voting rights based on the vn and canton bfs.
-    /// Ignores the acl.
     /// </summary>
     /// <param name="vn">The vn of the person to be searched.</param>
     /// <param name="cantonBfs">The canton bfs number of the person to be searched.</param>
     /// <returns>A resolved person.</returns>
-    Task<PersonEntityModel?> GetSingleOrDefaultWithVotingRightsByVnAndCantonBfsIgnoreAcl(long vn, short cantonBfs);
+    Task<PersonEntityModel?> GetMostRecentWithVotingRightsByVnAndCantonBfs(long vn, short cantonBfs);
 
     /// <summary>
     /// Gets a list of persons with filter version id.
@@ -54,7 +53,7 @@ public interface IPersonService
     /// <param name="requiredValidPageSize">if set to true, a page validation value is checked, which must be between 1 and 100.</param>
     /// <param name="includeDois">Whether to include the domain of influences.</param>
     /// <returns>A list of resolved people.</returns>
-    Task<PersonSearchResultPage<PersonEntityModel>> GetByFilterVersionId(PersonSearchFilterIdParametersModel searchParameters, bool requiredValidPageSize = true, bool includeDois = false);
+    Task<PersonSearchResultPageModel<PersonEntityModel>> GetByFilterVersionId(PersonSearchFilterIdParametersModel searchParameters, bool requiredValidPageSize = true, bool includeDois = false);
 
     /// <summary>
     /// Gets a stream of <see cref="PersonEntity"/> filtered by given criteria.

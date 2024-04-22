@@ -14,8 +14,8 @@ public class PlantUmlTests
 {
     private static readonly ArchUnitNET.Domain.Architecture _architecture =
         new ArchLoader().LoadAssemblies(
-                typeof(Abstractions.Import.Markers.ArchMarker).Assembly,
                 typeof(Abstractions.Core.Markers.ArchMarker).Assembly,
+                typeof(Abstractions.Core.Import.Markers.ArchMarker).Assembly,
                 typeof(Abstractions.Adapter.Markers.ArchMarker).Assembly,
                 typeof(Adapter.Ech.Markers.ArchMarker).Assembly,
                 typeof(Adapter.EVoting.Kewr.Markers.ArchMarker).Assembly,
@@ -24,8 +24,8 @@ public class PlantUmlTests
                 typeof(Adapter.VotingBasis.Markers.ArchMarker).Assembly,
                 typeof(Adapter.VotingIam.Markers.ArchMarker).Assembly,
                 typeof(Core.Markers.ArchMarker).Assembly,
-                typeof(Import.Innosolv.Markers.ArchMarker).Assembly,
-                typeof(Import.Loganto.Markers.ArchMarker).Assembly,
+                typeof(Core.Import.Loganto.Markers.ArchMarker).Assembly,
+                typeof(Core.Import.Innosolv.Markers.ArchMarker).Assembly,
                 typeof(Domain.Markers.ArchMarker).Assembly,
                 typeof(WebService.Markers.ArchMarker).Assembly).Build();
 

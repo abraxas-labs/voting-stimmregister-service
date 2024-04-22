@@ -3,5 +3,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Voting.Stimmregister.Domain\Voting.Stimmregister.Domain.csproj" />
   </ItemGroup>
-  
+
 </Project>

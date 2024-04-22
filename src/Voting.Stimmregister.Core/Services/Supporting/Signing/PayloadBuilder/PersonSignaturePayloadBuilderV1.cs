@@ -74,6 +74,7 @@ public class PersonSignaturePayloadBuilderV1 : IDisposable, ISignaturePayloadBui
             .AppendDelimited(person.ContactAddressLocality)
             .AppendDelimited(person.ContactAddressZipCode)
             .AppendDelimited(person.ContactCantonAbbreviation)
+            .AppendDelimited(person.ContactAddressCountryIdIso2)
             .AppendDelimited(person.ResidenceAddressExtensionLine1)
             .AppendDelimited(person.ResidenceAddressExtensionLine2)
             .AppendDelimited(person.ResidenceAddressStreet)

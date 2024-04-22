@@ -46,6 +46,9 @@
               </dateOfBirth>
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
+            <religionData>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+            </religionData>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Zürich</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">ZH</canton>
@@ -68,10 +71,10 @@
           <street>Big Ben Avenue</street>
           <houseNumber>5</houseNumber>
           <town>London</town>
-          <swissZipCode>3317</swissZipCode>
+          <foreignZipCode>3317</foreignZipCode>
           <country>
-            <countryIdISO2>CH</countryIdISO2>
-            <countryNameShort>Schweiz</countryNameShort>
+            <countryIdISO2>GB</countryIdISO2>
+            <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
         </addressInformation>
       </electoralAddress>
@@ -82,19 +85,17 @@
           <lastName>Klein</lastName>
         </person>
         <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <addressLine1>Big Ben Avenue</addressLine1>
-          <addressLine2>5</addressLine2>
           <street>Big Ben Avenue</street>
           <houseNumber>5</houseNumber>
           <town>London</town>
-          <swissZipCode>1317</swissZipCode>
+          <foreignZipCode>1317</foreignZipCode>
           <country>
-            <countryIdISO2>CH</countryIdISO2>
-            <countryNameShort>Schweiz</countryNameShort>
+            <countryIdISO2>GB</countryIdISO2>
+            <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
         </addressInformation>
       </deliveryAddress>
-      <isEvoter>false</isEvoter>
+      <isEvoter>true</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
           <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
@@ -146,10 +147,10 @@
           <street>Big Ben Avenue</street>
           <houseNumber>5</houseNumber>
           <town>London</town>
-          <swissZipCode>9017</swissZipCode>
+          <foreignZipCode>9017</foreignZipCode>
           <country>
-            <countryIdISO2>DE</countryIdISO2>
-            <countryNameShort>Deutschland</countryNameShort>
+            <countryIdISO2>GB</countryIdISO2>
+            <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
         </addressInformation>
       </electoralAddress>
@@ -160,15 +161,13 @@
           <lastName>Miro</lastName>
         </person>
         <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <addressLine1>Big Ben Avenue</addressLine1>
-          <addressLine2>5</addressLine2>
           <street>Big Ben Avenue</street>
           <houseNumber>5</houseNumber>
           <town>London</town>
-          <swissZipCode>9017</swissZipCode>
+          <foreignZipCode>9017</foreignZipCode>
           <country>
-            <countryIdISO2>DE</countryIdISO2>
-            <countryNameShort>Deutschland</countryNameShort>
+            <countryIdISO2>GB</countryIdISO2>
+            <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
         </addressInformation>
       </deliveryAddress>
@@ -213,6 +212,9 @@
               </dateOfBirth>
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
+            <religionData>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+            </religionData>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">St. Gallen</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">SG</canton>
@@ -239,10 +241,10 @@
           <street>Big Ben Avenue</street>
           <houseNumber>5</houseNumber>
           <town>London</town>
-          <swissZipCode>9031</swissZipCode>
+          <foreignZipCode>9031</foreignZipCode>
           <country>
-            <countryIdISO2>CH</countryIdISO2>
-            <countryNameShort>Schweiz</countryNameShort>
+            <countryIdISO2>GB</countryIdISO2>
+            <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
         </addressInformation>
       </electoralAddress>
@@ -253,19 +255,17 @@
           <lastName>Miro</lastName>
         </person>
         <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <addressLine1>Big Ben Avenue</addressLine1>
-          <addressLine2>5</addressLine2>
           <street>Big Ben Avenue</street>
           <houseNumber>5</houseNumber>
           <town>London</town>
-          <swissZipCode>9031</swissZipCode>
+          <foreignZipCode>9031</foreignZipCode>
           <country>
-            <countryIdISO2>CH</countryIdISO2>
-            <countryNameShort>Schweiz</countryNameShort>
+            <countryIdISO2>GB</countryIdISO2>
+            <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
         </addressInformation>
       </deliveryAddress>
-      <isEvoter>false</isEvoter>
+      <isEvoter>true</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
           <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
@@ -306,6 +306,9 @@
               </dateOfBirth>
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
+            <religionData>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+            </religionData>
             <extension>
               <postageCode xmlns="">90316</postageCode>
               <votingPlace xmlns="">
@@ -360,15 +363,15 @@
           <lastName>Berweger</lastName>
         </person>
         <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <addressLine1>Petrusstr</addressLine1>
-          <addressLine2>857</addressLine2>
+          <addressLine1>Appartement 2</addressLine1>
+          <addressLine2>Stockwerk 10</addressLine2>
           <street>Petrusstr.</street>
           <houseNumber>3</houseNumber>
           <town>Berlin</town>
           <foreignZipCode>90316</foreignZipCode>
           <country>
-            <countryIdISO2>CH</countryIdISO2>
-            <countryNameShort>Schweiz</countryNameShort>
+            <countryIdISO2>DE</countryIdISO2>
+            <countryNameShort>Deutschland</countryNameShort>
           </country>
         </addressInformation>
       </electoralAddress>
@@ -379,19 +382,19 @@
           <lastName>Berweger</lastName>
         </person>
         <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <addressLine1>Petrusstr</addressLine1>
-          <addressLine2>857</addressLine2>
+          <addressLine1>Appartement 2</addressLine1>
+          <addressLine2>Stockwerk 10</addressLine2>
           <street>Petrusstr.</street>
           <houseNumber>3</houseNumber>
           <town>Berlin</town>
           <foreignZipCode>90316</foreignZipCode>
           <country>
-            <countryIdISO2>CH</countryIdISO2>
-            <countryNameShort>Schweiz</countryNameShort>
+            <countryIdISO2>DE</countryIdISO2>
+            <countryNameShort>Deutschland</countryNameShort>
           </country>
         </addressInformation>
       </deliveryAddress>
-      <isEvoter>false</isEvoter>
+      <isEvoter>true</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
           <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
@@ -425,6 +428,9 @@
               </dateOfBirth>
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
+            <religionData>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">121</religion>
+            </religionData>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Mörschwil</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">SG</canton>
@@ -447,10 +453,10 @@
           <street>Champs Elisee</street>
           <houseNumber>5</houseNumber>
           <town>Paris</town>
-          <swissZipCode>9031</swissZipCode>
+          <foreignZipCode>9031</foreignZipCode>
           <country>
-            <countryIdISO2>CH</countryIdISO2>
-            <countryNameShort>Schweiz</countryNameShort>
+            <countryIdISO2>FR</countryIdISO2>
+            <countryNameShort>Frankreich</countryNameShort>
           </country>
         </addressInformation>
       </electoralAddress>
@@ -464,14 +470,14 @@
           <street>Champs Elisee</street>
           <houseNumber>5</houseNumber>
           <town>Paris</town>
-          <swissZipCode>9017</swissZipCode>
+          <foreignZipCode>4643</foreignZipCode>
           <country>
-            <countryIdISO2>CH</countryIdISO2>
-            <countryNameShort>Schweiz</countryNameShort>
+            <countryIdISO2>FR</countryIdISO2>
+            <countryNameShort>Frankreich</countryNameShort>
           </country>
         </addressInformation>
       </deliveryAddress>
-      <isEvoter>false</isEvoter>
+      <isEvoter>true</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
           <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">SK</domainOfInfluenceType>

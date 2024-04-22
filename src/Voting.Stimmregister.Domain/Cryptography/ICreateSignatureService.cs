@@ -13,18 +13,6 @@ namespace Voting.Stimmregister.Domain.Cryptography;
 public interface ICreateSignatureService
 {
     /// <summary>
-    /// Bulk signing provided person entities.
-    /// </summary>
-    /// <param name="entities">The person entities to sign.</param>
-    void BulkSignPersons(IReadOnlyCollection<PersonEntity> entities);
-
-    /// <summary>
-    /// Bulk signing provided domain of influence entities.
-    /// </summary>
-    /// <param name="domainOfInfluenceEntities">The domain of influence entities to sign.</param>
-    void BulkSignDomainOfInfluences(IReadOnlyCollection<DomainOfInfluenceEntity> domainOfInfluenceEntities);
-
-    /// <summary>
     /// Signing provided integrity entity for domain of influences.
     /// </summary>
     /// <param name="integrity">The integrity entity to sign.</param>

@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Voting.Stimmregister.Adapter.Data;
 
 #nullable disable
 
@@ -18,7 +15,7 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -106,6 +103,37 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
                     b.ToTable("BfsIntegrities");
                 });
 
+            modelBuilder.Entity("Voting.Stimmregister.Domain.Models.BfsStatisticEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Bfs")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("BfsName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EVoterDeregistrationCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EVoterRegistrationCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EVoterTotalCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("VoterTotalCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BfsStatistics");
+                });
+
             modelBuilder.Entity("Voting.Stimmregister.Domain.Models.DomainOfInfluenceEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -169,17 +197,6 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
 
                     b.Property<string>("SchoolCircleName")
                         .HasColumnType("text");
-
-                    b.Property<byte[]>("Signature")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("SignatureKeyId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<byte>("SignatureVersion")
-                        .HasColumnType("smallint");
 
                     b.Property<string>("Street")
                         .IsRequired()
@@ -330,6 +347,9 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("TenantId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TenantName")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -578,6 +598,9 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
                     b.Property<short>("CantonBfs")
                         .HasColumnType("smallint");
 
+                    b.Property<string>("ContactAddressCountryIdIso2")
+                        .HasColumnType("text");
+
                     b.Property<string>("ContactAddressDwellingNumber")
                         .HasColumnType("text");
 
@@ -774,17 +797,6 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Signature")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("SignatureKeyId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<byte>("SignatureVersion")
-                        .HasColumnType("smallint");
-
                     b.Property<string>("SourceSystemId")
                         .HasColumnType("text");
 
@@ -810,7 +822,14 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
 
                     b.HasIndex("IsLatest", "MunicipalityId", "Id");
 
+                    b.HasIndex("Vn", "IsLatest", "MunicipalityId")
+                        .IsUnique()
+                        .HasFilter("\"IsLatest\"");
+
                     b.HasIndex("IsLatest", "IsDeleted", "IsValid", "Id");
+
+                    b.HasIndex("SourceSystemId", "SourceSystemName", "VersionCount", "MunicipalityId")
+                        .IsUnique();
 
                     b.HasIndex("IsLatest", "IsDeleted", "OfficialName", "FirstName", "Id");
 
@@ -829,9 +848,45 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.OwnsOne("Voting.Stimmregister.Domain.Models.AccessControlListDoiReturnAddress", "ReturnAddress", b1 =>
+                        {
+                            b1.Property<Guid>("AccessControlListDoiEntityId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("AddressAddition")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("AddressLine1")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("AddressLine2")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("City")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Country")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Street")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("ZipCode")
+                                .HasColumnType("text");
+
+                            b1.HasKey("AccessControlListDoiEntityId");
+
+                            b1.ToTable("AccessControlListDois");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AccessControlListDoiEntityId");
+                        });
+
                     b.Navigation("ImportStatistic");
 
                     b.Navigation("Parent");
+
+                    b.Navigation("ReturnAddress");
                 });
 
             modelBuilder.Entity("Voting.Stimmregister.Domain.Models.BfsIntegrityEntity", b =>
@@ -867,6 +922,45 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("BfsIntegrityEntityId");
+                        });
+
+                    b.Navigation("AuditInfo")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Voting.Stimmregister.Domain.Models.BfsStatisticEntity", b =>
+                {
+                    b.OwnsOne("Voting.Stimmregister.Domain.Models.AuditInfo", "AuditInfo", b1 =>
+                        {
+                            b1.Property<Guid>("BfsStatisticEntityId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<string>("CreatedById")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("CreatedByName")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<DateTime?>("ModifiedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<string>("ModifiedById")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("ModifiedByName")
+                                .HasColumnType("text");
+
+                            b1.HasKey("BfsStatisticEntityId");
+
+                            b1.ToTable("BfsStatistics");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BfsStatisticEntityId");
                         });
 
                     b.Navigation("AuditInfo")

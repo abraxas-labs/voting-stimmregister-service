@@ -9,82 +9,88 @@ namespace Voting.Stimmregister.Domain.Enums;
 public enum DomainOfInfluenceType
 {
     /// <summary>
-    /// Domain of influence type is unspecified.
+    /// Domain of influence (DOI) type is unspecified.
+    /// Represents DOI- and district specific extended types.
     /// </summary>
-    Unspecified,
+    Unspecified = 0,
 
     /// <summary>
     /// Switzerland / Confederation (de: Schweiz / Bund).
     /// </summary>
-    Ch,
+    Ch = 1,
 
     /// <summary>
-    /// The canto (de: Kanton).
+    /// The canton (de: Kanton).
     /// </summary>
-    Ct,
+    Ct = 2,
 
     /// <summary>
     /// The district (de: Bezirk).
     /// </summary>
-    Bz,
+    Bz = 3,
 
     /// <summary>
     /// The municipality (de: Gemeinde).
     /// </summary>
-    Mu,
+    Mu = 4,
 
     /// <summary>
     /// The city district (de: Stadtkreis).
     /// </summary>
-    Sk,
+    Sk = 5,
 
     /// <summary>
     /// The school circle (de: Schulkreis).
     /// </summary>
-    Sc,
+    Sc = 6,
 
     /// <summary>
     /// The church circle (de: Kirchgemeinde).
     /// </summary>
-    Ki,
+    Ki = 7,
 
     /// <summary>
     /// The local community (de: Ortsbürgergemeinde).
     /// </summary>
-    Og,
+    Og = 8,
 
     /// <summary>
     /// The coorperation (de: Koprorationen).
     /// </summary>
-    Ko,
+    Ko = 9,
 
     /// <summary>
     /// Other types (de: Andere).
     /// </summary>
-    An,
+    An = 10,
 
     /// <summary>
     /// The catholic church circle (de: Kirchgemeinde (katholisch)).
+    /// Represents a specific type for a district.
     /// </summary>
-    KiKat,
+    KiKat = 11,
 
     /// <summary>
     /// The evangelic church circle (de: Kirchgemeinde (evangelisch)).
+    /// Represents a specific type for a district.
     /// </summary>
-    KiEva,
+    KiEva = 12,
 
     /// <summary>
     /// Another type (de: Verkehrskreis).
+    /// Represents a specific type for a district.
     /// </summary>
-    AnVek,
+    AnVek = 13,
 
     /// <summary>
     /// Another type (de: Wohnviertel).
+    /// Represents a specific type for a district.
     /// </summary>
-    AnWok,
+    AnWok = 14,
 
     /// <summary>
     /// Another type (de: Volkskreis).
+    /// Represents a specific type for a district.
     /// </summary>
-    AnVok,
+    AnVok = 15,
 }

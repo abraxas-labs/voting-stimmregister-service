@@ -40,7 +40,7 @@ public interface IPersonRepository : IDbRepository<DbContext, PersonEntity>
     /// <param name="includeDois">Whether to load the domain of influences.</param>
     /// <param name="paging">Optional. If set, paging is applied with these parameters.</param>
     /// <returns>A page of resolved people.</returns>
-    Task<PersonSearchResultPage<PersonEntity>> GetPersonByFilter(IReadOnlyCollection<FilterCriteriaEntity> criteria, DateOnly referenceKeyDate, bool includeDois, Pageable? paging);
+    Task<PersonSearchResultPageModel<PersonEntity>> GetPersonByFilter(IReadOnlyCollection<FilterCriteriaEntity> criteria, DateOnly referenceKeyDate, bool includeDois, Pageable? paging);
 
     /// <summary>
     /// Gets the count of persons by given filter criteria.
@@ -56,7 +56,7 @@ public interface IPersonRepository : IDbRepository<DbContext, PersonEntity>
     /// <param name="filterVersionId">The id of the filter version.</param>
     /// <param name="paging">Optional. If set, paging is applied with these parameters.</param>
     /// <returns>A page of resolved people.</returns>
-    Task<PersonSearchResultPage<PersonEntity>> GetPersonsByFilterVersionId(Guid filterVersionId, Pageable? paging);
+    Task<PersonSearchResultPageModel<PersonEntity>> GetPersonsByFilterVersionId(Guid filterVersionId, Pageable? paging);
 
     /// <summary>
     /// Gets the latest person with the specified register Id including all assigned domain of influences.
@@ -67,13 +67,13 @@ public interface IPersonRepository : IDbRepository<DbContext, PersonEntity>
     Task<PersonEntity> GetPersonByRegisterIdIncludingDoIs(Guid personRegisterId);
 
     /// <summary>
-    /// Gets the latest person with voting rights based on the vn and canton bfs.
-    /// Ignores the acl.
+    /// Gets the most recent person with voting rights based on the vn and canton bfs.
+    /// If more than one person is found, the one with the most recent revision is selected.
     /// </summary>
     /// <param name="vn">The vn of the person to be searched.</param>
     /// <param name="cantonBfs">The canton bfs number of the person to be searched.</param>
     /// <returns>The resolved person.</returns>
-    Task<PersonEntity?> GetSingleOrDefaultWithVotingRightsByVnAndCantonBfsIgnoreAcl(long vn, short cantonBfs);
+    Task<PersonEntity?> GetMostRecentWithVotingRightsByVnAndCantonBfsIgnoreAcl(long vn, short cantonBfs);
 
     /// <summary>
     /// Returns all persons found by a filter version as an <see cref="IAsyncEnumerable{T}"/>.

@@ -2,7 +2,6 @@
 // For license information see LICENSE file
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -86,10 +85,8 @@ public class FilterGrpcService : FilterService.FilterServiceBase
     public override async Task<FilterServiceSaveFilterResponse> Save(FilterServiceSaveFilterRequest request, ServerCallContext context)
     {
         var municipalityId = await GetMunicipalityId() ?? throw new ForbiddenException("no municipality id found");
-        var filterModel = _mapper.Map<FilterServiceSaveFilterRequest, FilterEntity>(request);
-        filterModel.FilterCriterias = _mapper
-            .Map<IEnumerable<FilterCriteriaModel>, IEnumerable<FilterCriteriaEntity>>(request.Criteria).ToHashSet();
 
+        var filterModel = _mapper.Map<FilterServiceSaveFilterRequest, FilterEntity>(request);
         var id = await _filterService.Save(filterModel, municipalityId);
         return new FilterServiceSaveFilterResponse
         {

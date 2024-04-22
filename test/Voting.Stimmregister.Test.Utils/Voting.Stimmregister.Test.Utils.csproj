@@ -9,4 +9,5 @@
     <PackageReference Include="Voting.Lib.Cryptography.Mocks" Version="$(VotingLibVersion)" />
     <PackageReference Include="Voting.Lib.Eventing.Testing" Version="$(VotingLibVersion)" />
   </ItemGroup>
+
 </Project>

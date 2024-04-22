@@ -2,6 +2,7 @@
 // For license information see LICENSE file
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Google.Protobuf.WellKnownTypes;
@@ -9,6 +10,7 @@ using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using Voting.Lib.Testing.Mocks;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Proto.V1.Services;
@@ -40,7 +42,7 @@ public class CreateVersionTest : BaseWriteableDbGrpcTest<FilterService.FilterSer
     [Fact]
     public async Task CreateVersion_SgManager_CreateNew()
     {
-        const string name = "CreateVersion SgManager CreateNew";
+        const string name = "Hello_World (1)";
         var deadline = Timestamp.FromDateTime(DateTime.SpecifyKind(new DateTime(2012, 4, 12), DateTimeKind.Utc));
         var versionEntity = await CreateVersion_Test(SgManagerClient, name: name, deadline: deadline);
         FixFilterCriteriaChangingFields(versionEntity!);
@@ -51,7 +53,7 @@ public class CreateVersionTest : BaseWriteableDbGrpcTest<FilterService.FilterSer
     [Fact]
     public async Task CreateVersion_SgManager_ShouldFailValidtionName()
     {
-        const string name = nameof(CreateVersion_SgManager_CreateNew);
+        const string name = "Hello\nWorld ";
         var deadline = Timestamp.FromDateTime(DateTime.SpecifyKind(new DateTime(2012, 4, 12), DateTimeKind.Utc));
         await CreateVersion_Test(SgManagerClient, name: name, expectThrows: true, expectedStatusCode: StatusCode.InvalidArgument, deadline: deadline);
     }
@@ -121,6 +123,27 @@ public class CreateVersionTest : BaseWriteableDbGrpcTest<FilterService.FilterSer
             await SgManagerClient.CreateVersionAsync(request));
 
         exception.StatusCode.Should().Be(StatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task CreateVersion_RoleUnauthorized_ShouldReturnPermissionDenied()
+    {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+            Roles.Reader,
+        };
+
+        const string name = "CreateVersion Role Unauthorized CreateNew";
+        var dateTime = new DateTime(2019, 5, 17, 0, 0, 0, DateTimeKind.Utc);
+        var deadline = Timestamp.FromDateTime(dateTime);
+
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
+        await CreateVersion_Test(client, name: name, expectThrows: true, expectedStatusCode: StatusCode.PermissionDenied, deadline: deadline);
     }
 
     protected override async Task AuthorizationTestCall(FilterService.FilterServiceClient service)
@@ -198,7 +221,7 @@ public class CreateVersionTest : BaseWriteableDbGrpcTest<FilterService.FilterSer
     {
         return await RunOnDb(async db =>
             await db.FilterVersions.IgnoreQueryFilters()
-                .Include(version => version.FilterCriterias)
+                .Include(version => version.FilterCriterias.OrderBy(c => c.FilterValue))
                 .SingleOrDefaultAsync(version => version.Name == versionName));
     }
 }

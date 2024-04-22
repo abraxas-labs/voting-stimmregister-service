@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
@@ -47,6 +48,24 @@ public class RenameVersionTest : BaseWriteableDbGrpcTest<FilterService.FilterSer
     {
         const string name = "RenameVersion SgManager NotExistingVersion";
         _ = await RenameVersion_Test(SgManagerClient, filterVersionId: Guid.Empty, name: name, expectThrows: true, expectedStatusCode: StatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task RenameVersion_RoleUnauthorized_ShouldReturnPermissionDenied()
+    {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+            Roles.Reader,
+        };
+
+        const string name = "RenameVersion Role Unauthorized ExistingVersion";
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
+        await RenameVersion_Test(client, filterVersionId: FilterVersionMockedData.SomeFilterVersion_MunicipalityIdOther2.Id, name: name, expectThrows: true, expectedStatusCode: StatusCode.PermissionDenied);
     }
 
     protected override async Task AuthorizationTestCall(FilterService.FilterServiceClient service)

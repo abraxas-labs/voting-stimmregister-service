@@ -14,6 +14,7 @@
       "ImportStatisticId": null,
       "ImportStatistic": null,
       "Children": [],
+      "ReturnAddress": null,
       "Id": "3e2ff4ab-4147-4b29-bac7-1651e7d8422d"
     },
     {
@@ -30,6 +31,7 @@
       "ImportStatisticId": null,
       "ImportStatistic": null,
       "Children": [],
+      "ReturnAddress": null,
       "Id": "cf0fb17f-8e71-4f9e-ab80-6412d42d00aa"
     }
   ]

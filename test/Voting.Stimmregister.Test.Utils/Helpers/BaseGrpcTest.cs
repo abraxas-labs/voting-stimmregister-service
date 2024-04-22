@@ -31,6 +31,8 @@ public abstract class BaseGrpcTest<TService, TFactory, TStartup> : GrpcAuthoriza
     private readonly Lazy<TService> _lazyManualExporterClient;
     private readonly Lazy<TService> _lazyApiExporterClient;
     private readonly Lazy<TService> _lazyImportObserverClient;
+    private readonly Lazy<TService> _lazyRegistrationStatisticReaderClient;
+    private readonly Lazy<TService> _lazyUnknownRegistrationStatisticReaderClient;
     private readonly Lazy<TService> _lazyUnknownClient;
 
     protected BaseGrpcTest(TFactory factory)
@@ -67,6 +69,12 @@ public abstract class BaseGrpcTest<TService, TFactory, TStartup> : GrpcAuthoriza
 
         _lazyImportObserverClient = new(() =>
             CreateGrpcService(CreateGrpcChannel(true, roles: new[] { Roles.ImportObserver, Roles.Reader }, tenant: VotingIamTenantIds.Abraxas)));
+
+        _lazyRegistrationStatisticReaderClient = new(() =>
+            CreateGrpcService(CreateGrpcChannel(true, roles: new[] { Roles.EVotingStatisticsReader }, tenant: VotingIamTenantIds.KTSG)));
+
+        _lazyUnknownRegistrationStatisticReaderClient = new(() =>
+            CreateGrpcService(CreateGrpcChannel(true, roles: new[] { Roles.EVotingStatisticsReader }, tenant: VotingIamTenantIds.Unknown)));
     }
 
     protected TService UnauthorizedClient => _lazyUnauthorizedClient.Value;
@@ -90,6 +98,10 @@ public abstract class BaseGrpcTest<TService, TFactory, TStartup> : GrpcAuthoriza
     protected TService ApiExporterClient => _lazyApiExporterClient.Value;
 
     protected TService ImportObserverClient => _lazyImportObserverClient.Value;
+
+    protected TService RegistrationStatisticReaderClient => _lazyRegistrationStatisticReaderClient.Value;
+
+    protected TService UnknownRegistrationStatisticReaderClient => _lazyUnknownRegistrationStatisticReaderClient.Value;
 
     protected void RunOnDb(Action<DataContext> action)
         => RunScoped(action);

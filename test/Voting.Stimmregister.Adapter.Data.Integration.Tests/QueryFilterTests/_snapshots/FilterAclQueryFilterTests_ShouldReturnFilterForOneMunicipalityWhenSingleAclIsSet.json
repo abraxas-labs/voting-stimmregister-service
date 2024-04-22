@@ -5,6 +5,7 @@
       "Description": "",
       "MunicipalityId": 1111,
       "TenantId": null,
+      "TenantName": null,
       "LatestVersion": null,
       "FilterVersions": [],
       "FilterCriterias": [],

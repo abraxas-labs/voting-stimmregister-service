@@ -27,6 +27,10 @@ public static class AclDoiVotingBasisMockedData
             Type = Abraxas.Voting.Basis.Shared.V1.DomainOfInfluenceType.Ch,
             Canton = DomainOfInfluenceCanton.Sg,
             Children = { SG_Auslandschweizer_L2_MU, SG_Kanton_StGallen_L2_CT },
+            ReturnAddress = new DomainOfInfluenceVotingCardReturnAddress
+            {
+                AddressLine1 = "Staatskanzlei St. Gallen",
+            },
         };
 
     public static PoliticalDomainOfInfluence SG_Auslandschweizer_L2_MU
@@ -109,6 +113,14 @@ public static class AclDoiVotingBasisMockedData
             TenantId = VotingIamTenantIds.KTSG,
             Type = Abraxas.Voting.Basis.Shared.V1.DomainOfInfluenceType.Mu,
             Canton = DomainOfInfluenceCanton.Unspecified,
+            ReturnAddress = new DomainOfInfluenceVotingCardReturnAddress
+            {
+                AddressLine1 = "Gemeindekanzlei Goldach",
+                City = "Goldach",
+                Country = "SWITZERLAND",
+                Street = "Postfach",
+                ZipCode = "9403",
+            },
         };
 
     public static PoliticalDomainOfInfluence SG_Rorschacherberg_L5_MU
@@ -213,7 +225,7 @@ public static class AclDoiVotingBasisMockedData
 
     private static AccessControlListDoiEntity GetMockedEntity(PoliticalDomainOfInfluence model)
     {
-        return new AccessControlListDoiEntity
+        var entity = new AccessControlListDoiEntity
         {
             Id = Guid.Parse(model.Id),
             Name = model.Name,
@@ -221,11 +233,28 @@ public static class AclDoiVotingBasisMockedData
             TenantName = model.TenantName,
             TenantId = model.TenantId,
             Type = (Domain.Enums.DomainOfInfluenceType)model.Type,
-            Canton = model.Canton == DomainOfInfluenceCanton.Unspecified ?
-                Canton.Unknown :
-                Enum.Parse<Canton>(model.Canton.ToString(), ignoreCase: true),
+            Canton =
+                model.Canton == DomainOfInfluenceCanton.Unspecified
+                    ? Canton.Unknown
+                    : Enum.Parse<Canton>(model.Canton.ToString(), ignoreCase: true),
             ParentId = string.IsNullOrWhiteSpace(model.ParentId) ? null : Guid.Parse(model.ParentId),
             IsValid = true,
         };
+
+        if (model.ReturnAddress != null)
+        {
+            entity.ReturnAddress = new AccessControlListDoiReturnAddress
+            {
+                AddressAddition = model.ReturnAddress.AddressAddition,
+                AddressLine1 = model.ReturnAddress.AddressLine1,
+                AddressLine2 = model.ReturnAddress.AddressLine2,
+                City = model.ReturnAddress.City,
+                Country = model.ReturnAddress.Country,
+                Street = model.ReturnAddress.Street,
+                ZipCode = model.ReturnAddress.ZipCode,
+            };
+        }
+
+        return entity;
     }
 }

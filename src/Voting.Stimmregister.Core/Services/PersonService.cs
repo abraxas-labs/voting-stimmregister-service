@@ -62,7 +62,7 @@ public class PersonService : IPersonService
         => _lastSearchParameterService.GetForCurrentUserAndTenant(searchType);
 
     /// <inheritdoc />
-    public async Task<PersonSearchResultPage<PersonEntityModel>> GetAll(PersonSearchParametersModel searchParameters, bool requiredValidPageSize = true, bool includeDois = false)
+    public async Task<PersonSearchResultPageModel<PersonEntityModel>> GetAll(PersonSearchParametersModel searchParameters, bool requiredValidPageSize = true, bool includeDois = false)
     {
         var stopWatch = Stopwatch.StartNew();
         var referenceKeyDate = _clock.Today;
@@ -75,7 +75,7 @@ public class PersonService : IPersonService
             await _lastSearchParameterService.Store(searchParameters.SearchType, searchParameters.Paging, criteria);
             stopWatch.Stop();
             RegisterStatistics(searchParameters, stopWatch, searchResult.TotalItemsCount);
-            var personEntitySearchResult = _mapper.Map<PersonSearchResultPage<PersonEntityModel>>(
+            var personEntitySearchResult = _mapper.Map<PersonSearchResultPageModel<PersonEntityModel>>(
                 searchResult,
                 opt => opt.Items[MappingConstants.ReferenceKeyDate] = referenceKeyDate);
 
@@ -103,9 +103,9 @@ public class PersonService : IPersonService
         return person;
     }
 
-    public async Task<PersonEntityModel?> GetSingleOrDefaultWithVotingRightsByVnAndCantonBfsIgnoreAcl(long vn, short cantonBfs)
+    public async Task<PersonEntityModel?> GetMostRecentWithVotingRightsByVnAndCantonBfs(long vn, short cantonBfs)
     {
-        var personEntity = await _personRepository.GetSingleOrDefaultWithVotingRightsByVnAndCantonBfsIgnoreAcl(vn, cantonBfs);
+        var personEntity = await _personRepository.GetMostRecentWithVotingRightsByVnAndCantonBfsIgnoreAcl(vn, cantonBfs);
         if (personEntity == null)
         {
             return null;
@@ -117,12 +117,12 @@ public class PersonService : IPersonService
         return person;
     }
 
-    public async Task<PersonSearchResultPage<PersonEntityModel>> GetByFilterVersionId(PersonSearchFilterIdParametersModel searchParameters, bool requiredValidPageSize = true, bool includeDois = false)
+    public async Task<PersonSearchResultPageModel<PersonEntityModel>> GetByFilterVersionId(PersonSearchFilterIdParametersModel searchParameters, bool requiredValidPageSize = true, bool includeDois = false)
     {
         var referenceKeyDate = _clock.Today;
 
         ValidatePagingParameters(requiredValidPageSize, searchParameters.Paging);
-        PersonSearchResultPage<PersonEntity> searchResult;
+        PersonSearchResultPageModel<PersonEntity> searchResult;
         if (searchParameters.VersionId != null && searchParameters.VersionId != Guid.Empty)
         {
             var versionId = searchParameters.VersionId.Value;
@@ -145,7 +145,7 @@ public class PersonService : IPersonService
             throw new InvalidSearchFilterCriteriaException($"Filter Version Id '{searchParameters.VersionId}' or Filter Id '{searchParameters.FilterId}' must be set.");
         }
 
-        var personEntitySearchResult = _mapper.Map<PersonSearchResultPage<PersonEntityModel>>(searchResult);
+        var personEntitySearchResult = _mapper.Map<PersonSearchResultPageModel<PersonEntityModel>>(searchResult);
         DeriveComputedInfos(personEntitySearchResult.Items, referenceKeyDate);
         await DeriveActuality(personEntitySearchResult.Items);
         return personEntitySearchResult;

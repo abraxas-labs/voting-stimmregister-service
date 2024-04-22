@@ -1,9 +1,11 @@
 // (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using Voting.Lib.Database.Models;
+
 namespace Voting.Stimmregister.Domain.Models;
 
-public class ImportedEntity : BaseEntityWithSignature
+public class ImportedEntity : BaseEntity
 {
     /// <summary>
     /// Gets or sets the municipality id (BFS number), i.e. '3214'.

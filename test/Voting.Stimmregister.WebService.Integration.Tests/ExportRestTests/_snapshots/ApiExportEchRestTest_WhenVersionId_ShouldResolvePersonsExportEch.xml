@@ -20,7 +20,7 @@
         <registerName>Stehendes Stimmregister</registerName>
       </cantonalRegister>
     </reportingAuthority>
-    <numberOfVoters>2</numberOfVoters>
+    <numberOfVoters>3</numberOfVoters>
     <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
       <person>
         <foreigner>
@@ -65,8 +65,8 @@
           <town>St. Gallen</town>
           <swissZipCode>9002</swissZipCode>
           <country>
-            <countryIdISO2>DE</countryIdISO2>
-            <countryNameShort>Deutschland</countryNameShort>
+            <countryIdISO2>CH</countryIdISO2>
+            <countryNameShort>Schweiz</countryNameShort>
           </country>
         </addressInformation>
       </electoralAddress>
@@ -81,8 +81,8 @@
           <town>St. Gallen</town>
           <swissZipCode>9002</swissZipCode>
           <country>
-            <countryIdISO2>DE</countryIdISO2>
-            <countryNameShort>Deutschland</countryNameShort>
+            <countryIdISO2>CH</countryIdISO2>
+            <countryNameShort>Schweiz</countryNameShort>
           </country>
         </addressInformation>
       </deliveryAddress>
@@ -120,6 +120,9 @@
               </dateOfBirth>
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
+            <religionData>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+            </religionData>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Teufen</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">AR</canton>
@@ -214,6 +217,128 @@
           <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
           <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
           <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Teufen</domainOfInfluenceName>
+        </domainOfInfluence>
+      </domainOfInfluenceInfo>
+    </voter>
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+      <person>
+        <swissAbroad>
+          <swissAbroadPerson>
+            <personIdentification>
+              <localPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC.EW</personIdCategory>
+                <personId>02347558965</personId>
+              </localPersonId>
+              <otherPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC</personIdCategory>
+                <personId>faa6cdb4-58b0-4e07-97cd-c52227d26a33</personId>
+              </otherPersonId>
+              <otherPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC.REV</personIdCategory>
+                <personId>ef3fd8ad-b603-44a8-a7cc-e994e1df4222</personId>
+              </otherPersonId>
+              <officialName xmlns="http://www.ech.ch/xmlns/eCH-0044/4">Berweger</officialName>
+              <firstName xmlns="http://www.ech.ch/xmlns/eCH-0044/4">Natasha</firstName>
+              <sex xmlns="http://www.ech.ch/xmlns/eCH-0044/4">2</sex>
+              <dateOfBirth xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <yearMonthDay>1997-12-30</yearMonthDay>
+              </dateOfBirth>
+            </personIdentification>
+            <languageOfCorrespondance>de</languageOfCorrespondance>
+            <religionData>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+            </religionData>
+            <extension>
+              <postageCode xmlns="">90316</postageCode>
+              <votingPlace xmlns="">
+                <organisation>
+                  <organisationName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Staatskanzlei</organisationName>
+                  <organisationNameAddOn1 xmlns="http://www.ech.ch/xmlns/eCH-0010/6">St. Gallen</organisationNameAddOn1>
+                </organisation>
+                <addressInformation>
+                  <addressLine1 xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Kanton St. Gallen</addressLine1>
+                  <addressLine2 xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Staatskanzlei</addressLine2>
+                  <street xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Regierungsgebäude</street>
+                  <town xmlns="http://www.ech.ch/xmlns/eCH-0010/6">St. Gallen</town>
+                  <swissZipCode xmlns="http://www.ech.ch/xmlns/eCH-0010/6">9001</swissZipCode>
+                  <country xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+                    <countryIdISO2>CH</countryIdISO2>
+                    <countryNameShort>Switzerland</countryNameShort>
+                  </country>
+                </addressInformation>
+              </votingPlace>
+              <address xmlns="">
+                <line1>Petrusstr</line1>
+                <line2>857</line2>
+                <line3>Sins</line3>
+                <line4 />
+                <line5 />
+                <line6>Berlin </line6>
+                <line7>EH3 9QN </line7>
+              </address>
+            </extension>
+            <placeOfOrigin>
+              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Basel Landschaft</originName>
+              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">BL</canton>
+            </placeOfOrigin>
+          </swissAbroadPerson>
+          <dateOfRegistration>2020-01-10</dateOfRegistration>
+          <residenceCountry>
+            <countryId xmlns="http://www.ech.ch/xmlns/eCH-0008/3">8207</countryId>
+            <countryIdISO2 xmlns="http://www.ech.ch/xmlns/eCH-0008/3">DE</countryIdISO2>
+            <countryNameShort xmlns="http://www.ech.ch/xmlns/eCH-0008/3">Germany</countryNameShort>
+          </residenceCountry>
+          <municipality>
+            <municipalityId xmlns="http://www.ech.ch/xmlns/eCH-0007/6">9170</municipalityId>
+            <municipalityName xmlns="http://www.ech.ch/xmlns/eCH-0007/6">Auslandschweizer</municipalityName>
+          </municipality>
+        </swissAbroad>
+      </person>
+      <dataLock>0</dataLock>
+      <electoralAddress>
+        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <mrMrs>1</mrMrs>
+          <firstName>Natasha</firstName>
+          <lastName>Berweger</lastName>
+        </person>
+        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <addressLine1>Appartement 2</addressLine1>
+          <addressLine2>Stockwerk 10</addressLine2>
+          <street>Petrusstr.</street>
+          <houseNumber>3</houseNumber>
+          <town>Berlin</town>
+          <foreignZipCode>90316</foreignZipCode>
+          <country>
+            <countryIdISO2>DE</countryIdISO2>
+            <countryNameShort>Deutschland</countryNameShort>
+          </country>
+        </addressInformation>
+      </electoralAddress>
+      <deliveryAddress>
+        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <mrMrs>1</mrMrs>
+          <firstName>Natasha</firstName>
+          <lastName>Berweger</lastName>
+        </person>
+        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <addressLine1>Appartement 2</addressLine1>
+          <addressLine2>Stockwerk 10</addressLine2>
+          <street>Petrusstr.</street>
+          <houseNumber>3</houseNumber>
+          <town>Berlin</town>
+          <foreignZipCode>90316</foreignZipCode>
+          <country>
+            <countryIdISO2>DE</countryIdISO2>
+            <countryNameShort>Deutschland</countryNameShort>
+          </country>
+        </addressInformation>
+      </deliveryAddress>
+      <isEvoter>true</isEvoter>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
+          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">BL</localDomainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Basel Landschaft</domainOfInfluenceName>
         </domainOfInfluence>
       </domainOfInfluenceInfo>
     </voter>

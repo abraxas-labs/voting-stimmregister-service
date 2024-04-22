@@ -41,6 +41,9 @@ public class AccessControlListDoiModelBuilder : IEntityTypeConfiguration<AccessC
             .Property(d => d.Type)
             .HasConversion(new EnumToStringConverter<DomainOfInfluenceType>());
 
+        builder
+            .OwnsOne(d => d.ReturnAddress);
+
         // Note: No QueryFilter here, because AccessControlListDoiEntity is the base to apply QueryFilter's to other entities.
     }
 }

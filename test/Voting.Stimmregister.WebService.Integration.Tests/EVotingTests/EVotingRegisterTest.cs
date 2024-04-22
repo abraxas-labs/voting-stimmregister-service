@@ -47,6 +47,7 @@ public class EVotingRegisterTest : BaseWriteableDbRestTest
     {
         await base.InitializeAsync();
         _config.EnableKewrAndLoganto = true;
+        _config.SkipForwardingEVoterFlag = [];
     }
 
     [Fact]
@@ -147,7 +148,7 @@ public class EVotingRegisterTest : BaseWriteableDbRestTest
     }
 
     [Fact]
-    public async Task ShouldPersistEVotingStatusWhenLogantoIsDisabled()
+    public async Task ShouldPersistEVotingStatusWhenLogantoAndKewrIsDisabled()
     {
         _config.EnableKewrAndLoganto = false;
 
@@ -156,7 +157,54 @@ public class EVotingRegisterTest : BaseWriteableDbRestTest
         await PersonMockedData.Seed(RunScoped);
         await BfsIntegrityMockedData.Seed(RunScoped);
 
-        var ahvNumber = PersonMockedData.Person_3213_Goldach_Swiss_Abroad.Vn!.Value;
+        var ahvNumber = PersonMockedData.Person_3213_Goldach_1.Vn!.Value;
+
+        var resp = await ApiEVotingClient.PostAsJsonAsync(RegisterApiUrl, new CreateRegistrationRequest
+        {
+            Ahvn13 = Ahvn13.Parse(ahvNumber).ToString(),
+            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
+        });
+
+        resp.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        await RunOnDb(context =>
+        {
+            var eVoter = context.Set<EVoterEntity>().FirstOrDefault(v => v.Ahvn13 == ahvNumber);
+            var audits = context.Set<EVoterAuditEntity>().Where(v => v.EVoterId == eVoter!.Id);
+            eVoter.Should().NotBeNull();
+            eVoter!.BfsCanton.Should().Be(EVotingBfsCantonMockedData.BfsCantonValid);
+            eVoter.BfsMunicipality.Should().Be((short)PersonMockedData.Person_3213_Goldach_1.MunicipalityId);
+            eVoter.ContextId.Should().BeNull();
+            eVoter.EVoterFlag.Should().BeTrue();
+            eVoter.AuditInfo.CreatedById.Should().Be("default-user-id");
+            audits.Should().ContainSingle();
+            var audit = audits.First();
+            audit.ContextId.Should().BeNull();
+            audit.BfsCanton.Should().Be(EVotingBfsCantonMockedData.BfsCantonValid);
+            audit.BfsMunicipality.Should().Be((short)PersonMockedData.Person_3213_Goldach_1.MunicipalityId);
+            audit.EVoterFlag.Should().BeTrue();
+            audit.EVoterId.Should().Be(eVoter.Id);
+            audit.StatusCode.Should().BeNull();
+            audit.EVoterAuditInfo.CreatedById.Should().Be("default-user-id");
+
+            return Task.CompletedTask;
+        });
+    }
+
+    [Fact]
+    public async Task ShouldPersistEVotingStatusWhenOnlyLogantoIsDisabled()
+    {
+        HttpClientFactoryMocked.KewrSearchResponse = HttpClientFactoryMocked.KewrSearchValidResult;
+        HttpClientFactoryMocked.KewrGetResponse = HttpClientFactoryMocked.KewrGetWithVotingPermission;
+
+        _config.SkipForwardingEVoterFlag = [3203, 3213];
+
+        await ResetDb();
+        await AclDoiVotingBasisMockedData.Seed(RunScoped);
+        await PersonMockedData.Seed(RunScoped);
+        await BfsIntegrityMockedData.Seed(RunScoped);
+
+        var ahvNumber = PersonMockedData.Person_3213_Goldach_1.Vn!.Value;
 
         var resp = await ApiEVotingClient.PostAsJsonAsync(RegisterApiUrl, new CreateRegistrationRequest
         {

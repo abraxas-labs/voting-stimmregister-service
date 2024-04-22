@@ -25,7 +25,7 @@ public class ServerTimingMiddleware : IMiddleware
 
         context.Response.OnStarting(() =>
         {
-            context.Response.Headers.Add(
+            context.Response.Headers.Append(
                 ServerTimingHeaderName,
                 activities.BuildHeaderString());
             return Task.CompletedTask;

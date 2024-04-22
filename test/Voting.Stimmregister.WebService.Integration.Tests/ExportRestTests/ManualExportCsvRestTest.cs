@@ -20,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Test.Utils.Helpers;
@@ -173,6 +174,27 @@ public class ManualExportCsvRestTest : BaseWriteableDbRestTest
 
         var ex = await Assert.ThrowsAsync<HttpRequestException>(() => GetRecords(request));
         ex.InnerException?.InnerException?.Message.Should().Be("The application aborted the request.");
+    }
+
+    [Fact]
+    public async Task WhenUnauthorizedRole_ShouldReturnForbidden()
+    {
+        var request = new PersonSearchParametersExportModel();
+        var rolesArray = new[]
+        {
+            Roles.Reader,
+            Roles.Manager,
+            Roles.ManualImporter,
+            Roles.ApiImporter,
+            Roles.ImportObserver,
+            Roles.ApiExporter,
+        };
+
+        var client = CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray);
+        var response = await client.PostAsJsonAsync(Path.Combine(RouteController, RouteExportCsv), request);
+        response.StatusCode
+            .Should()
+            .Be(HttpStatusCode.Forbidden);
     }
 
     protected override Task<HttpResponseMessage> AuthorizationTestCall(HttpClient httpClient)

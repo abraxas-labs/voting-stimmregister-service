@@ -78,4 +78,10 @@ public class AccessControlListDoiEntity : BaseEntity
     /// Empty if the current DOI is a leaf node, otherwise it may have one to many children.
     /// </summary>
     public ICollection<AccessControlListDoiEntity> Children { get; set; } = new HashSet<AccessControlListDoiEntity>();
+
+    /// <summary>
+    /// Gets or sets the return address of the current DOI.
+    /// Empty if the current DOI is not a leaf node or not responsible for voting cards.
+    /// </summary>
+    public AccessControlListDoiReturnAddress? ReturnAddress { get; set; }
 }

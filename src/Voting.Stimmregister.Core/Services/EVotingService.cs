@@ -103,7 +103,7 @@ public class EVotingService : IEVotingService
         // Get person details
         var person = await GetEVotingPerson(ahvn13, bfsCanton);
 
-        if (!_config.EnableKewrAndLoganto)
+        if (!_config.EnableKewrAndLoganto || _config.SkipForwardingEVoterFlag.Contains(person.BfsMunicipality))
         {
             await SaveEVoter(ahvn13, bfsCanton, person.BfsMunicipality, true, null, null);
             return;
@@ -135,7 +135,7 @@ public class EVotingService : IEVotingService
     {
         var person = await GetEVotingPerson(ahvn13, bfsCanton);
 
-        if (!_config.EnableKewrAndLoganto)
+        if (!_config.EnableKewrAndLoganto || _config.SkipForwardingEVoterFlag.Contains(person.BfsMunicipality))
         {
             await SaveEVoter(person.Ahvn13, bfsCanton, person.BfsMunicipality, false, null, null);
             return;
@@ -193,7 +193,7 @@ public class EVotingService : IEVotingService
             return await _kewrAdapter.GetPersonWithMainResidenceByAhvn13(ahvn13, bfsCanton);
         }
 
-        var person = await _personService.GetSingleOrDefaultWithVotingRightsByVnAndCantonBfsIgnoreAcl(ahvn13.ToNumber(), bfsCanton);
+        var person = await _personService.GetMostRecentWithVotingRightsByVnAndCantonBfs(ahvn13.ToNumber(), bfsCanton);
         if (person == null)
         {
             throw new EVotingValidationException(

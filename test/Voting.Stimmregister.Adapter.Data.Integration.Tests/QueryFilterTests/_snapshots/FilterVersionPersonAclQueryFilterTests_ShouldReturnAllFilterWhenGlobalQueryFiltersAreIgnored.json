@@ -3,6 +3,21 @@
     {
       "FilterVersionId": "3333d8dd-057c-4449-9630-12dacc12ba05",
       "FilterVersion": null,
+      "PersonId": "ef3fd8ad-b603-44a8-a7cc-e994e1df4222",
+      "Person": null,
+      "AuditInfo": {
+        "CreatedById": "default-user-id",
+        "CreatedByName": "MockDataSeeder",
+        "CreatedAt": "2020-01-10T13:12:10.2Z",
+        "ModifiedById": "default-user-id",
+        "ModifiedByName": "MockDataSeeder",
+        "ModifiedAt": "2020-01-10T13:12:10.2Z"
+      },
+      "Id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "FilterVersionId": "3333d8dd-057c-4449-9630-12dacc12ba05",
+      "FilterVersion": null,
       "PersonId": "1bcf78fc-66df-42eb-9adf-157f884eb360",
       "Person": null,
       "AuditInfo": {

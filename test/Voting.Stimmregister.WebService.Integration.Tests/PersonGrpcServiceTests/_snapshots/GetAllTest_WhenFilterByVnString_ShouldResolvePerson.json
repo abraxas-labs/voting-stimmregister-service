@@ -14,7 +14,7 @@
       },
       "DateOfBirthAdjusted": true,
       "OriginalName": "Katherina",
-      "AllianceName": "Mercury",
+      "AllianceName": "Jackson-Mercury",
       "AliasName": "Catherina",
       "OtherName": "Michaela",
       "CallName": "Cathy",
@@ -60,7 +60,7 @@
       "ResidenceAddressHouseNumber": "27",
       "ResidenceAddressPostOfficeBoxText": "Postfach",
       "ResidenceAddressTown": "Winkeln SG",
-      "ResidenceCountry": "Schweiz",
+      "ResidenceCountry": "CH",
       "ResidenceAddressZipCode": "9015",
       "MoveInArrivalDate": {
         "Seconds": 982800000,

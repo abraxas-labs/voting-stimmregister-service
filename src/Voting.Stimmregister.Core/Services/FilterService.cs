@@ -251,6 +251,7 @@ public class FilterService : IFilterService
         entity.Id = Guid.Empty;
         entity.MunicipalityId = municipalityId;
         entity.TenantId = _permission.TenantId;
+        entity.TenantName = _permission.TenantName;
         entity.FilterCriterias = new HashSet<FilterCriteriaEntity>();
         _permission.ClearModified(entity);
         _permission.SetCreated(entity);

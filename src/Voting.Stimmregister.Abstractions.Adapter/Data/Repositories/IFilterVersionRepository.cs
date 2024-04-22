@@ -6,6 +6,7 @@ using Voting.Lib.Database.Repositories;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
+
 public interface IFilterVersionRepository : IDbRepository<DbContext, FilterVersionEntity>
 {
 }

@@ -131,7 +131,8 @@ public class LogantoPersonCsvRecord : IPersonCsvRecord
     public string? ContactAddressTown { get; set; }
 
     /// <summary>
-    /// Gets or sets the eCH-0010:swissZipCodeType, i.e. '9000'.
+    /// Gets or sets the eCH-0010:swissZipCodeType or eCH-0010:foreignZipCodeType, i.e. '9000' or 'EH129DN'.
+    /// The property naming does not only imply swiss zip codes, but also foreign zip codes.
     /// </summary>
     [Name("ZUA_SWISSZIPCODE")]
     public string? ContactAddressSwissZipCode { get; set; }
@@ -141,6 +142,12 @@ public class LogantoPersonCsvRecord : IPersonCsvRecord
     /// </summary>
     [Name("ZUA_KANTON")]
     public string? ContactCantonAbbreviation { get; set; }
+
+    /// <summary>
+    /// Gets or sets the eCH-0010:countryIdISO2Type, i.e. 'CH'.
+    /// </summary>
+    [Name("ZUA_COUNTRY")]
+    public string? ContactAddressCountryIdIso2 { get; set; }
 
     /// <summary>
     /// Gets or sets the eCH-0011:religionType, i.e. '711' for 'denominational'.

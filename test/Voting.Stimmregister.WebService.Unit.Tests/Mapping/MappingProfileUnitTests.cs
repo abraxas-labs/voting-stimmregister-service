@@ -63,4 +63,16 @@ public class MappingProfileUnitTests
 
         mapperConfiguration.AssertConfigurationIsValid();
     }
+
+    [Fact]
+    public void WhenRegistrationStatisticConfigured_ShouldBeValid()
+    {
+        var mapperConfiguration = new MapperConfiguration(configuration =>
+        {
+            configuration.EnableEnumMappingValidation();
+            configuration.AddProfile<RegistrationStatisticProfile>();
+        });
+
+        mapperConfiguration.AssertConfigurationIsValid();
+    }
 }

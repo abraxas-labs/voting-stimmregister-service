@@ -79,4 +79,12 @@ public static class Roles
     /// </list>
     /// </summary>
     public const string ApiExporter = "ApiExporter";
+
+    /// <summary>
+    /// Is allowed to:
+    /// <list type="bullet">
+    ///     <item>read the e-voting statistics</item>
+    /// </list>
+    /// </summary>
+    public const string EVotingStatisticsReader = "EVotingStatisticsReader";
 }

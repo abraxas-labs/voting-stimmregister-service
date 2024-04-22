@@ -16,7 +16,7 @@ public class CountryHelperServiceTests
     [InlineData("Switzerland", "8100", "CH")]
     [InlineData("UNITED STATES OF AMERICA", "8439", "US")]
     [InlineData("SRI LANKA", null, "LK")]
-    public void WhenPassingValidCountryOrBfs_ShouldResolveIso2(string countryInput, string countryNumberInput, string expectedCountryOutput)
+    public void WhenPassingValidCountryOrBfs_ShouldResolveIso2(string countryInput, string? countryNumberInput, string expectedCountryOutput)
     {
         var countryOutput = _countryHelperService.GetCountryTwoLetterIsoCode(countryInput, countryNumberInput);
         Assert.Equal(expectedCountryOutput, countryOutput);
@@ -27,7 +27,7 @@ public class CountryHelperServiceTests
     [InlineData(null, "1")]
     [InlineData("", "")]
     [InlineData(null, null)]
-    public void WhenPassingInvalidCountryAndBfs_ShouldReturnNull(string countryInput, string countryNumberInput)
+    public void WhenPassingInvalidCountryAndBfs_ShouldReturnNull(string? countryInput, string? countryNumberInput)
     {
         var countryOutput = _countryHelperService.GetCountryTwoLetterIsoCode(countryInput, countryNumberInput);
         Assert.Null(countryOutput);
@@ -46,9 +46,9 @@ public class CountryHelperServiceTests
     [InlineData("AA")]
     [InlineData(null)]
     [InlineData("")]
-    public void WhenPassingValidCountryIso2Code_ShouldReturnCountryInfo(string countryTwoLetterCode)
+    public void WhenPassingValidCountryIso2Code_ShouldReturnCountryInfo(string? countryTwoLetterCode)
     {
-        var countryInfo = _countryHelperService.GetCountryInfo(countryTwoLetterCode);
+        var countryInfo = _countryHelperService.GetCountryInfo(countryTwoLetterCode!);
         Assert.Null(countryInfo);
     }
 
@@ -59,7 +59,7 @@ public class CountryHelperServiceTests
     [InlineData("I", "IT")]
     [InlineData("", null)]
     public void WhenValidDataFromLoganto_ShouldReturnRightDateLetterIsoCode(
-        string countryIdInput, string expectedCountryOutput)
+        string countryIdInput, string? expectedCountryOutput)
     {
         var countryOutput = _countryHelperService.GetLogantoCountryTwoLetterIsoCode(countryIdInput);
         Assert.Equal(expectedCountryOutput, countryOutput);

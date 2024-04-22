@@ -26,10 +26,11 @@ using Voting.Stimmregister.Adapter.Hsm.DependencyInjection;
 using Voting.Stimmregister.Adapter.VotingBasis.DependencyInjection;
 using Voting.Stimmregister.Adapter.VotingIam.DependencyInjection;
 using Voting.Stimmregister.Core.DependencyInjection;
+using Voting.Stimmregister.Core.Import.Cobra.DependencyInjection;
+using Voting.Stimmregister.Core.Import.Innosolv.DependencyInjection;
+using Voting.Stimmregister.Core.Import.Loganto.DependencyInjection;
 using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.DependencyInjection;
-using Voting.Stimmregister.Import.Innosolv.DependencyInjection;
-using Voting.Stimmregister.Import.Loganto.DependencyInjection;
 using Voting.Stimmregister.WebService.Configuration;
 using Voting.Stimmregister.WebService.Converters;
 using Voting.Stimmregister.WebService.DependencyInjection;
@@ -51,7 +52,7 @@ public class Startup
     {
         _configuration = configuration;
         _environment = environment;
-        AppConfig = configuration.Get<AppConfig>();
+        AppConfig = configuration.Get<AppConfig>()!;
     }
 
     protected AppConfig AppConfig { get; }
@@ -64,8 +65,10 @@ public class Startup
         services.AddIamServices(AppConfig.SecureConnect);
         services.AddAdapterDataServices(AppConfig.Database, ConfigureDatabase);
         services.AddAdapterEch(AppConfig.Ech);
+        services.AddImportDependencies();
         services.AddAdapterLogantoServices();
         services.AddAdapterEvotingLogantoServices(AppConfig.EVoting.LogantoServiceUrl);
+        services.AddAdapterCobraServices();
         services.AddAdapterInnosolv();
         services.AddAdapterEVotingKewrServices(AppConfig.EVoting.KewrServiceUrl);
         services.AddAdapterVotingBasisServices(AppConfig.Imports.VotingBasis);
@@ -169,7 +172,7 @@ public class Startup
         });
 
     protected virtual void ConfigureDatabase(DbContextOptionsBuilder db)
-        => db.UseNpgsql(AppConfig.Database.ConnectionString);
+        => db.UseNpgsql(AppConfig.Database.ConnectionString, o => o.SetPostgresVersion(AppConfig.Database.Version));
 
     /// <summary>
     /// Force using german for speaking fluent validation errors for the user.
@@ -184,6 +187,7 @@ public class Startup
         endpoints.MapGrpcService<PersonGrpcService>();
         endpoints.MapGrpcService<FilterGrpcService>();
         endpoints.MapGrpcService<ImportStatisticGrpcService>();
+        endpoints.MapGrpcService<RegistrationStatisticGrpcService>();
     }
 
     private void ConfigureHealthChecks(IHealthChecksBuilder checks)

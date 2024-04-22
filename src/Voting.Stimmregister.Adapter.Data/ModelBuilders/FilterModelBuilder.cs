@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Adapter.Data.ModelBuilders;
-public class FilterBuilder : IEntityTypeConfiguration<FilterEntity>
+
+public class FilterModelBuilder : IEntityTypeConfiguration<FilterEntity>
 {
     public void Configure(EntityTypeBuilder<FilterEntity> builder)
     {

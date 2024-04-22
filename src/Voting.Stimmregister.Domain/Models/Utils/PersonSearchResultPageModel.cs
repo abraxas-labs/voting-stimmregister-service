@@ -5,10 +5,10 @@ using Voting.Lib.Database.Models;
 
 namespace Voting.Stimmregister.Domain.Models.Utils;
 
-public class PersonSearchResultPage<T> : Page<T>
+public class PersonSearchResultPageModel<T> : Page<T>
     where T : PersonEntity
 {
-    public PersonSearchResultPage(Page<T> page, int invalidPersonsCount)
+    public PersonSearchResultPageModel(Page<T> page, int invalidPersonsCount)
         : base(page.Items, page.TotalItemsCount, page.CurrentPage, page.PageSize)
     {
         InvalidPersonsCount = invalidPersonsCount;

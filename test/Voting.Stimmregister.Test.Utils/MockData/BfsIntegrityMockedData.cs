@@ -23,8 +23,8 @@ public static class BfsIntegrityMockedData
 {
     private static readonly IReadOnlyDictionary<Guid, string> _signatures = new Dictionary<Guid, string>
     {
-        [Guid.Parse("28da12c1-6e19-4e94-9f68-751014ffbae1")] = "AGnsKqSKQJ4RPXK5jkTySZlvyGq3awhLWgVBmsGMUuzHqS+2w/ddytJz7q1lTnknQDrRdXNHzw6Gphl+iPqL341wABtldD83zRQ2fCKFPtzxyQR/GZlqepyh3ZDZtJK43S2Xgd8+4UUXvZ+nIdXB2zgwM32poszOBYoCcr8QSdTKPQTd",
-        [Guid.Parse("f04d2243-d71a-4dea-931d-871e4f6fa4eb")] = "AOT0oRl0oEPq55lPUXGzeiy/jddTb+eoXz93ePWQwTwuFVdH9tebVG3tsV24cg1PnMiPlwQLb4+wIaaHBwH1tsdZAYiExyBwXJMp/X4hM5mkQm74WYSpmdRTC5qmf8BhSEVY+NNLgZtuqlTZ/wBODBEG+Y5GISCSOx34KR4yvkByEpM4",
+        [Guid.Parse("28da12c1-6e19-4e94-9f68-751014ffbae1")] = "AdHW+k3CyyOTELoY9iuQcW8c6QQtoAr6euk30C5IcF6/wGZCpnNdCuQW2OYy6E1GNRik3zsYmSx0Xtwx4KyHqwFPAGWKCwySr2YU2bUL9KexuAOHlVFn4UV1pEA6AujZuVal6E6fAAfwzBVcSpUwlt2cYz6uDDFd3Ml6tDDQVExxgVvU",
+        [Guid.Parse("f04d2243-d71a-4dea-931d-871e4f6fa4eb")] = "AFhGYOEvNFb8tGGs3DWycsiz0lUuWBTRH30xxYLqopM9v/+zF/Er1FeGvDYF9iiTUn0lam3QMSwYihiVFT7rcHmfABE37aBzbZSraLCZSmkQfcXJntZr/8GopOnXkdvie9/Siy4oweTxfbBtl3XPvcnPSnvgXWHy4WOi3/Ts4+YgerlT",
     };
 
     public static BfsIntegrityEntity Person_3203_UpToDate

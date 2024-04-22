@@ -12,6 +12,7 @@ using Voting.Stimmregister.Domain.Exceptions;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Adapter.Data.Repositories;
+
 public class FilterRepository : DbRepository<DataContext, FilterEntity>, IFilterRepository
 {
     public FilterRepository(DataContext context)

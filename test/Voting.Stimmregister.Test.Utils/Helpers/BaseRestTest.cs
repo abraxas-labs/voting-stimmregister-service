@@ -34,31 +34,31 @@ public abstract class BaseRestTest<TFactory, TStartup> : RestAuthorizationBaseTe
             CreateHttpClient(false));
 
         _lazyApiImporterClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, userId: SecureConnectTestDefaults.MockedUserService.Loginid, roles: new[] { Roles.ApiImporter }));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, userId: SecureConnectTestDefaults.MockedUserService.Loginid, roles: [Roles.ApiImporter]));
 
         _lazyManualImporterClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, roles: new[] { Roles.ManualImporter }, tenant: VotingIamTenantIds.KTSG));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: [Roles.ManualImporter]));
 
         _lazyApiEVotingClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, roles: new[] { Roles.EVoting }, tenant: VotingIamTenantIds.KTSG));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: [Roles.EVoting]));
 
         _lazySgManualExporterClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, roles: new[] { Roles.ManualExporter }, tenant: VotingIamTenantIds.KTSG));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: [Roles.ManualExporter]));
 
         _lazySgApiExporterClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, roles: new[] { Roles.ApiExporter }, tenant: VotingIamTenantIds.KTSG));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: [Roles.ApiExporter]));
 
         _lazySgManagerClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, roles: new[] { Roles.Reader, Roles.Manager }, tenant: VotingIamTenantIds.KTSG));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: [Roles.Reader, Roles.Manager]));
 
         _lazySgReaderClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, roles: new[] { Roles.Reader }, tenant: VotingIamTenantIds.KTSG));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: [Roles.Reader]));
 
         _lazyTgManagerClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, roles: new[] { Roles.Reader, Roles.Manager }, tenant: VotingIamTenantIds.KTTG));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTTG, roles: [Roles.Reader, Roles.Manager]));
 
         _lazyTgReaderClient = new Lazy<HttpClient>(() =>
-            CreateHttpClient(true, roles: new[] { Roles.Reader }, tenant: VotingIamTenantIds.KTTG));
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTTG, roles: [Roles.Reader]));
     }
 
     protected HttpClient UnauthorizedClient => _lazyUnauthorizedClient.Value;

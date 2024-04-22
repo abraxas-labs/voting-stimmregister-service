@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<delivery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns="http://www.abraxas.ch/xmlns/ABX-Voting/1">
+  <deliveryHeader xmlns:eCH-0058="http://www.ech.ch/xmlns/eCH-0058/5">
+    <eCH-0058:senderId>SR-MockDataGenerator</eCH-0058:senderId>
+    <eCH-0058:messageId>SR-MOCK-1</eCH-0058:messageId>
+    <eCH-0058:messageType>SR-MOCK-1</eCH-0058:messageType>
+    <eCH-0058:sendingApplication>
+      <eCH-0058:manufacturer>Abraxas</eCH-0058:manufacturer>
+      <eCH-0058:product>SR-MockDataGenerator</eCH-0058:product>
+      <eCH-0058:productVersion>0.0.1-dev</eCH-0058:productVersion>
+    </eCH-0058:sendingApplication>
+    <eCH-0058:messageDate>2023-10-12T00:00:00.000</eCH-0058:messageDate>
+    <eCH-0058:action>1</eCH-0058:action>
+    <eCH-0058:testDeliveryFlag>true</eCH-0058:testDeliveryFlag>
+  </deliveryHeader>
+  <baseDelivery>
+    <person>
+      <personIdentification xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4">
+        <eCH-0044:vn>7561302619107</eCH-0044:vn>
+        <eCH-0044:localPersonId>
+          <eCH-0044:personIdCategory>MockedId</eCH-0044:personIdCategory>
+          <eCH-0044:personId>dd0326d9-3b66-4a76-bb0b-3bbfea242ebb</eCH-0044:personId>
+        </eCH-0044:localPersonId>
+        <eCH-0044:officialName>Meyer</eCH-0044:officialName>
+        <eCH-0044:firstName>Fiona</eCH-0044:firstName>
+        <eCH-0044:sex>2</eCH-0044:sex>
+        <eCH-0044:dateOfBirth>
+          <eCH-0044:yearMonthDay>1957-12-14</eCH-0044:yearMonthDay>
+        </eCH-0044:dateOfBirth>
+      </personIdentification>
+      <nameData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:officialName>Meyer</eCH-0011:officialName>
+        <eCH-0011:firstName>Fiona</eCH-0011:firstName>
+        <eCH-0011:originalName>Linden</eCH-0011:originalName>
+      </nameData>
+      <religionData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:religion>111</eCH-0011:religion>
+      </religionData>
+      <nationalityData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:nationalityStatus>2</eCH-0011:nationalityStatus>
+        <eCH-0011:countryInfo>
+          <eCH-0011:country xmlns:eCH-0008="http://www.ech.ch/xmlns/eCH-0008/3">
+            <eCH-0008:countryIdISO2>CH</eCH-0008:countryIdISO2>
+            <eCH-0008:countryNameShort>Schweiz</eCH-0008:countryNameShort>
+          </eCH-0011:country>
+        </eCH-0011:countryInfo>
+      </nationalityData>
+      <placeOfOrigin xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:originName>Dreissigackerscheid</eCH-0011:originName>
+        <eCH-0011:canton>GR</eCH-0011:canton>
+      </placeOfOrigin>
+      <hasMainResidence>
+        <reportingMunicipality xmlns:eCH-0007="http://www.ech.ch/xmlns/eCH-0007/6">
+          <eCH-0007:municipalityId>3203</eCH-0007:municipalityId>
+          <eCH-0007:municipalityName>St. Gallen</eCH-0007:municipalityName>
+        </reportingMunicipality>
+        <arrivalDate>1997-02-22</arrivalDate>
+        <comesFrom xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+          <eCH-0011:unknown>0</eCH-0011:unknown>
+        </comesFrom>
+        <dwellingAddress xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+          <eCH-0011:address xmlns:eCH-0010="http://www.ech.ch/xmlns/eCH-0010/5">
+            <eCH-0010:street>Veit-Stoß-Str.</eCH-0010:street>
+            <eCH-0010:houseNumber>14b</eCH-0010:houseNumber>
+            <eCH-0010:town>St. Gallen</eCH-0010:town>
+            <eCH-0010:swissZipCode>9001</eCH-0010:swissZipCode>
+            <eCH-0010:country>CH</eCH-0010:country>
+          </eCH-0011:address>
+          <eCH-0011:typeOfHousehold>0</eCH-0011:typeOfHousehold>
+          <eCH-0011:movingDate>1997-02-22</eCH-0011:movingDate>
+        </dwellingAddress>
+      </hasMainResidence>
+      <district>
+        <districtCategory>KIKAT</districtCategory>
+        <localDistrictId>e0c26e1f-b223-4376-9511-e6ba70f8ac5e</localDistrictId>
+        <otherDistrictId>d8e43fa3-586f-40e0-8950-7f807b808b26</otherDistrictId>
+        <districtName>Katholische Kirchgemeinde St. Gallen</districtName>
+      </district>
+      <district>
+        <districtCategory>SK</districtCategory>
+        <localDistrictId>a28de5e1-4961-4892-b210-c77d44fcfa9b</localDistrictId>
+        <otherDistrictId>7fe4784b-93dd-44d1-b0c9-8a252fa2fff5</otherDistrictId>
+        <districtName>Notker</districtName>
+      </district>
+    </person>
+    <person>
+      <personIdentification xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4">
+        <eCH-0044:vn>7569689011446</eCH-0044:vn>
+        <eCH-0044:localPersonId>
+          <eCH-0044:personIdCategory>MockedId</eCH-0044:personIdCategory>
+          <eCH-0044:personId>829da0a7-cc8e-4704-a1c1-e0c3301f8f46</eCH-0044:personId>
+        </eCH-0044:localPersonId>
+        <eCH-0044:officialName>Burg</eCH-0044:officialName>
+        <eCH-0044:firstName>Rudolf</eCH-0044:firstName>
+        <eCH-0044:sex>1</eCH-0044:sex>
+        <eCH-0044:dateOfBirth>
+          <eCH-0044:yearMonthDay>1932-11-19</eCH-0044:yearMonthDay>
+        </eCH-0044:dateOfBirth>
+      </personIdentification>
+      <nameData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:officialName>Burg</eCH-0011:officialName>
+        <eCH-0011:firstName>Rudolf</eCH-0011:firstName>
+      </nameData>
+      <religionData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:religion>111</eCH-0011:religion>
+      </religionData>
+      <nationalityData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:nationalityStatus>2</eCH-0011:nationalityStatus>
+        <eCH-0011:countryInfo>
+          <eCH-0011:country xmlns:eCH-0008="http://www.ech.ch/xmlns/eCH-0008/3">
+            <eCH-0008:countryIdISO2>CH</eCH-0008:countryIdISO2>
+            <eCH-0008:countryNameShort>Schweiz</eCH-0008:countryNameShort>
+          </eCH-0011:country>
+        </eCH-0011:countryInfo>
+      </nationalityData>
+      <placeOfOrigin xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:originName>St. Gallen</eCH-0011:originName>
+        <eCH-0011:canton>SG</eCH-0011:canton>
+      </placeOfOrigin>
+      <hasMainResidence>
+        <reportingMunicipality xmlns:eCH-0007="http://www.ech.ch/xmlns/eCH-0007/6">
+          <eCH-0007:municipalityId>3203</eCH-0007:municipalityId>
+          <eCH-0007:municipalityName>St. Gallen</eCH-0007:municipalityName>
+        </reportingMunicipality>
+        <arrivalDate>1957-03-01</arrivalDate>
+        <dwellingAddress xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+          <eCH-0011:address xmlns:eCH-0010="http://www.ech.ch/xmlns/eCH-0010/5">
+            <eCH-0010:street>Leonstrasse</eCH-0010:street>
+            <eCH-0010:houseNumber>12a</eCH-0010:houseNumber>
+            <eCH-0010:town>St. Gallen</eCH-0010:town>
+            <eCH-0010:swissZipCode>9000</eCH-0010:swissZipCode>
+            <eCH-0010:country>CH</eCH-0010:country>
+          </eCH-0011:address>
+          <eCH-0011:typeOfHousehold>0</eCH-0011:typeOfHousehold>
+          <eCH-0011:movingDate>1957-03-01</eCH-0011:movingDate>
+        </dwellingAddress>
+      </hasMainResidence>
+      <district>
+        <districtCategory>KIKAT</districtCategory>
+        <localDistrictId>e0c26e1f-b223-4376-9511-e6ba70f8ac5e</localDistrictId>
+        <otherDistrictId>d8e43fa3-586f-40e0-8950-7f807b808b26</otherDistrictId>
+        <districtName>Katholische Kirchgemeinde St. Gallen</districtName>
+      </district>
+      <district>
+        <districtCategory>SK</districtCategory>
+        <localDistrictId>a28de5e1-4961-4892-b210-c77d44fcfa9b</localDistrictId>
+        <otherDistrictId>7fe4784b-93dd-44d1-b0c9-8a252fa2fff5</otherDistrictId>
+        <districtName>Notker</districtName>
+      </district>
+    </person>
+  </baseDelivery>
+</delivery>

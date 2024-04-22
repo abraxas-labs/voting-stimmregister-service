@@ -69,7 +69,12 @@ public class PersonAclQueryFilterTests : BaseWriteableDbTest
     {
         using var scope = GetImpersonatedServiceScope(PersonMockedData.MunicipalityIdStGallen.ToString());
         var personRepo = scope.ServiceProvider.GetRequiredService<IPersonRepository>();
-        var persons = await personRepo.Query().IgnoreQueryFilters().OrderBy(d => d.DomainOfInfluenceId).ThenBy(x => x.RegisterId).ToListAsync();
+        var persons = await personRepo
+            .Query()
+            .IgnoreQueryFilters()
+            .OrderBy(d => d.DomainOfInfluenceId)
+            .ThenBy(d => d.RegisterId)
+            .ThenBy(x => x.VersionCount).ToListAsync();
 
         persons.MatchSnapshot(e => e.Id!);
     }

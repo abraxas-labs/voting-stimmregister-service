@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
 using Voting.Stimmregister.Test.Utils.Helpers;
@@ -56,6 +57,25 @@ public class GetSingleTest : BaseWriteableDbGrpcTest<PersonService.PersonService
         };
 
         await AssertStatus(async () => await SgManagerClient.GetSingleAsync(request), StatusCode.InvalidArgument);
+    }
+
+    [Fact]
+    public async Task WhenRegisterIdIsGuidEmpty_RoleUnauthorized_ShouldPermissionDenied()
+    {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+        };
+
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
+        await AssertStatus(
+            async () => await client.GetSingleAsync(
+                NewValidGetSingleRequest(x => x.RegisterId = Guid.Empty.ToString())),
+            StatusCode.PermissionDenied);
     }
 
     protected override async Task AuthorizationTestCall(PersonService.PersonServiceClient service)

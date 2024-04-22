@@ -1,7 +1,6 @@
 ﻿// (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -43,10 +42,10 @@ public class LogantoPersonImportRestTest : BaseImportRestTest
             .Where(i => i.FileName.Equals(ValidFileName))
             .SingleAsync();
 
-        importStats.AcmEncryptedAesKey = Array.Empty<byte>();
-        importStats.AcmAesIv = Array.Empty<byte>();
-        importStats.AcmEncryptedMacKey = Array.Empty<byte>();
-        importStats.AcmHmac = Array.Empty<byte>();
+        importStats.AcmEncryptedAesKey = [];
+        importStats.AcmAesIv = [];
+        importStats.AcmEncryptedMacKey = [];
+        importStats.AcmHmac = [];
 
         importStats.MatchSnapshot(i => i.Id, i => i.QueuedFileName);
     }

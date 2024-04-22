@@ -13,13 +13,6 @@ namespace Voting.Stimmregister.Domain.Cryptography;
 public interface IVerifySigningService
 {
     /// <summary>
-    /// Ensures that the signatures of the provided persons are valid.
-    /// </summary>
-    /// <param name="persons">The persons to verify the signature of.</param>
-    /// <exception cref="SignatureInvalidException">If an invalid signature is detected.</exception>
-    void EnsurePersonSignaturesValid(IReadOnlyCollection<PersonEntity> persons);
-
-    /// <summary>
     /// Ensures that the signature of the <see cref="BfsIntegrityEntity"/> is valid.
     /// </summary>
     /// <param name="integrity">The integrity entity.</param>

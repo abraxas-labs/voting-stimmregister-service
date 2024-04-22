@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.2.1" />
-    <PackageReference Include="NCrontab.Signed" Version="3.3.2" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+    <PackageReference Include="NCrontab.Signed" Version="3.3.3" />
     <PackageReference Include="Grpc.AspNetCore" Version="$(GrpcAspNetCoreVersion)" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="$(GrpcAspNetCoreVersion)" />
     <PackageReference Include="Grpc.AspNetCore.Web" Version="$(GrpcAspNetCoreVersion)" />

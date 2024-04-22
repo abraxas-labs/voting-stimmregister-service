@@ -17,6 +17,7 @@ using Voting.Stimmregister.Abstractions.Adapter.Data.DataContexts;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Abstractions.Adapter.VotingBasis;
 using Voting.Stimmregister.Abstractions.Adapter.VotingIam;
+using Voting.Stimmregister.Adapter.VotingBasis.Utils;
 using Voting.Stimmregister.Adapter.VotingBasis.Validators;
 using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.Enums;
@@ -223,8 +224,28 @@ public class AccessControlListImportService : IAccessControlListImportService
             Enum.Parse<Canton>(serviceModel.Canton.ToString(), ignoreCase: true);
         entity.ParentId = string.IsNullOrWhiteSpace(serviceModel.ParentId) ? null : Guid.Parse(serviceModel.ParentId);
         entity.ImportStatisticId = _importStatisticId;
+        entity.ReturnAddress = MapToAclDoiReturnAddress(serviceModel.ReturnAddress);
 
         return entity;
+    }
+
+    private AccessControlListDoiReturnAddress? MapToAclDoiReturnAddress(DomainOfInfluenceVotingCardReturnAddress? returnAddress)
+    {
+        if (returnAddress == null)
+        {
+            return null;
+        }
+
+        return new AccessControlListDoiReturnAddress
+        {
+            AddressAddition = string.IsNullOrEmpty(returnAddress.AddressAddition) ? null : returnAddress.AddressAddition,
+            AddressLine1 = string.IsNullOrEmpty(returnAddress.AddressLine1) ? null : returnAddress.AddressLine1,
+            AddressLine2 = string.IsNullOrEmpty(returnAddress.AddressLine2) ? null : returnAddress.AddressLine2,
+            City = string.IsNullOrEmpty(returnAddress.City) ? null : returnAddress.City,
+            Country = string.IsNullOrEmpty(returnAddress.Country) ? null : returnAddress.Country,
+            Street = string.IsNullOrEmpty(returnAddress.Street) ? null : returnAddress.Street,
+            ZipCode = string.IsNullOrEmpty(returnAddress.ZipCode) ? null : returnAddress.ZipCode,
+        };
     }
 
     private AccessControlListDoiEntity MapToAclEntity(
@@ -239,6 +260,7 @@ public class AccessControlListImportService : IAccessControlListImportService
         target.Canton = source.Canton;
         target.ParentId = source.ParentId;
         target.ImportStatisticId = _importStatisticId;
+        target.ReturnAddress = source.ReturnAddress;
 
         return target;
     }
@@ -260,6 +282,7 @@ public class AccessControlListImportService : IAccessControlListImportService
             () => Comparer<string>.Default.Compare(aclFromImport.TenantId, aclFromRepo.TenantId),
             () => Comparer<Domain.Enums.DomainOfInfluenceType>.Default.Compare(aclFromImport.Type, aclFromRepo.Type),
             () => Comparer<Canton>.Default.Compare(aclFromImport.Canton, aclFromRepo.Canton),
+            () => AccessControlListDoiReturnAddressEqualityComparer.Instance.Equals(aclFromImport.ReturnAddress, aclFromRepo.ReturnAddress) ? 0 : 1,
         };
 
         return compareFunctions.Any(compareFunction => compareFunction() != 0);

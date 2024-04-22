@@ -2,7 +2,6 @@
 // For license information see LICENSE file
 
 using System.Collections.Generic;
-using System.Linq;
 using Voting.Stimmregister.Core.Diagnostics;
 using Voting.Stimmregister.Domain.Cryptography;
 using Voting.Stimmregister.Domain.Models;
@@ -29,32 +28,6 @@ public class CreateVerifySignatureService : ICreateSignatureService, IVerifySign
         _activityFactory = activityFactory;
     }
 
-    public void BulkSignPersons(IReadOnlyCollection<PersonEntity> entities)
-    {
-        using var activity = _activityFactory.Start("sign-persons");
-        if (entities.Count == 0)
-        {
-            return;
-        }
-
-        var payloadBuilder = _signaturePayloadBuilderFactory.Get(entities.First());
-        var payloads = entities.Select(x => payloadBuilder.Build(x)).ToList();
-        _signatureCreator.BulkSign(payloads, entities);
-    }
-
-    public void BulkSignDomainOfInfluences(IReadOnlyCollection<DomainOfInfluenceEntity> domainOfInfluenceEntities)
-    {
-        using var activity = _activityFactory.Start("sign-dois");
-        if (domainOfInfluenceEntities.Count == 0)
-        {
-            return;
-        }
-
-        var payloadBuilder = _signaturePayloadBuilderFactory.Get(domainOfInfluenceEntities.First());
-        var payloads = domainOfInfluenceEntities.Select(x => payloadBuilder.Build(x)).ToList();
-        _signatureCreator.BulkSign(payloads, domainOfInfluenceEntities);
-    }
-
     public void SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<DomainOfInfluenceEntity> dois)
     {
         using var activity = _activityFactory.Start("sign-integrity-dois");
@@ -74,17 +47,6 @@ public class CreateVerifySignatureService : ICreateSignatureService, IVerifySign
         using var activity = _activityFactory.Start("sign-filter-version");
         var payload = _signaturePayloadBuilderFactory.Get(filterVersion).Build((filterVersion, persons));
         _signatureCreator.Sign(payload, filterVersion);
-    }
-
-    public void EnsurePersonSignaturesValid(IReadOnlyCollection<PersonEntity> persons)
-    {
-        using var activity = _activityFactory.Start("assert-person-signatures");
-
-        foreach (var person in persons)
-        {
-            var payload = _signaturePayloadBuilderFactory.Get(person).Build(person);
-            _signatureVerifier.EnsureValidSignature(person, payload);
-        }
     }
 
     public void EnsureBfsIntegritySignatureValid(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons)

@@ -30,6 +30,7 @@ public class ImportStatisticRepository : DbRepository<DataContext, ImportStatist
         _clock = clock;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "EF1002:Risk of vulnerability to SQL injection.", Justification = "Referencing hardened inerpolated string parameters.")]
     public async Task<ImportStatisticEntity?> FetchQueuedForUpdate()
     {
         var importStatusColName = Set.GetDelimitedColumnName(x => x.ImportStatus);

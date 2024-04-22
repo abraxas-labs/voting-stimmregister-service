@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Voting.Stimmregister.Abstractions.Adapter\Voting.Stimmregister.Abstractions.Adapter.csproj" />
+    <ProjectReference Include="..\Voting.Stimmregister.Abstractions.Core.Import\Voting.Stimmregister.Abstractions.Core.Import.csproj" />
+    <ProjectReference Include="..\Voting.Stimmregister.Core\Voting.Stimmregister.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Voting.Lib.Ech.AbxVoting_1_0" Version="$(VotingLibVersion)" />
+    <PackageReference Include="Voting.Lib.Ech" Version="$(VotingLibVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Xsd\*.xsd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Voting.Stimmregister.MockDataGenerator</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

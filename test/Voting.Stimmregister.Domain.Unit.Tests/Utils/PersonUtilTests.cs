@@ -13,7 +13,7 @@ public class PersonUtilTests
     [InlineData("Street1", true)]
     [InlineData("", false)]
     [InlineData(null, false)]
-    public void ShouldReturnExpectedResidenceAddressAvailability(string residenceStreet, bool expectedAvailability)
+    public void ShouldReturnExpectedResidenceAddressAvailability(string? residenceStreet, bool expectedAvailability)
     {
         var result = PersonUtil.HasResidenceAddress(new()
         {
@@ -28,7 +28,7 @@ public class PersonUtilTests
     [InlineData(null, "Street1", true)]
     [InlineData("", "", false)]
     [InlineData(null, null, false)]
-    public void ShouldReturnExpectedContactAddressAvailability(string contactStreet, string addressLine1, bool expectedAvailability)
+    public void ShouldReturnExpectedContactAddressAvailability(string? contactStreet, string? addressLine1, bool expectedAvailability)
     {
         var result = PersonUtil.HasContactAddress(new()
         {

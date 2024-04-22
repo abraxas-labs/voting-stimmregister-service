@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
@@ -59,6 +60,27 @@ public class DeleteVersionTest : BaseWriteableDbGrpcTest<FilterService.FilterSer
         await DeleteVersion_Test(
             SgReaderClient,
             FilterVersionMockedData.SomeFilterVersion_MunicipalityIdOther2.Id,
+            expectThrows: true,
+            expectedStatusCode: StatusCode.PermissionDenied);
+    }
+
+    [Fact]
+    public async Task DeleteVersion_RoleUnauthorized_ShouldReturnPermissionDenied()
+    {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+            Roles.Reader,
+        };
+
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
+        await DeleteVersion_Test(
+            client,
+            Guid.Empty,
             expectThrows: true,
             expectedStatusCode: StatusCode.PermissionDenied);
     }

@@ -216,6 +216,11 @@ public class PersonEntity : ImportedEntity
     public string? ContactCantonAbbreviation { get; set; }
 
     /// <summary>
+    /// Gets or sets the eCH-0010:countryIdISO2Type, i.e. 'CH'.
+    /// </summary>
+    public string? ContactAddressCountryIdIso2 { get; set; }
+
+    /// <summary>
     /// Gets or sets the eCH-0045:languageOfCorrespondence, i.e. 'de'.
     /// Cobra field only.
     /// </summary>

@@ -3,6 +3,7 @@
   "Description": "description",
   "MunicipalityId": 3203,
   "TenantId": null,
+  "TenantName": null,
   "LatestVersion": null,
   "FilterVersions": [],
   "FilterCriterias": [],

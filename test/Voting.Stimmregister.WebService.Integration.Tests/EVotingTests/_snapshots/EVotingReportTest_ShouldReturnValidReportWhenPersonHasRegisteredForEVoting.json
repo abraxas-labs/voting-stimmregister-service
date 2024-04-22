@@ -1,7 +1,7 @@
 {
   "Ahvn13": "7568731784109",
   "BfsCanton": 17,
-  "BfsMunicipality": 1,
+  "BfsMunicipality": 3203,
   "EVoterFlag": true,
   "ContextId": null,
   "CreatedBy": "default-user-id",
@@ -11,7 +11,7 @@
   "Audits": [
     {
       "BfsCanton": 17,
-      "BfsMunicipality": 1,
+      "BfsMunicipality": 3203,
       "EVoterFlag": true,
       "ContextId": null,
       "StatusMessage": "lorem ipsum",

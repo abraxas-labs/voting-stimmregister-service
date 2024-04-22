@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <None Remove="Services\_files\**\*.csv" />
+    <Content Include="Services\_files\**\*.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Voting.Stimmregister.Core.Import.Cobra\Voting.Stimmregister.Core.Import.Cobra.csproj" />
+    <ProjectReference Include="..\Voting.Stimmregister.Test.Utils\Voting.Stimmregister.Test.Utils.csproj" />
+  </ItemGroup>
+
+</Project>

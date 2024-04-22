@@ -148,8 +148,5 @@ public static class AllTablesWithMockedData
             ResidenceAddressZipCode = "9016",
             ResidenceAddressTown = "St. Gallen",
             IsValid = true,
-            SignatureVersion = 1,
-            SignatureKeyId = "SomeKeyId",
-            Signature = new byte[] { 1, 0, 1 },
         };
 }

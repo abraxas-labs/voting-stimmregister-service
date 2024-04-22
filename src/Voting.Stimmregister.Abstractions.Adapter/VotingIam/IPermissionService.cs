@@ -16,6 +16,8 @@ public interface IPermissionService
 
     string TenantId { get; }
 
+    string TenantName { get; }
+
     IReadOnlyCollection<string> BfsAccessControlList { get; }
 
     /// <summary>

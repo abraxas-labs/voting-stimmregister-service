@@ -79,5 +79,7 @@
       "CountOfInvalidPersons": 0,
       "Criteria": []
     }
-  ]
+  ],
+  "TenantName": "",
+  "TenantId": ""
 }

@@ -28,6 +28,7 @@
           "ImportStatisticId": null,
           "ImportStatistic": null,
           "Children": [],
+          "ReturnAddress": null,
           "Id": "a500760a-3e0f-4c98-a13a-9a614b74127a"
         },
         {
@@ -44,6 +45,15 @@
           "ImportStatisticId": null,
           "ImportStatistic": null,
           "Children": [],
+          "ReturnAddress": {
+            "AddressLine1": "Gemeindekanzlei Goldach",
+            "AddressLine2": null,
+            "Street": "Postfach",
+            "AddressAddition": null,
+            "ZipCode": "9403",
+            "City": "Goldach",
+            "Country": "SWITZERLAND"
+          },
           "Id": "a8d6078f-5ace-4284-a99f-d33a5df47f23"
         },
         {
@@ -60,6 +70,7 @@
           "ImportStatisticId": null,
           "ImportStatistic": null,
           "Children": [],
+          "ReturnAddress": null,
           "Id": "b0570f77-a2a8-4fb9-8092-d6916776624f"
         },
         {
@@ -76,9 +87,11 @@
           "ImportStatisticId": null,
           "ImportStatistic": null,
           "Children": [],
+          "ReturnAddress": null,
           "Id": "f53c1865-30e3-4c1e-88ae-7ea471daa4b4"
         }
       ],
+      "ReturnAddress": null,
       "Id": "03fd4057-9da9-4fd5-8310-d4d420762aef"
     },
     {
@@ -151,6 +164,7 @@
                       "ImportStatisticId": null,
                       "ImportStatistic": null,
                       "Children": [],
+                      "ReturnAddress": null,
                       "Id": "a500760a-3e0f-4c98-a13a-9a614b74127a"
                     },
                     {
@@ -167,6 +181,15 @@
                       "ImportStatisticId": null,
                       "ImportStatistic": null,
                       "Children": [],
+                      "ReturnAddress": {
+                        "AddressLine1": "Gemeindekanzlei Goldach",
+                        "AddressLine2": null,
+                        "Street": "Postfach",
+                        "AddressAddition": null,
+                        "ZipCode": "9403",
+                        "City": "Goldach",
+                        "Country": "SWITZERLAND"
+                      },
                       "Id": "a8d6078f-5ace-4284-a99f-d33a5df47f23"
                     },
                     {
@@ -183,6 +206,7 @@
                       "ImportStatisticId": null,
                       "ImportStatistic": null,
                       "Children": [],
+                      "ReturnAddress": null,
                       "Id": "b0570f77-a2a8-4fb9-8092-d6916776624f"
                     },
                     {
@@ -199,15 +223,19 @@
                       "ImportStatisticId": null,
                       "ImportStatistic": null,
                       "Children": [],
+                      "ReturnAddress": null,
                       "Id": "f53c1865-30e3-4c1e-88ae-7ea471daa4b4"
                     }
                   ],
+                  "ReturnAddress": null,
                   "Id": "03fd4057-9da9-4fd5-8310-d4d420762aef"
                 }
               ],
+              "ReturnAddress": null,
               "Id": "27e721c1-0590-40f7-94da-1526ab47c5d4"
             }
           ],
+          "ReturnAddress": null,
           "Id": "5a9772c4-a504-40b3-88b2-620af634d9b5"
         },
         {
@@ -224,9 +252,19 @@
           "ImportStatisticId": null,
           "ImportStatistic": null,
           "Children": [],
+          "ReturnAddress": null,
           "Id": "e4f482e6-20d8-4c8f-9e31-fecf092bf06b"
         }
       ],
+      "ReturnAddress": {
+        "AddressLine1": "Staatskanzlei St. Gallen",
+        "AddressLine2": null,
+        "Street": null,
+        "AddressAddition": null,
+        "ZipCode": null,
+        "City": null,
+        "Country": null
+      },
       "Id": "24b12f20-a4a9-4f62-a805-60e7c61359e2"
     },
     {
@@ -271,6 +309,7 @@
               "ImportStatisticId": null,
               "ImportStatistic": null,
               "Children": [],
+              "ReturnAddress": null,
               "Id": "a500760a-3e0f-4c98-a13a-9a614b74127a"
             },
             {
@@ -287,6 +326,15 @@
               "ImportStatisticId": null,
               "ImportStatistic": null,
               "Children": [],
+              "ReturnAddress": {
+                "AddressLine1": "Gemeindekanzlei Goldach",
+                "AddressLine2": null,
+                "Street": "Postfach",
+                "AddressAddition": null,
+                "ZipCode": "9403",
+                "City": "Goldach",
+                "Country": "SWITZERLAND"
+              },
               "Id": "a8d6078f-5ace-4284-a99f-d33a5df47f23"
             },
             {
@@ -303,6 +351,7 @@
               "ImportStatisticId": null,
               "ImportStatistic": null,
               "Children": [],
+              "ReturnAddress": null,
               "Id": "b0570f77-a2a8-4fb9-8092-d6916776624f"
             },
             {
@@ -319,12 +368,15 @@
               "ImportStatisticId": null,
               "ImportStatistic": null,
               "Children": [],
+              "ReturnAddress": null,
               "Id": "f53c1865-30e3-4c1e-88ae-7ea471daa4b4"
             }
           ],
+          "ReturnAddress": null,
           "Id": "03fd4057-9da9-4fd5-8310-d4d420762aef"
         }
       ],
+      "ReturnAddress": null,
       "Id": "27e721c1-0590-40f7-94da-1526ab47c5d4"
     },
     {
@@ -383,6 +435,7 @@
                   "ImportStatisticId": null,
                   "ImportStatistic": null,
                   "Children": [],
+                  "ReturnAddress": null,
                   "Id": "a500760a-3e0f-4c98-a13a-9a614b74127a"
                 },
                 {
@@ -399,6 +452,15 @@
                   "ImportStatisticId": null,
                   "ImportStatistic": null,
                   "Children": [],
+                  "ReturnAddress": {
+                    "AddressLine1": "Gemeindekanzlei Goldach",
+                    "AddressLine2": null,
+                    "Street": "Postfach",
+                    "AddressAddition": null,
+                    "ZipCode": "9403",
+                    "City": "Goldach",
+                    "Country": "SWITZERLAND"
+                  },
                   "Id": "a8d6078f-5ace-4284-a99f-d33a5df47f23"
                 },
                 {
@@ -415,6 +477,7 @@
                   "ImportStatisticId": null,
                   "ImportStatistic": null,
                   "Children": [],
+                  "ReturnAddress": null,
                   "Id": "b0570f77-a2a8-4fb9-8092-d6916776624f"
                 },
                 {
@@ -431,15 +494,19 @@
                   "ImportStatisticId": null,
                   "ImportStatistic": null,
                   "Children": [],
+                  "ReturnAddress": null,
                   "Id": "f53c1865-30e3-4c1e-88ae-7ea471daa4b4"
                 }
               ],
+              "ReturnAddress": null,
               "Id": "03fd4057-9da9-4fd5-8310-d4d420762aef"
             }
           ],
+          "ReturnAddress": null,
           "Id": "27e721c1-0590-40f7-94da-1526ab47c5d4"
         }
       ],
+      "ReturnAddress": null,
       "Id": "5a9772c4-a504-40b3-88b2-620af634d9b5"
     },
     {
@@ -456,6 +523,7 @@
       "ImportStatisticId": null,
       "ImportStatistic": null,
       "Children": [],
+      "ReturnAddress": null,
       "Id": "a500760a-3e0f-4c98-a13a-9a614b74127a"
     },
     {
@@ -472,6 +540,15 @@
       "ImportStatisticId": null,
       "ImportStatistic": null,
       "Children": [],
+      "ReturnAddress": {
+        "AddressLine1": "Gemeindekanzlei Goldach",
+        "AddressLine2": null,
+        "Street": "Postfach",
+        "AddressAddition": null,
+        "ZipCode": "9403",
+        "City": "Goldach",
+        "Country": "SWITZERLAND"
+      },
       "Id": "a8d6078f-5ace-4284-a99f-d33a5df47f23"
     },
     {
@@ -488,6 +565,7 @@
       "ImportStatisticId": null,
       "ImportStatistic": null,
       "Children": [],
+      "ReturnAddress": null,
       "Id": "b0570f77-a2a8-4fb9-8092-d6916776624f"
     },
     {
@@ -504,6 +582,7 @@
       "ImportStatisticId": null,
       "ImportStatistic": null,
       "Children": [],
+      "ReturnAddress": null,
       "Id": "e4f482e6-20d8-4c8f-9e31-fecf092bf06b"
     },
     {
@@ -520,6 +599,7 @@
       "ImportStatisticId": null,
       "ImportStatistic": null,
       "Children": [],
+      "ReturnAddress": null,
       "Id": "f53c1865-30e3-4c1e-88ae-7ea471daa4b4"
     }
   ]

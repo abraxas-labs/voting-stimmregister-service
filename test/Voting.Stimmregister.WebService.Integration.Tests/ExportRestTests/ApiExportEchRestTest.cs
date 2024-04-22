@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Voting.Lib.Ech.Ech0045_4_0.Schemas;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Test.Utils.Helpers;
@@ -77,6 +78,26 @@ public class ApiExportEchRestTest : BaseReadOnlyRestTest
 
         var xmlContent = await Export(request);
         xmlContent.MatchFormattedXmlSnapshot();
+    }
+
+    [Fact]
+    public async Task WhenRoleUnauthorized_ShouldReturnForbidden()
+    {
+        var request = new PersonSearchParametersExportModel();
+        var rolesArray = new[]
+        {
+            Roles.Reader,
+            Roles.Manager,
+            Roles.ManualImporter,
+            Roles.ApiImporter,
+            Roles.ImportObserver,
+        };
+
+        var client = CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray);
+        var response = await client.PostAsJsonAsync(Route, request);
+        response.StatusCode
+            .Should()
+            .Be(HttpStatusCode.Forbidden);
     }
 
     protected override Task<HttpResponseMessage> AuthorizationTestCall(HttpClient httpClient)

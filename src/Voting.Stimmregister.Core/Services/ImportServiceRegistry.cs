@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Voting.Stimmregister.Abstractions.Adapter.Models;
-using Voting.Stimmregister.Abstractions.Import.Services;
+using Voting.Stimmregister.Abstractions.Core.Import.Services;
 using Voting.Stimmregister.Domain.Enums;
 
 namespace Voting.Stimmregister.Core.Services;

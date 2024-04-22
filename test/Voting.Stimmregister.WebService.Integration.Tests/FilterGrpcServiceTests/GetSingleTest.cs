@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Models;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
@@ -60,11 +61,21 @@ public class GetSingleTest : BaseWriteableDbGrpcTest<FilterService.FilterService
     }
 
     [Fact]
-    public async Task GetSingle_ManualExporter()
+    public async Task GetSingle_RoleUnauthorized_ShouldReturnPermissionDenied()
     {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+        };
+
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
         await GetSingle_Test(
-            ManualExporterClient,
-            FilterMockedData.SomeFilter_MunicipalityIdOther2.Id,
+            client,
+            Guid.Empty,
             expectThrows: true,
             expectedStatusCode: StatusCode.PermissionDenied);
     }
@@ -88,7 +99,7 @@ public class GetSingleTest : BaseWriteableDbGrpcTest<FilterService.FilterService
             var exception = await Assert.ThrowsAsync<RpcException>(async () =>
                 await client.GetSingleAsync(request));
 
-            if (expectedStatusCode == null)
+            if (expectedStatusCode != null)
             {
                 Assert.Equal(expectedStatusCode, exception.StatusCode);
             }

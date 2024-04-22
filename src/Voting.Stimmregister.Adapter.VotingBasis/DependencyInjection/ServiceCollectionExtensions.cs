@@ -41,7 +41,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IAccessControlListDoiHostedService, AccessControlListDoiHostedService>();
         services.AddTransient<IAccessControlListDoiService, AccessControlListDoiService>();
         services.AddTransient<IAccessControlListImportService, AccessControlListImportService>();
-        services.AddHostedService(sp => sp.GetService<IAccessControlListDoiHostedService>());
+        services.AddHostedService(sp => sp.GetRequiredService<IAccessControlListDoiHostedService>());
 
         return services;
     }

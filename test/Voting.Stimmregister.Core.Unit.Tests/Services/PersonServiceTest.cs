@@ -23,6 +23,7 @@ using Voting.Stimmregister.Domain.Models.Utils;
 using Xunit;
 
 namespace Voting.Stimmregister.Core.Unit.Tests.Services;
+
 public class PersonServiceTest
 {
     private readonly PersonService _personService;
@@ -65,8 +66,8 @@ public class PersonServiceTest
         var personEntityModel1 = new PersonEntityModel { FirstName = "Carmen", MunicipalityId = 1 };
         var personEntityModel2 = new PersonEntityModel { FirstName = "Marco", MunicipalityId = 2 };
 
-        var personEntityResult = new PersonSearchResultPage<PersonEntity>(new Page<PersonEntity>(new[] { personEntity1, personEntity2 }, 2, 1, 2), 0);
-        var personEntityModelResult = new PersonSearchResultPage<PersonEntityModel>(new Page<PersonEntityModel>(new[] { personEntityModel1, personEntityModel2 }, 2, 1, 2), 0);
+        var personEntityResult = new PersonSearchResultPageModel<PersonEntity>(new Page<PersonEntity>(new[] { personEntity1, personEntity2 }, 2, 1, 2), 0);
+        var personEntityModelResult = new PersonSearchResultPageModel<PersonEntityModel>(new Page<PersonEntityModel>(new[] { personEntityModel1, personEntityModel2 }, 2, 1, 2), 0);
 
         var integrityEntities = new Dictionary<string, BfsIntegrityEntity>
         {
@@ -83,8 +84,8 @@ public class PersonServiceTest
             .Returns(Task.FromResult<IReadOnlyDictionary<string, BfsIntegrityEntity>>(integrityEntities));
 
         _mapperMock
-            .Setup(m => m.Map(It.IsAny<PersonSearchResultPage<PersonEntity>>(), It.IsAny<Action<IMappingOperationOptions<object, PersonSearchResultPage<PersonEntityModel>>>>()))
-            .Returns<PersonSearchResultPage<PersonEntity>, Action<IMappingOperationOptions<object, PersonSearchResultPage<PersonEntityModel>>>>((__, _) => personEntityModelResult);
+            .Setup(m => m.Map(It.IsAny<PersonSearchResultPageModel<PersonEntity>>(), It.IsAny<Action<IMappingOperationOptions<object, PersonSearchResultPageModel<PersonEntityModel>>>>()))
+            .Returns<PersonSearchResultPageModel<PersonEntity>, Action<IMappingOperationOptions<object, PersonSearchResultPageModel<PersonEntityModel>>>>((__, _) => personEntityModelResult);
 
         // Act
         var result = await _personService.GetAll(searchParameters, requiredValidPageSize: true);
@@ -114,7 +115,7 @@ public class PersonServiceTest
         };
 
         const bool requiredValidPageSize = true;
-        var repositoryResult = new PersonSearchResultPage<PersonEntity>(new Page<PersonEntity>(new[] { new PersonEntity(), new PersonEntity() }, 2, 1, 2), 0);
+        var repositoryResult = new PersonSearchResultPageModel<PersonEntity>(new Page<PersonEntity>(new[] { new PersonEntity(), new PersonEntity() }, 2, 1, 2), 0);
         _personRepositoryMock
             .Setup(m => m.GetPersonByFilter(new List<FilterCriteriaEntity> { new() }, _clockMock.Today, false, searchParameters.Paging))
             .Returns(Task.FromResult(repositoryResult));

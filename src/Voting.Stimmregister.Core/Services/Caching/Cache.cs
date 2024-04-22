@@ -42,13 +42,13 @@ public abstract class Cache<TKey, TElement> : IAsyncDisposable
     public async Task<TElement?> Get(TKey key)
     {
         var cacheKey = $"{_cacheName}-{key}";
-        if (_memoryCache.TryGetValue(cacheKey, out TElement value))
+        if (_memoryCache.TryGetValue(cacheKey, out TElement? value))
         {
             return value;
         }
 
         using var locker = await _resolverLock.AcquireAsync();
-        if (_memoryCache.TryGetValue(cacheKey, out TElement addedValue))
+        if (_memoryCache.TryGetValue(cacheKey, out TElement? addedValue))
         {
             return addedValue;
         }

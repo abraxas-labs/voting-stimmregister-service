@@ -25,7 +25,7 @@ public class PersonVoterMapping : IPersonVoterMapping
     private const string PersonIdCategoryLocalId = "LOC";
     private const string PersonIdCategoryLocalRevisionId = "LOC.REV";
     private const string SwissCountryIdIso2 = "CH";
-    private const string ResidenceCountryUnknown = "Unbekannt";
+    private const string AddressCountryUnknown = "Unbekannt";
 
     private readonly ICountryHelperService _countryHelperService;
     private readonly ILogger<PersonVoterMapping> _logger;
@@ -40,18 +40,18 @@ public class PersonVoterMapping : IPersonVoterMapping
 
     public VotingPersonType ToEchVoter(PersonEntity person)
     {
+        var hasResidence = PersonUtil.HasResidenceStreetOrPostOfficeBoxText(person);
+        var hasContact = PersonUtil.HasContactStreetOrPostOfficeBoxText(person);
+
         var votingPersonType = new VotingPersonType
         {
             Person = BuildPerson(person),
-            ElectoralAddress = PersonUtil.HasResidenceAddress(person) ? BuildElectoralAddress(person) : BuildDeliveryAddress(person),
-            DeliveryAddress = PersonUtil.HasContactAddress(person) ? BuildDeliveryAddress(person) : BuildElectoralAddress(person),
-            IsEvoter = person is { EVoting: true, IsSwissAbroad: false },
+            ElectoralAddress = hasResidence || !hasContact ? BuildElectoralAddress(person) : BuildDeliveryAddress(person),
+            DeliveryAddress = hasContact || !hasResidence ? BuildDeliveryAddress(person) : BuildElectoralAddress(person),
+            IsEvoter = person.EVoting,
         };
 
-        foreach (var doiInfo in BuildDomainOfInfluenceInfoType(person))
-        {
-            votingPersonType.DomainOfInfluenceInfo.Add(doiInfo);
-        }
+        votingPersonType.DomainOfInfluenceInfo.AddRange(BuildDomainOfInfluenceInfoType(person));
 
         return votingPersonType;
     }
@@ -105,7 +105,20 @@ public class PersonVoterMapping : IPersonVoterMapping
             : new PlaceOfOriginType { Canton = canton, OriginName = origin, };
     }
 
-    private static PersonMailAddressType BuildElectoralAddress(PersonEntity person)
+    private static string PlaceholderIfEmptyOrNull(string? s)
+        => string.IsNullOrEmpty(s) ? "?" : s;
+
+    private static string CallNameOrFirstName(PersonEntity person)
+        => string.IsNullOrEmpty(person.CallName)
+            ? person.FirstName
+            : person.CallName;
+
+    private static string LastName(PersonEntity person)
+        => string.IsNullOrEmpty(person.AllianceName)
+            ? person.OfficialName
+            : person.AllianceName;
+
+    private PersonMailAddressType BuildElectoralAddress(PersonEntity person)
     {
         var personAddress = new PersonMailAddressType
         {
@@ -121,25 +134,14 @@ public class PersonVoterMapping : IPersonVoterMapping
         return personAddress;
     }
 
-    private static string PlaceholderIfEmptyOrNull(string? s)
-        => string.IsNullOrEmpty(s) ? "?" : s;
-
-    private static string CallNameOrFirstName(PersonEntity person)
-        => string.IsNullOrEmpty(person.CallName)
-            ? person.FirstName
-            : person.CallName;
-
-    private static string LastName(PersonEntity person)
-        => string.IsNullOrEmpty(person.AllianceName)
-            ? person.OfficialName
-            : $"{person.OfficialName}-{person.AllianceName}";
-
-    private static AddressInformationType BuildDeliveryAddressInformation(PersonEntity person)
+    private AddressInformationType BuildDeliveryAddressInformation(PersonEntity person)
     {
+        var countryInfo = _countryHelperService.GetCountryInfo(person.ContactAddressCountryIdIso2!);
+
         var address = new AddressInformationType()
         {
-            AddressLine1 = person.ContactAddressLine1,
-            AddressLine2 = person.ContactAddressLine2,
+            AddressLine1 = person.ContactAddressExtensionLine1,
+            AddressLine2 = person.ContactAddressExtensionLine2,
             Street = person.ContactAddressStreet,
             HouseNumber = person.ContactAddressHouseNumber,
             DwellingNumber = person.ContactAddressDwellingNumber,
@@ -147,27 +149,22 @@ public class PersonVoterMapping : IPersonVoterMapping
             PostOfficeBoxNumber = (uint?)person.ContactAddressPostOfficeBoxNumber,
             Locality = person.ContactAddressLocality,
             Town = person.ContactAddressTown,
-            Country = new Ech0010_6_0.CountryType
+            Country = new CountryType
             {
-                CountryIdIso2 = person.Country,
-                CountryNameShort = person.CountryNameShort,
+                CountryIdIso2 = countryInfo?.Iso2Id,
+                CountryNameShort = countryInfo?.ShortNameDe ?? AddressCountryUnknown,
             },
         };
 
-        if (int.TryParse(person.ContactAddressZipCode, out var zip) && !person.IsSwissAbroad)
-        {
-            address.SwissZipCode = (uint?)zip;
-        }
-        else
-        {
-            address.ForeignZipCode = person.ContactAddressZipCode;
-        }
+        EvaluateAndAssignZipCode(address, person.ContactAddressZipCode, person.ContactAddressCountryIdIso2);
 
         return address;
     }
 
-    private static AddressInformationType BuildElectoralAddressInformation(PersonEntity person)
+    private AddressInformationType BuildElectoralAddressInformation(PersonEntity person)
     {
+        var countryInfo = _countryHelperService.GetCountryInfo(person.ResidenceCountry!);
+
         var address = new AddressInformationType()
         {
             AddressLine1 = person.ResidenceAddressExtensionLine1,
@@ -176,24 +173,52 @@ public class PersonVoterMapping : IPersonVoterMapping
             HouseNumber = person.ResidenceAddressHouseNumber,
             DwellingNumber = person.ResidenceAddressDwellingNumber,
             Town = PlaceholderIfEmptyOrNull(person.ResidenceAddressTown ?? person.ContactAddressTown),
-            Country = new Ech0010_6_0.CountryType
+            Country = new CountryType
             {
-                CountryIdIso2 = person.Country,
-                CountryNameShort = person.CountryNameShort,
+                CountryIdIso2 = countryInfo?.Iso2Id,
+                CountryNameShort = countryInfo?.ShortNameDe ?? AddressCountryUnknown,
             },
             PostOfficeBoxText = person.ResidenceAddressPostOfficeBoxText,
         };
 
-        if (int.TryParse(person.ResidenceAddressZipCode, out var zip) && !person.IsSwissAbroad)
+        EvaluateAndAssignZipCode(address, person.ResidenceAddressZipCode, person.ResidenceCountry);
+
+        return address;
+    }
+
+    private void EvaluateAndAssignZipCode(AddressInformationType address, string? zipCode, string? countryIso2)
+    {
+        // If the country is not set, we cannot determine if the zip code is swiss or foreign.
+        if (string.IsNullOrEmpty(countryIso2) && !string.IsNullOrEmpty(zipCode))
         {
-            address.SwissZipCode = (uint?)zip;
+            const int minZipCode = 1000;
+            const int maxZipCode = 9999;
+
+            // It is assumed to be swiss if format conditions match, otherwise it is assigned as foreign zip code.
+            if (uint.TryParse(zipCode, out var zipCodeNumeric) && zipCodeNumeric is >= minZipCode and <= maxZipCode)
+            {
+                address.SwissZipCode = zipCodeNumeric;
+            }
+            else
+            {
+                address.ForeignZipCode = zipCode;
+            }
+        }
+        else if (countryIso2?.Equals(SwissCountryIdIso2, StringComparison.OrdinalIgnoreCase) == true)
+        {
+            if (uint.TryParse(zipCode, out var zipCodeNumeric))
+            {
+                address.SwissZipCode = zipCodeNumeric;
+            }
+            else
+            {
+                _logger.LogError("Failed to parse swiss contact address zip code <{ContactAddressCountryIdIso2}> as uint32.", zipCode);
+            }
         }
         else
         {
-            address.ForeignZipCode = person.ResidenceAddressZipCode;
+            address.ForeignZipCode = zipCode;
         }
-
-        return address;
     }
 
     private PersonMailAddressType? BuildDeliveryAddress(PersonEntity person)
@@ -233,10 +258,7 @@ public class PersonVoterMapping : IPersonVoterMapping
             DateOfBirth = person.DateOfBirth.ToEchDatePartiallyKnown(),
         };
 
-        foreach (var otherPersonId in BuildOtherPersonIds(person))
-        {
-            personIdentification.OtherPersonId.Add(otherPersonId);
-        }
+        personIdentification.OtherPersonId.AddRange(BuildOtherPersonIds(person));
 
         var swissMunicipality = new SwissMunicipalityType
         {
@@ -266,12 +288,13 @@ public class PersonVoterMapping : IPersonVoterMapping
         {
             PersonIdentification = personIdentification,
             LanguageOfCorrespondance = language,
+            ReligionData = new ReligionDataType
+            {
+                Religion = ((int)person.Religion).ToString("D3"),
+            },
         };
 
-        foreach (var placeOfOrigin in BuildPlaceOfOrigins(person))
-        {
-            swissPerson.PlaceOfOrigin.Add(placeOfOrigin);
-        }
+        swissPerson.PlaceOfOrigin.AddRange(BuildPlaceOfOrigins(person));
 
         if (!person.IsSwissAbroad)
         {
@@ -317,7 +340,7 @@ public class PersonVoterMapping : IPersonVoterMapping
                     CountryId = (ushort?)residenceCountryInfo?.Id,
                     CountryIdIso2 = residenceCountryInfo?.Iso2Id,
                     CountryNameShort = residenceCountryInfo?.ShortNameEn ??
-                                       person.ResidenceCountry ?? ResidenceCountryUnknown,
+                                       person.ResidenceCountry ?? AddressCountryUnknown,
                 },
                 Municipality = swissMunicipality,
             },

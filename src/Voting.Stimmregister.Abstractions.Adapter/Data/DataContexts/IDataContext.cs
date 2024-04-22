@@ -79,6 +79,11 @@ public interface IDataContext
     DbSet<PersonDoiEntity> PersonDois { get; set; }
 
     /// <summary>
+    /// Gets or sets the BfsStatistics table.
+    /// </summary>
+    DbSet<BfsStatisticEntity> BfsStatistics { get; set; }
+
+    /// <summary>
     /// Saves changes async by calling <see cref="DbContext.SaveChangesAsync"/>.
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>

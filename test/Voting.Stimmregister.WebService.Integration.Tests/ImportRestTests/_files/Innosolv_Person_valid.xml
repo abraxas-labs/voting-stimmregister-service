@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<delivery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.abraxas.ch/xmlns/ABX-Voting/1">
+  <deliveryHeader xmlns:eCH-0058="http://www.ech.ch/xmlns/eCH-0058/5">
+    <eCH-0058:senderId>SR-MockDataGenerator</eCH-0058:senderId>
+    <eCH-0058:messageId>SR-MOCK-1</eCH-0058:messageId>
+    <eCH-0058:messageType>SR-MOCK-1</eCH-0058:messageType>
+    <eCH-0058:sendingApplication>
+      <eCH-0058:manufacturer>Abraxas</eCH-0058:manufacturer>
+      <eCH-0058:product>SR-MockDataGenerator</eCH-0058:product>
+      <eCH-0058:productVersion>0.0.1-dev</eCH-0058:productVersion>
+    </eCH-0058:sendingApplication>
+    <eCH-0058:messageDate>2023-11-15T00:00:00.000</eCH-0058:messageDate>
+    <eCH-0058:action>1</eCH-0058:action>
+    <eCH-0058:testDeliveryFlag>true</eCH-0058:testDeliveryFlag>
+  </deliveryHeader>
+  <baseDelivery>
+    <person>
+      <personIdentification xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4">
+        <eCH-0044:vn>7564290593954</eCH-0044:vn>
+        <eCH-0044:localPersonId>
+          <eCH-0044:personIdCategory>MockedId</eCH-0044:personIdCategory>
+          <eCH-0044:personId>5e408abc-c311-46d3-96df-8e6167829f0f</eCH-0044:personId>
+        </eCH-0044:localPersonId>
+        <eCH-0044:officialName>Axmann</eCH-0044:officialName>
+        <eCH-0044:firstName>Ferdinand</eCH-0044:firstName>
+        <eCH-0044:sex>1</eCH-0044:sex>
+        <eCH-0044:dateOfBirth>
+          <eCH-0044:yearMonthDay>1945-01-27</eCH-0044:yearMonthDay>
+        </eCH-0044:dateOfBirth>
+      </personIdentification>
+      <nameData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:officialName>Axmann</eCH-0011:officialName>
+        <eCH-0011:firstName>Ferdinand</eCH-0011:firstName>
+      </nameData>
+      <religionData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:religion>111</eCH-0011:religion>
+      </religionData>
+      <nationalityData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:nationalityStatus>2</eCH-0011:nationalityStatus>
+        <eCH-0011:countryInfo>
+          <eCH-0011:country xmlns:eCH-0008="http://www.ech.ch/xmlns/eCH-0008/3">
+            <eCH-0008:countryIdISO2>CH</eCH-0008:countryIdISO2>
+            <eCH-0008:countryNameShort>Schweiz</eCH-0008:countryNameShort>
+          </eCH-0011:country>
+        </eCH-0011:countryInfo>
+      </nationalityData>
+      <placeOfOrigin xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:originName>Grubescheid</eCH-0011:originName>
+        <eCH-0011:canton>BS</eCH-0011:canton>
+      </placeOfOrigin>
+      <hasMainResidence>
+        <reportingMunicipality xmlns:eCH-0007="http://www.ech.ch/xmlns/eCH-0007/6">
+          <eCH-0007:municipalityId>3238</eCH-0007:municipalityId>
+          <eCH-0007:municipalityName>Widnau</eCH-0007:municipalityName>
+        </reportingMunicipality>
+        <arrivalDate>2009-11-10</arrivalDate>
+        <comesFrom xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+          <eCH-0011:foreignCountry>
+            <eCH-0011:country xmlns:eCH-0008="http://www.ech.ch/xmlns/eCH-0008/3">
+              <eCH-0008:countryIdISO2>KR</eCH-0008:countryIdISO2>
+              <eCH-0008:countryNameShort>Südkorea</eCH-0008:countryNameShort>
+            </eCH-0011:country>
+            <eCH-0011:town>Nord Piet</eCH-0011:town>
+          </eCH-0011:foreignCountry>
+        </comesFrom>
+        <dwellingAddress xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+          <eCH-0011:address xmlns:eCH-0010="http://www.ech.ch/xmlns/eCH-0010/5">
+            <eCH-0010:street>Unterdorfstrasse</eCH-0010:street>
+            <eCH-0010:houseNumber>42</eCH-0010:houseNumber>
+            <eCH-0010:town>Widnau</eCH-0010:town>
+            <eCH-0010:swissZipCode>9443</eCH-0010:swissZipCode>
+            <eCH-0010:country>CH</eCH-0010:country>
+          </eCH-0011:address>
+          <eCH-0011:typeOfHousehold>1</eCH-0011:typeOfHousehold>
+          <eCH-0011:movingDate>2009-11-10</eCH-0011:movingDate>
+        </dwellingAddress>
+      </hasMainResidence>
+      <district>
+        <districtCategory>SK</districtCategory>
+        <localDistrictId>C</localDistrictId>
+        <otherDistrictId>C-other</otherDistrictId>
+        <districtName>Widnau</districtName>
+      </district>
+      <district>
+        <districtCategory>KIKAT</districtCategory>
+        <localDistrictId>100</localDistrictId>
+        <otherDistrictId>100-other</otherDistrictId>
+        <districtName>Kath. Kirchgemeinde Widnau</districtName>
+      </district>
+      <district>
+        <districtCategory>KIEVA</districtCategory>
+        <localDistrictId>100</localDistrictId>
+        <otherDistrictId>100-other</otherDistrictId>
+        <districtName>Evang. Kirchgde. Diepoldsau-Widnau</districtName>
+      </district>
+      <district>
+        <districtCategory>SC</districtCategory>
+        <localDistrictId>101</localDistrictId>
+        <otherDistrictId>101-other</otherDistrictId>
+        <districtName>Schulgemeinde Widnau</districtName>
+      </district>
+      <district>
+        <districtCategory>AN</districtCategory>
+        <localDistrictId>0</localDistrictId>
+        <otherDistrictId>0-other</otherDistrictId>
+        <districtName>kein</districtName>
+      </district>
+      <district>
+        <districtCategory>AN</districtCategory>
+        <localDistrictId>150</localDistrictId>
+        <otherDistrictId>150-other</otherDistrictId>
+        <districtName>Quartier 15 (902)</districtName>
+      </district>
+      <district>
+        <districtCategory>AN</districtCategory>
+        <localDistrictId>0</localDistrictId>
+        <otherDistrictId>0-other</otherDistrictId>
+        <districtName>kein</districtName>
+      </district>
+    </person>
+    <person>
+      <personIdentification xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4">
+        <eCH-0044:vn>7561155406602</eCH-0044:vn>
+        <eCH-0044:localPersonId>
+          <eCH-0044:personIdCategory>MockedId</eCH-0044:personIdCategory>
+          <eCH-0044:personId>49be24c6-edcf-4c61-b0e1-820de8ef686d</eCH-0044:personId>
+        </eCH-0044:localPersonId>
+        <eCH-0044:officialName>Amberg</eCH-0044:officialName>
+        <eCH-0044:firstName>Lindsay</eCH-0044:firstName>
+        <eCH-0044:sex>2</eCH-0044:sex>
+        <eCH-0044:dateOfBirth>
+          <eCH-0044:yearMonthDay>2001-02-19</eCH-0044:yearMonthDay>
+        </eCH-0044:dateOfBirth>
+      </personIdentification>
+      <nameData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:officialName>Amberg</eCH-0011:officialName>
+        <eCH-0011:firstName>Lindsay</eCH-0011:firstName>
+      </nameData>
+      <religionData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:religion>111</eCH-0011:religion>
+      </religionData>
+      <nationalityData xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:nationalityStatus>2</eCH-0011:nationalityStatus>
+        <eCH-0011:countryInfo>
+          <eCH-0011:country xmlns:eCH-0008="http://www.ech.ch/xmlns/eCH-0008/3">
+            <eCH-0008:countryIdISO2>CH</eCH-0008:countryIdISO2>
+            <eCH-0008:countryNameShort>Schweiz</eCH-0008:countryNameShort>
+          </eCH-0011:country>
+        </eCH-0011:countryInfo>
+      </nationalityData>
+      <placeOfOrigin xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+        <eCH-0011:originName>Schimmerscheid</eCH-0011:originName>
+        <eCH-0011:canton>NW</eCH-0011:canton>
+      </placeOfOrigin>
+      <hasSecondaryResidence>
+        <reportingMunicipality xmlns:eCH-0007="http://www.ech.ch/xmlns/eCH-0007/6">
+          <eCH-0007:municipalityId>3238</eCH-0007:municipalityId>
+          <eCH-0007:municipalityName>Widnau</eCH-0007:municipalityName>
+        </reportingMunicipality>
+        <arrivalDate>2023-05-14</arrivalDate>
+        <comesFrom xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+          <eCH-0011:swissTown xmlns:eCH-0007="http://www.ech.ch/xmlns/eCH-0007/5">
+            <eCH-0007:municipalityId>2197</eCH-0007:municipalityId>
+            <eCH-0007:municipalityName>Ost Raikscheid</eCH-0007:municipalityName>
+          </eCH-0011:swissTown>
+        </comesFrom>
+        <dwellingAddress xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8">
+          <eCH-0011:address xmlns:eCH-0010="http://www.ech.ch/xmlns/eCH-0010/5">
+            <eCH-0010:street>Dechant-Krey-Str.</eCH-0010:street>
+            <eCH-0010:houseNumber>894</eCH-0010:houseNumber>
+            <eCH-0010:town>Widnau</eCH-0010:town>
+            <eCH-0010:swissZipCode>6931</eCH-0010:swissZipCode>
+            <eCH-0010:country>CH</eCH-0010:country>
+          </eCH-0011:address>
+          <eCH-0011:typeOfHousehold>0</eCH-0011:typeOfHousehold>
+          <eCH-0011:movingDate>2023-05-14</eCH-0011:movingDate>
+        </dwellingAddress>
+        <mainResidence xmlns:eCH-0007="http://www.ech.ch/xmlns/eCH-0007/6">
+          <eCH-0007:municipalityId>5035</eCH-0007:municipalityId>
+          <eCH-0007:municipalityName>Süd Luzie</eCH-0007:municipalityName>
+        </mainResidence>
+      </hasSecondaryResidence>
+      <district>
+        <districtCategory>SK</districtCategory>
+        <localDistrictId>C</localDistrictId>
+        <otherDistrictId>C-other</otherDistrictId>
+        <districtName>Widnau</districtName>
+      </district>
+      <district>
+        <districtCategory>KIKAT</districtCategory>
+        <localDistrictId>100</localDistrictId>
+        <otherDistrictId>100-other</otherDistrictId>
+        <districtName>Kath. Kirchgemeinde Widnau</districtName>
+      </district>
+      <district>
+        <districtCategory>KIEVA</districtCategory>
+        <localDistrictId>100</localDistrictId>
+        <otherDistrictId>100-other</otherDistrictId>
+        <districtName>Evang. Kirchgde. Diepoldsau-Widnau</districtName>
+      </district>
+      <district>
+        <districtCategory>SC</districtCategory>
+        <localDistrictId>101</localDistrictId>
+        <otherDistrictId>101-other</otherDistrictId>
+        <districtName>Schulgemeinde Widnau</districtName>
+      </district>
+      <district>
+        <districtCategory>AN</districtCategory>
+        <localDistrictId>0</localDistrictId>
+        <otherDistrictId>0-other</otherDistrictId>
+        <districtName>kein</districtName>
+      </district>
+      <district>
+        <districtCategory>AN</districtCategory>
+        <localDistrictId>110</localDistrictId>
+        <otherDistrictId>110-other</otherDistrictId>
+        <districtName>Quartier 11 (523)</districtName>
+      </district>
+      <district>
+        <districtCategory>AN</districtCategory>
+        <localDistrictId>0</localDistrictId>
+        <otherDistrictId>0-other</otherDistrictId>
+        <districtName>kein</districtName>
+      </district>
+    </person>
+  </baseDelivery>
+</delivery>

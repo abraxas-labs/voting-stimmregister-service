@@ -7,6 +7,7 @@ using FluentAssertions;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Models;
@@ -98,15 +99,26 @@ public class SaveTest : BaseWriteableDbGrpcTest<FilterService.FilterServiceClien
     }
 
     [Fact]
-    public async Task Save_SgReader_UpdateExisting_ShouldFail()
+    public async Task Save_RoleUnauthorized_UpdateExisting_ShouldPermissionDenied()
     {
-        const string name = "Save_SgReader_ShouldFail";
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+            Roles.Reader,
+        };
+
+        const string name = "Save_RoleUnauthorized_ShouldPermissionDenied";
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
         await Save_Test(
-            SgReaderClient,
-            filterId: FilterMockedData.SomeFilter_MunicipalityIdOther2.Id,
-            name: name,
+            client,
             expectThrows: true,
-            expectedStatusCode: StatusCode.PermissionDenied);
+            expectedStatusCode: StatusCode.PermissionDenied,
+            filterId: Guid.Empty,
+            name: name);
     }
 
     protected override async Task AuthorizationTestCall(FilterService.FilterServiceClient service)

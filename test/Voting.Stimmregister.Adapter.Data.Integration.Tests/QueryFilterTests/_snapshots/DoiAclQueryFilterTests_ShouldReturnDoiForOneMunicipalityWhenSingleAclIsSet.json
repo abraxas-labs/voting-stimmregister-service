@@ -27,9 +27,6 @@
       "MunicipalityId": 3203,
       "IsValid": true,
       "ValidationErrors": null,
-      "SignatureVersion": 0,
-      "SignatureKeyId": "",
-      "Signature": "",
       "Id": "00000000-0000-0000-0000-000000000000"
     },
     {
@@ -59,9 +56,6 @@
       "MunicipalityId": 3203,
       "IsValid": true,
       "ValidationErrors": null,
-      "SignatureVersion": 0,
-      "SignatureKeyId": "",
-      "Signature": "",
       "Id": "00000000-0000-0000-0000-000000000000"
     }
   ]

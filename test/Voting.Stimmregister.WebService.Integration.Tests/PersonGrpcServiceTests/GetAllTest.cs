@@ -9,6 +9,7 @@ using FluentAssertions;
 using Grpc.Core;
 using Voting.Lib.Testing.Mocks;
 using Voting.Lib.Testing.Utils;
+using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Proto.V1.Services;
@@ -426,6 +427,27 @@ public class GetAllTest : BaseWriteableDbGrpcTest<PersonService.PersonServiceCli
         }
     }
 
+    [Fact]
+    public async Task WhenNoFilterAndRoleUnauthorized_ShouldPermissionDenied()
+    {
+        var rolesArray = new[]
+        {
+            Roles.ApiImporter,
+            Roles.ApiExporter,
+            Roles.ManualImporter,
+            Roles.ManualExporter,
+            Roles.ImportObserver,
+        };
+
+        var filter = new FilterCriteriaModel();
+        var client = CreateGrpcService(CreateGrpcChannel(true, tenant: VotingIamTenantIds.KTSG, roles: rolesArray));
+
+        await AssertStatus(
+            async () => await client.GetAllAsync(
+                NewValidGetAllRequest(x => x.Criteria.Add(filter))),
+            StatusCode.PermissionDenied);
+    }
+
     [Theory]
     [InlineData(FilterOperator.Contains)]
     [InlineData(FilterOperator.StartsWith)]
@@ -561,19 +583,20 @@ public class GetAllTest : BaseWriteableDbGrpcTest<PersonService.PersonServiceCli
             switch (filterOperator)
             {
                 case FilterOperator.Equals:
-                    dateOfBirth.Should().BeInRange(referenceDate.AddYears(-1).AddDays(1), referenceDate);
+                    dateOfBirth.Should().BeOnOrAfter(referenceDate.AddYears(-1).AddDays(1));
+                    dateOfBirth.Should().BeOnOrBefore(referenceDate);
                     break;
                 case FilterOperator.Less:
-                    dateOfBirth.Should().BeInRange(referenceDate.AddDays(1), DateOnly.MaxValue);
+                    dateOfBirth.Should().BeOnOrAfter(referenceDate.AddDays(1));
                     break;
                 case FilterOperator.LessEqual:
-                    dateOfBirth.Should().BeInRange(referenceDate.AddYears(-1).AddDays(1), DateOnly.MaxValue);
+                    dateOfBirth.Should().BeOnOrAfter(referenceDate.AddYears(-1).AddDays(1));
                     break;
                 case FilterOperator.Greater:
-                    dateOfBirth.Should().BeInRange(DateOnly.MinValue, referenceDate);
+                    dateOfBirth.Should().BeOnOrBefore(referenceDate);
                     break;
                 case FilterOperator.GreaterEqual:
-                    dateOfBirth.Should().BeInRange(DateOnly.MinValue, referenceDate.AddYears(-1));
+                    dateOfBirth.Should().BeOnOrBefore(referenceDate.AddYears(-1));
                     break;
                 default:
                     throw new NotSupportedException();
