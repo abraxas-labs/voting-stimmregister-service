@@ -61,6 +61,10 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
     private const string PeopleFileValid = "TwoPeople_valid.csv";
     private const string PeopleFileValidChanged = "TwoPeople_valid_changed.csv";
     private const string PeopleFileValidOneDeleted = "TwoPeople_valid_one_deleted.csv";
+    private const string ShouldHaveSameRegisterIdPersonFileOriginal = "ShouldHaveSameRegisterId_Person_Original.csv";
+    private const string ShouldHaveSameRegisterIdPersonFileNewSourceId = "ShouldHaveSameRegisterId_Person_NewSourceId.csv";
+    private const string ShouldHaveSameRegisterIdPersonFileEmptyVn = "ShouldHaveSameRegisterId_Person_EmptyVn.csv";
+    private const string ShouldHaveSameRegisterIdPersonFileNewName = "ShouldHaveSameRegisterId_Person_NewName.csv";
     private const string PersonCountryFileValid = "FourPeople_country_valid.csv";
     private const string PersonFileValidWithoutAddress = "OnePerson_valid_withoutAddress.csv";
     private const string CountryUnknown = "Staat unbekannt";
@@ -611,6 +615,36 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
         importStatisticEntry.Should().NotBeNull();
         importStatisticEntry!.ProcessingErrors.Should().NotBeNull();
         importStatisticEntry!.ProcessingErrors.Should().ContainAll("7562220000001", "7562220000002");
+    }
+
+    /// <summary>
+    /// represent special case from import failure (Jira: VOTING-4358) to ensure the import works as expected
+    /// Test case:
+    /// <list type="number">
+    ///     <item>import First Person with SourceId and Vn set</item>
+    ///     <item>import Second valid Person to mark First Person as deleted</item>
+    ///     <item>import First Person with other SourceId</item>
+    ///     <item>import First Person with same SourceId but empty Vn</item>
+    ///     <item>import Second valid Person to mark First Person as deleted again</item>
+    ///     <item>import First Person with same SourceId and same Vn but new Name</item>
+    /// </list>
+    /// In all Imports the Frist Person should recognized as same Person and have the same RegisterId in all Records.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+    [Fact]
+
+    public async Task WhenImportedWithOtherSourceIdAndThenEmptyVn_ShouldHaveSameRegisterId()
+    {
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginal);
+        var firstPerson = _personRepository.Query().IgnoreQueryFilters().FirstOrDefault();
+        await ImportPeopleFromFile(PersonFileValid);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewSourceId);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileEmptyVn);
+        await ImportPeopleFromFile(PersonFileValid);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewName);
+        var importedPersons = await _personRepository.Query().IgnoreQueryFilters().ToListAsync();
+        importedPersons.Should().HaveCount(10);
+        importedPersons.FindAll(p => p.RegisterId == firstPerson?.RegisterId).Should().HaveCount(6);
     }
 
     private static Mock<ICountryHelperService> CreateCountryHelperServiceMock()

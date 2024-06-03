@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.6.7`)
+# ✨ Changelog (`v2.6.8`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.6.7
-Previous version ---- v1.121.5
+This version -------- v2.6.8
+Previous version ---- v2.6.7
 Initial version ----- v1.121.5
-Total commits ------- 390
+Total commits ------- 3
 ```
+
+## [v2.6.8] - 2024-06-03
+
+### 🔄 Changed
+
+- update link to code of conduct
 
 ## [v2.6.7] - 2024-04-16
 
@@ -99,19 +105,13 @@ Total commits ------- 390
 
 - allow to skip forwarding of e-voter flag by municipality id configuration
 
-## [v2.2.7] - 2024-03-15
-
 ### 🔄 Changed
 
 - extend filter input validation
 
-## [v2.2.6] - 2024-03-14
-
 ### 🔄 Changed
 
 - add relegion for swiss person type in ech-0045 export
-
-## [v2.2.5] - 2024-03-14
 
 ### ❌ Removed
 
@@ -1557,6 +1557,24 @@ Add GetByFilterId to IPersonService interface
 ### 🆕 Added
 
 - Loganto Adapter Init
+
+## [v2.2.7] - 2024-03-15
+
+### 🔄 Changed
+
+- extend filter input validation
+
+## [v2.2.6] - 2024-03-14
+
+### 🔄 Changed
+
+- add relegion for swiss person type in ech-0045 export
+
+## [v2.2.5] - 2024-03-14
+
+### ❌ Removed
+
+- remove deprecated person signature
 
 ## [v2.2.4] - 2024-03-14
 
