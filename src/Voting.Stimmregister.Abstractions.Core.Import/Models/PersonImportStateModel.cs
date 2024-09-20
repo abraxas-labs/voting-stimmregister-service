@@ -64,6 +64,8 @@ public class PersonImportStateModel : ImportStateModel<PersonEntity>
 
         PersonIdsBySourceSystemId = existingPersonsById.Values
             .Where(p => p.SourceSystemId != null)
+            .GroupBy(p => p.SourceSystemId)
+            .Select(g => g.Count() > 1 ? g.FirstOrDefault(p => !p.IsDeleted) ?? g.First() : g.First())
             .ToDictionary(p => p.SourceSystemId!, p => p.Id);
 
         ExistingDoisByDoiId = existingDoisByDoiId;
@@ -149,8 +151,11 @@ public class PersonImportStateModel : ImportStateModel<PersonEntity>
 
         foreach (var person in toDelete)
         {
+            // For all navigation properties of the person entity, the id must be ignored in the mapping profile
+            // to prevent original foreign-key constraints from being manipulated and thus, to preserve data integrity.
             var newPerson = Mapper.Map<PersonEntity>(person);
             newPerson.DeletedDate = deletedDate;
+            newPerson.ImportStatisticId = ImportStatisticId;
             Update(newPerson, person);
         }
     }

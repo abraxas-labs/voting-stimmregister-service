@@ -12,5 +12,8 @@ public class PersonProfile : Profile
     {
         CreateMap<PersonEntity, PersonEntity>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        CreateMap<PersonDoiEntity, PersonDoiEntity>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }

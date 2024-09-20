@@ -57,10 +57,6 @@ public class PersonModelBuilder : IEntityTypeConfiguration<PersonEntity>
             .Property(d => d.SourceSystemName)
             .HasConversion(new EnumToStringConverter<ImportSourceSystem>());
 
-        builder
-            .HasIndex(x => new { x.SourceSystemId, x.SourceSystemName, x.VersionCount, x.MunicipalityId })
-            .IsUnique();
-
         // This index ensures no duplicate person with the same AVHN13 is kept for the same municipality
         // regardless of its source system. The uniqueness is only applied for the leading versions
         // (latest=true), while historical versions are ignored.

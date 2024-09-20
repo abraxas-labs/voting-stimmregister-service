@@ -8,6 +8,7 @@ using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Abstractions.Adapter.VotingIam;
 using Voting.Stimmregister.Abstractions.Core.Import.Models;
 using Voting.Stimmregister.Abstractions.Core.Import.Services;
+using Voting.Stimmregister.Abstractions.Core.Services;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Core.Services;
@@ -17,15 +18,18 @@ public class BfsStatisticService : IBfsStatisticService
     private readonly IEVoterAuditRepository _evoterAuditRepo;
     private readonly IBfsStatisticRepository _bfsStatisticRepository;
     private readonly IPermissionService _permissionService;
+    private readonly IPersonService _personService;
 
     public BfsStatisticService(
         IEVoterAuditRepository evoterAuditRepo,
         IBfsStatisticRepository bfsStatisticRepository,
-        IPermissionService permissionService)
+        IPermissionService permissionService,
+        IPersonService personService)
     {
         _evoterAuditRepo = evoterAuditRepo;
         _bfsStatisticRepository = bfsStatisticRepository;
         _permissionService = permissionService;
+        _personService = personService;
     }
 
     public async Task CreateOrUpdateStatistics(PersonImportStateModel state)
@@ -39,14 +43,26 @@ public class BfsStatisticService : IBfsStatisticService
             .CountAsync(v => v.BfsMunicipality == state.MunicipalityId && v.EVoterFlag == false);
 
         var evoterTotalCount =
-            state.EntitiesToCreate.Count(e => e.EVoting)
+            state.EntitiesToCreate.Count(e => !e.IsDeleted && e.EVoting)
             + state.EntitiesToUpdate.Count(e => e.IsLatest && e.EVoting)
             + state.EntitiesUnchanged.Count(e => e.EVoting);
 
-        var voterTotalCount =
-            state.CreateCount
-            + state.UpdateCount
-            + state.EntitiesUnchanged.Count;
+        var createdTotalCount = await state.EntitiesToCreate
+            .ToAsyncEnumerable()
+            .SelectAwait(async e => await _personService.GetPersonModelFromEntity(e, true, false))
+            .CountAsync(e => !e.IsDeleted && e.IsVotingAllowed);
+
+        var updatedTotalCount = await state.EntitiesToUpdate
+            .ToAsyncEnumerable()
+            .SelectAwait(async e => await _personService.GetPersonModelFromEntity(e, true, false))
+            .CountAsync(e => e.IsLatest && e.IsVotingAllowed);
+
+        var unchangedTotalCount = await state.EntitiesUnchanged
+            .ToAsyncEnumerable()
+            .SelectAwait(async e => await _personService.GetPersonModelFromEntity(e, true, false))
+            .CountAsync(e => e.IsVotingAllowed);
+
+        var voterTotalCount = createdTotalCount + updatedTotalCount + unchangedTotalCount;
 
         var entity = new BfsStatisticEntity
         {

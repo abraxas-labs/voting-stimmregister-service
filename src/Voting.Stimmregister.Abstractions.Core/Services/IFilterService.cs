@@ -34,7 +34,7 @@ public interface IFilterService
     /// <param name="id">The id of the filter.</param>
     /// <param name="deadline">The deadline.</param>
     /// <returns>The metadata.</returns>
-    Task<PersonCountsModel> GetMetadata(Guid id, DateOnly deadline);
+    Task<FilterMetadataModel> GetMetadata(Guid id, DateOnly deadline);
 
     /// <summary>
     /// Get a single filter version including the associated filter by the id of the filter version.

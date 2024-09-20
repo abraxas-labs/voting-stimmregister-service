@@ -50,7 +50,7 @@ public class PersonGrpcService : PersonService.PersonServiceBase
         ServerCallContext context)
     {
         var searchParameters = _mapper.Map<PersonSearchSingleParametersModel>(request);
-        var person = await _personService.GetSingleIncludingDoIs(searchParameters.RegisterId);
+        var person = await _personService.GetPersonModelIncludingDoIs(searchParameters.RegisterId);
         return _mapper.Map<PersonServiceGetSingleResponse>(person);
     }
 

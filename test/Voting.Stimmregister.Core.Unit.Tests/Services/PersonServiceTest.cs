@@ -134,7 +134,7 @@ public class PersonServiceTest
         var personEntityModel1 = new PersonEntityModel { Id = Guid.NewGuid(), RegisterId = Guid.Empty, FirstName = "Carmen" };
 
         // Act / ASsert
-        var errorText = await Assert.ThrowsAsync<InvalidSearchFilterCriteriaException>(async () => await _personService.GetSingleIncludingDoIs(personEntityModel1.RegisterId));
+        var errorText = await Assert.ThrowsAsync<InvalidSearchFilterCriteriaException>(async () => await _personService.GetPersonModelIncludingDoIs(personEntityModel1.RegisterId));
 
         // Assert
         Assert.Equal("Register Id search parameter must not be null or Guid.Empty.", errorText.Message);
@@ -184,7 +184,7 @@ public class PersonServiceTest
             .Returns<PersonEntity, Action<IMappingOperationOptions<object, PersonEntityModel>>>((__, _) => personEntityModel1);
 
         // Act
-        var result = await _personService.GetSingleIncludingDoIs(personEntityModel1.RegisterId);
+        var result = await _personService.GetPersonModelIncludingDoIs(personEntityModel1.RegisterId);
 
         // Assert
         result.Should().NotBeNull();
@@ -255,7 +255,76 @@ public class PersonServiceTest
             .Returns(Task.FromResult<BfsIntegrityEntity?>(new() { LastUpdated = _clockMock.UtcNow }));
 
         // Act
-        var result = await _personService.GetSingleIncludingDoIs(personEntityModel1.RegisterId);
+        var result = await _personService.GetPersonModelIncludingDoIs(personEntityModel1.RegisterId);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsVotingAllowed.Should().Be(expectedIsVotingAllowed);
+        result.IsBirthDateValidForVotingRights.Should().Be(expectedIsBirthDateValidForVotingRights);
+        result.IsNationalityValidForVotingRights.Should().Be(expectedIsNationalityValidForVotingRights);
+        result.Actuality.Should().BeTrue();
+        result.ActualityDate.Should().Be(_clockMock.UtcNow);
+    }
+
+    [Theory]
+    [InlineData("01.01.1981", false, Countries.Switzerland, "SG", true, true, true, "01.01.2019")]
+    [InlineData("01.01.1989", false, Countries.Switzerland, "SG", true, true, true, "10.01.2020")]
+    [InlineData("01.01.1990", false, Countries.Switzerland, "SG", true, true, true, null)]
+    [InlineData("01.01.1986", false, Countries.Switzerland, "SG", false, true, true, "06.06.2021")]
+    [InlineData("01.01.3000", false, Countries.Switzerland, "SG", false, false, true, "01.01.1999")]
+    [InlineData("01.01.1982", true, Countries.Switzerland, "SG", false, true, true, "01.08.1959")]
+    [InlineData("01.01.1983", false, "DE", "SG", false, true, false, "01.01.2011")]
+    [InlineData("01.01.1985", false, Countries.Switzerland, null, true, true, true, "01.01.1978")]
+    [InlineData("01.01.3001", true, "DE", null, false, false, false, "01.01.2002")]
+    public async Task GetSingleFromEntity_ShouldHaveValidVotingRightFlags(
+        string dateOfBirthString,
+        bool restrictedVotingAndElectionRightFederation,
+        string? country,
+        string? residenceCantonAbbreviation,
+        bool expectedIsVotingAllowed,
+        bool expectedIsBirthDateValidForVotingRights,
+        bool expectedIsNationalityValidForVotingRights,
+        string? moveInArrivalDateString)
+    {
+        // Arrange
+        var dateOfBirth = DateOnly.ParseExact(dateOfBirthString, "dd.MM.yyyy");
+        DateOnly? moveInArrivalDate = moveInArrivalDateString != null ? DateOnly.ParseExact(moveInArrivalDateString, "dd.MM.yyyy") : null;
+        var personEntity1 = new PersonEntity
+        {
+            RegisterId = Guid.NewGuid(),
+            IsSwissAbroad = false,
+            FirstName = "Carmen",
+            DateOfBirth = dateOfBirth,
+            RestrictedVotingAndElectionRightFederation = restrictedVotingAndElectionRightFederation,
+            Country = country,
+            ResidenceCantonAbbreviation = residenceCantonAbbreviation,
+            MunicipalityId = 1,
+            MoveInArrivalDate = moveInArrivalDate,
+        };
+
+        var personEntityModel1 = new PersonEntityModel
+        {
+            RegisterId = personEntity1.RegisterId,
+            IsSwissAbroad = personEntity1.IsSwissAbroad,
+            FirstName = personEntity1.FirstName,
+            DateOfBirth = personEntity1.DateOfBirth,
+            RestrictedVotingAndElectionRightFederation = personEntity1.RestrictedVotingAndElectionRightFederation,
+            Country = personEntity1.Country,
+            ResidenceCantonAbbreviation = personEntity1.ResidenceCantonAbbreviation,
+            MunicipalityId = 1,
+            MoveInArrivalDate = personEntity1.MoveInArrivalDate,
+        };
+
+        _mapperMock
+            .Setup(m => m.Map(It.IsAny<PersonEntity>(), It.IsAny<Action<IMappingOperationOptions<object, PersonEntityModel>>>()))
+            .Returns<PersonEntity, Action<IMappingOperationOptions<object, PersonEntityModel>>>((__, _) => personEntityModel1);
+
+        _bfsIntegrityRepositoryMock
+            .Setup(x => x.Get(ImportType.Person, "1"))
+            .Returns(Task.FromResult<BfsIntegrityEntity?>(new() { LastUpdated = _clockMock.UtcNow }));
+
+        // Act
+        var result = await _personService.GetPersonModelFromEntity(personEntity1, true, true);
 
         // Assert
         result.Should().NotBeNull();

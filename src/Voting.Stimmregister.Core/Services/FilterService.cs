@@ -17,6 +17,7 @@ using Voting.Stimmregister.Core.Configuration;
 using Voting.Stimmregister.Core.Diagnostics;
 using Voting.Stimmregister.Core.Services.Supporting.Signing;
 using Voting.Stimmregister.Domain.Cryptography;
+using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Exceptions;
 using Voting.Stimmregister.Domain.Models;
 
@@ -32,7 +33,8 @@ public class FilterService : IFilterService
     private readonly IFilterVersionPersonRepository _filterVersionPersonRepository;
     private readonly IPersonRepository _personRepository;
     private readonly ICreateSignatureService _createSignatureService;
-    private readonly FilterConfig _config;
+    private readonly FilterConfig _filterConfig;
+    private readonly PersonConfig _personConfig;
     private readonly IDataContext _dataContext;
     private readonly ActivityFactory<FilterService> _activityFactory;
     private readonly ILogger<FilterService> _logger;
@@ -48,7 +50,8 @@ public class FilterService : IFilterService
         IPersonRepository personRepository,
         ICreateSignatureService createSignatureService,
         IPermissionService permission,
-        FilterConfig config,
+        FilterConfig filterConfig,
+        PersonConfig personConfig,
         IDataContext dataContext,
         ActivityFactory<FilterService> activityFactory,
         ILogger<FilterService> logger,
@@ -63,7 +66,8 @@ public class FilterService : IFilterService
         _personRepository = personRepository;
         _createSignatureService = createSignatureService;
         _permission = permission;
-        _config = config;
+        _filterConfig = filterConfig;
+        _personConfig = personConfig;
         _dataContext = dataContext;
         _activityFactory = activityFactory;
         _logger = logger;
@@ -105,14 +109,17 @@ public class FilterService : IFilterService
         return filter;
     }
 
-    public async Task<PersonCountsModel> GetMetadata(Guid id, DateOnly deadline)
+    public async Task<FilterMetadataModel> GetMetadata(Guid id, DateOnly deadline)
     {
         var filter = await _filterRepository.Query()
                 .Include(x => x.FilterCriterias)
                 .FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new EntityNotFoundException(nameof(FilterEntity), id);
 
-        return await _personRepository.GetCountsByFilter(filter.FilterCriterias.AsReadOnly(), deadline);
+        var personCount = await _personRepository.GetCountsByFilter(filter.FilterCriterias.AsReadOnly(), deadline);
+        var actuality = await GetActualityByFilter(filter.FilterCriterias.AsReadOnly(), deadline);
+
+        return new(personCount.CountOfPersons, personCount.CountOfInvalidPersons, actuality.IsActual, actuality.ActualityDate);
     }
 
     public async Task<FilterVersionEntity> GetSingleVersionInclFilterByVersionId(Guid versionId)
@@ -152,7 +159,7 @@ public class FilterService : IFilterService
             throw new ForbiddenException("no municipality id found");
         }
 
-        filter.Name += _config.DuplicateNameSuffix;
+        filter.Name += _filterConfig.DuplicateNameSuffix;
         var filterCriterias = filter.FilterCriterias;
         filter.FilterCriterias = new HashSet<FilterCriteriaEntity>();
 
@@ -229,6 +236,14 @@ public class FilterService : IFilterService
             ?? throw new EntityNotFoundException(id);
 
         await _filterVersionRepository.DeleteByKey(version.Id);
+    }
+
+    private async Task<FilterActualityModel> GetActualityByFilter(IReadOnlyCollection<FilterCriteriaEntity> filterCriteria, DateOnly deadline)
+    {
+        var actualityDate = await _personRepository.GetActualityDateByFilter(filterCriteria, deadline, ImportType.Person);
+        var isActual = actualityDate.HasValue && (DateTime.UtcNow - actualityDate.Value) < _personConfig.ActualityTimeSpan;
+
+        return new FilterActualityModel(isActual, actualityDate);
     }
 
     private void ApplyComputedProperties(FilterEntity filter)
@@ -430,8 +445,11 @@ public class FilterService : IFilterService
             return;
         }
 
-        await _filterCriteriaRepository
-            .DeleteRangeByKey(filterCriterias.Select(criteria => criteria.Id));
+        // The repository method DeleteRangeByKey cannot be used for deletion, because filter criteria use query filters
+        // targeting relational entities which is not supported by the use of ExecuteDeleteAsync. Therefore, we have to ignore
+        // the query filters for deletion.
+        var ids = filterCriterias.Select(e => e.Id).ToList();
+        await _filterCriteriaRepository.Query().IgnoreQueryFilters().Where(x => ids.Contains(x.Id)).ExecuteDeleteAsync();
     }
 
     private async Task<FilterEntity?> GetSingleFilter(Guid id)

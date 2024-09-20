@@ -196,11 +196,18 @@ public class InnosolvPersonImportServiceTest : BaseWriteableDbTest
         await RunImport(TwoPersonsValid);
 
         await RunImport(SinglePersonValid);
-        var persons = await RunOnDb(db => db.Persons.IgnoreQueryFilters().OrderBy(x => x.Vn).ToListAsync());
+        var persons = await RunOnDb(db => db.Persons.IgnoreQueryFilters().Include(x => x.PersonDois).OrderBy(x => x.Vn).OrderBy(x => x.VersionCount).ToListAsync());
         persons.Should().HaveCount(3);
         persons[0].IsDeleted.Should().BeFalse();
         persons[1].IsDeleted.Should().BeFalse();
         persons[2].IsDeleted.Should().BeTrue();
+
+        foreach (var person in persons)
+        {
+            person.PersonDois.Should().NotBeEmpty();
+        }
+
+        persons[1].ImportStatisticId.Should().NotBe(persons[2].ImportStatisticId.ToString());
     }
 
     [Fact]

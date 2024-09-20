@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Voting.Lib.Database.Models;
@@ -83,6 +84,19 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         var personsCount = await queryable.CountAsync();
         var personsInvalidCount = await queryable.CountAsync(x => !x.IsValid);
         return new PersonCountsModel(personsCount, personsInvalidCount);
+    }
+
+    public async Task<DateTime?> GetActualityDateByFilter(IReadOnlyCollection<FilterCriteriaEntity> criteria, DateOnly referenceKeyDate, ImportType importType)
+    {
+        var queryable = QueryIsLatest();
+        queryable = FilterForCriterias(queryable, criteria, referenceKeyDate);
+        var municipalityIds = queryable.Select(p => p.MunicipalityId.ToString()).Distinct().ToList()!;
+        var oldestBfsIntegrity = await Context.Set<BfsIntegrityEntity>()
+            .Where(x => x.ImportType == importType && municipalityIds.Contains(x.Bfs))
+            .OrderBy(e => e.LastUpdated)
+            .FirstOrDefaultAsync();
+
+        return oldestBfsIntegrity?.LastUpdated;
     }
 
     /// <inheritdoc />

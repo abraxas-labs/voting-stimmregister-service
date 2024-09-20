@@ -76,7 +76,7 @@ public class FilterProfile : Profile
         CreateMap<IEnumerable<FilterEntity>, FilterServiceGetAllResponse>()
             .ForMember(dst => dst.Filters, opts => opts.MapFrom(src => src));
 
-        CreateMap<PersonCountsModel, FilterServicePreviewMetadataResponse>();
+        CreateMap<FilterMetadataModel, FilterServicePreviewMetadataResponse>();
     }
 
     private void CreateFilterVersionMaps()

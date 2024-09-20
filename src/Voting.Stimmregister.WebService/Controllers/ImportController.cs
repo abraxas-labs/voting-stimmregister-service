@@ -1,6 +1,7 @@
 ﻿// (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Voting.Lib.Rest.Files;
@@ -43,11 +44,13 @@ public class ImportController : ControllerBase
     /// <returns>A <see cref="Task"/> representing the asynchronous operation resolving to the import result.</returns>
     [AuthorizeApiOrManualImporter]
     [HttpPost("cobra/persons")]
+    [Consumes("multipart/form-data")]
     public async Task<ImportRestApiResponse> CobraPersons()
     {
         var import = await _requestHelper.ReadFile(
             Request,
-            f => _personImportQueue.Enqueue(ImportSourceSystem.Cobra, f.FileName ?? "upload-cobra.csv", f.Content));
+            f => _personImportQueue.Enqueue(ImportSourceSystem.Cobra, f.FileName ?? "upload-cobra.csv", f.Content),
+            [MediaTypeNames.Text.Csv]);
 
         return new ImportRestApiResponse(import.Id);
     }
@@ -58,6 +61,7 @@ public class ImportController : ControllerBase
     /// <returns>A <see cref="Task"/> representing the asynchronous operation resolving to the import result.</returns>
     [AuthorizeApiImporter]
     [HttpPost("loganto/doi")]
+    [Consumes("multipart/form-data")]
     public async Task<ImportRestApiResponse> LogantoDoi()
     {
         var import = await _requestHelper.ReadFile(
@@ -73,6 +77,7 @@ public class ImportController : ControllerBase
     /// <returns>A <see cref="Task"/> representing the asynchronous operation resolving to the import result.</returns>
     [AuthorizeApiImporter]
     [HttpPost("loganto/persons")]
+    [Consumes("multipart/form-data")]
     public async Task<ImportRestApiResponse> LogantoPersons()
     {
         var import = await _requestHelper.ReadFile(
@@ -88,6 +93,7 @@ public class ImportController : ControllerBase
     /// <returns>A <see cref="Task"/> representing the asynchronous operation resolving to the import result.</returns>
     [AuthorizeApiImporter]
     [HttpPost("innosolv/persons")]
+    [Consumes("multipart/form-data")]
     public async Task<ImportRestApiResponse> InnosolvPersons()
     {
         var import = await _requestHelper.ReadFile(

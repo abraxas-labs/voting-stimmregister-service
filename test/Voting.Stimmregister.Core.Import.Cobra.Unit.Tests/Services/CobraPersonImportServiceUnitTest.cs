@@ -213,6 +213,17 @@ public class CobraPersonImportServiceUnitTest : BaseWriteableDbTest
             p => p.RegisterId,
             p => p.ImportStatisticId!);
         await ValidateBfsIntegritySignature(importedPeopleSoftDeleted[0].MunicipalityId);
+
+        var persons = await _personRepository.Query()
+            .IgnoreQueryFilters()
+            .Include(p => p.PersonDois)
+            .OrderBy(p => p.VersionCount)
+            .ToListAsync();
+
+        foreach (var person in persons)
+        {
+            person.PersonDois.Should().NotBeEmpty();
+        }
     }
 
     [Fact]

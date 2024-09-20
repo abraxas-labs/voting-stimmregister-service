@@ -89,7 +89,7 @@ public class PersonService : IPersonService
         }
     }
 
-    public async Task<PersonEntityModel> GetSingleIncludingDoIs(Guid personRegisterId)
+    public async Task<PersonEntityModel> GetPersonModelIncludingDoIs(Guid personRegisterId)
     {
         if (personRegisterId == Guid.Empty)
         {
@@ -97,10 +97,25 @@ public class PersonService : IPersonService
         }
 
         var personEntity = await _personRepository.GetPersonByRegisterIdIncludingDoIs(personRegisterId);
-        var person = _mapper.Map<PersonEntityModel>(personEntity, opt => opt.Items[MappingConstants.ReferenceKeyDate] = _clock.Today);
-        DeriveComputedInfos(_clock.Today, person);
-        await DeriveActuality(person);
-        return person;
+
+        return await GetPersonModelFromEntity(personEntity, true, true);
+    }
+
+    public async Task<PersonEntityModel> GetPersonModelFromEntity(PersonEntity person, bool includeComputedInfos, bool includeActuality)
+    {
+        var personModel = _mapper.Map<PersonEntityModel>(person, opt => opt.Items[MappingConstants.ReferenceKeyDate] = _clock.Today);
+
+        if (includeComputedInfos)
+        {
+            DeriveComputedInfos(_clock.Today, personModel);
+        }
+
+        if (includeActuality)
+        {
+            await DeriveActuality(personModel);
+        }
+
+        return personModel;
     }
 
     public async Task<PersonEntityModel?> GetMostRecentWithVotingRightsByVnAndCantonBfs(long vn, short cantonBfs)

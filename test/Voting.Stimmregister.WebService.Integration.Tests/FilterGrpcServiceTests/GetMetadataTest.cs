@@ -23,7 +23,7 @@ public class GetMetadataTest : BaseReadOnlyGrpcTest<FilterService.FilterServiceC
     }
 
     [Fact]
-    public async Task ShouldReturnCounts()
+    public async Task ShouldReturnMetadata()
     {
         var response = await SgReaderClient.GetMetadataAsync(new FilterServicePreviewMetadataRequest
         {
@@ -33,6 +33,7 @@ public class GetMetadataTest : BaseReadOnlyGrpcTest<FilterService.FilterServiceC
 
         response.CountOfPersons.Should().Be(20);
         response.CountOfInvalidPersons.Should().Be(3);
+        response.IsActual.Should().BeFalse();
     }
 
     [Fact]

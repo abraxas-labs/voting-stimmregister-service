@@ -62,9 +62,12 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
     private const string PeopleFileValidChanged = "TwoPeople_valid_changed.csv";
     private const string PeopleFileValidOneDeleted = "TwoPeople_valid_one_deleted.csv";
     private const string ShouldHaveSameRegisterIdPersonFileOriginal = "ShouldHaveSameRegisterId_Person_Original.csv";
+    private const string ShouldHaveSameRegisterIdPersonFileOriginalEmptyVn = "ShouldHaveSameRegisterId_Person_Original_EmptyVn.csv";
     private const string ShouldHaveSameRegisterIdPersonFileNewSourceId = "ShouldHaveSameRegisterId_Person_NewSourceId.csv";
     private const string ShouldHaveSameRegisterIdPersonFileEmptyVn = "ShouldHaveSameRegisterId_Person_EmptyVn.csv";
     private const string ShouldHaveSameRegisterIdPersonFileNewName = "ShouldHaveSameRegisterId_Person_NewName.csv";
+    private const string ShouldHaveSameRegisterIdPersonFileNewNameEmptyVn = "ShouldHaveSameRegisterId_Person_NewName_EmptyVn.csv";
+    private const string ShouldHaveSameRegisterIdPersonFileAnotherSourceId = "ShouldHaveSameRegisterId_Person_AnotherSourceId.csv";
     private const string PersonCountryFileValid = "FourPeople_country_valid.csv";
     private const string PersonFileValidWithoutAddress = "OnePerson_valid_withoutAddress.csv";
     private const string CountryUnknown = "Staat unbekannt";
@@ -269,6 +272,17 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
         importstatistic.DatasetsCountUpdated.Should().Be(0);
         importstatistic.DatasetsCountCreated.Should().Be(0);
         importstatistic.DatasetsCountDeleted.Should().Be(0);
+
+        var persons = await _personRepository.Query()
+            .IgnoreQueryFilters()
+            .Include(p => p.PersonDois)
+            .OrderBy(p => p.VersionCount)
+            .ToListAsync();
+
+        foreach (var person in persons)
+        {
+            person.PersonDois.Should().NotBeEmpty();
+        }
     }
 
     /// <summary>
@@ -309,6 +323,20 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
         bfsStatistics.Should().NotBeNull();
         bfsStatistics!.BfsName.Should().Be("Goldach (MU)");
         bfsStatistics!.VoterTotalCount.Should().Be(2);
+        bfsStatistics!.EVoterTotalCount.Should().Be(1);
+        bfsStatistics!.EVoterRegistrationCount.Should().Be(2);
+        bfsStatistics!.EVoterDeregistrationCount.Should().Be(1);
+
+        // 3. import same file with one deleted person
+        await ImportPeopleFromFile(PeopleFileValidOneDeleted);
+
+        bfsStatistics = await _bfsStatisticRepository.Query()
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(v => v.Bfs == "3213");
+
+        bfsStatistics.Should().NotBeNull();
+        bfsStatistics!.BfsName.Should().Be("Goldach (MU)");
+        bfsStatistics!.VoterTotalCount.Should().Be(1);
         bfsStatistics!.EVoterTotalCount.Should().Be(1);
         bfsStatistics!.EVoterRegistrationCount.Should().Be(2);
         bfsStatistics!.EVoterDeregistrationCount.Should().Be(1);
@@ -618,7 +646,7 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
     }
 
     /// <summary>
-    /// represent special case from import failure (Jira: VOTING-4358) to ensure the import works as expected
+    /// represent special case from import failure (VOTING-4358) to ensure the import works as expected
     /// Test case:
     /// <list type="number">
     ///     <item>import First Person with SourceId and Vn set</item>
@@ -645,6 +673,165 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
         var importedPersons = await _personRepository.Query().IgnoreQueryFilters().ToListAsync();
         importedPersons.Should().HaveCount(10);
         importedPersons.FindAll(p => p.RegisterId == firstPerson?.RegisterId).Should().HaveCount(6);
+    }
+
+    /// <summary>
+    /// represent special case from import failure (VOTING-3985) to ensure the import works as expected
+    /// Test case:
+    /// <list type="number">
+    ///     <item>import First Person with SourceId and empty Vn</item>
+    ///     <item>import First Person with same SourceId and Vn</item>
+    ///     <item>import First Person with other SourceId</item>
+    ///     <item>import First Person with same SourceId and empty Vn</item>
+    ///     <item>import Second valid Person to mark First Person as deleted</item>
+    ///     <item>import First Person with other SourceId but right Vn</item>
+    ///     <item>import First Person with same dataset from third import</item>
+    /// </list>
+    /// In the sixth import from person should create a new RegisterId because the SourceSystemId and Vn number was not found in latest state records.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+    ///
+    [Fact]
+    public async Task WhenImportedWithOtherSourceIdAndVnOnEmptyVn_ShouldHaveSameRegisterId()
+    {
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginalEmptyVn);
+        var firstPerson = _personRepository.Query().IgnoreQueryFilters().FirstOrDefault();
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginal);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewSourceId);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileEmptyVn);
+        await ImportPeopleFromFile(PersonFileValid);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileAnotherSourceId);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewSourceId);
+        var importedPersons = await _personRepository.Query().IgnoreQueryFilters().ToListAsync();
+        importedPersons.Should().HaveCount(9);
+        importedPersons.FindAll(p => p.RegisterId == firstPerson?.RegisterId).Should().HaveCount(5);
+        importedPersons.FindAll(p => p.IsLatest).Should().HaveCount(3);
+        importedPersons.FindAll(p => p.IsLatest && p.IsDeleted).Should().HaveCount(2);
+    }
+
+    /// <summary>
+    /// represent special case from import failure (VOTING-3985) to ensure the import works as expected
+    /// Test case:
+    /// <list type="number">
+    ///     <item>import First Person with SourceId and empty Vn</item>
+    ///     <item>import First Person with same SourceId and Vn</item>
+    ///     <item>import First Person with other SourceId</item>
+    ///     <item>import First Person with same SourceId and empty Vn</item>
+    ///     <item>import First Person with other SourceId but right Vn</item>
+    ///     <item>import First Person with same dataset from third import</item>
+    /// </list>
+    /// In the fifth import from person should create a new RegisterId because the SourceSystemId and Vn number was not found in latest state records.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+    ///
+    [Fact]
+    public async Task WhenImportedWithOtherSourceIdAndVnOnEmptyVnOnlyUpdate_ShouldHaveSameRegisterId()
+    {
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginalEmptyVn);
+        var firstPerson = _personRepository.Query().IgnoreQueryFilters().FirstOrDefault();
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginal);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewSourceId);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileEmptyVn);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileAnotherSourceId);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewSourceId);
+        var importedPersons = await _personRepository.Query().IgnoreQueryFilters().ToListAsync();
+        importedPersons.Should().HaveCount(7);
+        importedPersons.FindAll(p => p.RegisterId == firstPerson?.RegisterId).Should().HaveCount(5);
+        importedPersons.FindAll(p => p.IsLatest).Should().HaveCount(2);
+        importedPersons.FindAll(p => p.IsLatest && p.IsDeleted).Should().HaveCount(1);
+    }
+
+    /// <summary>
+    /// represent special case from import inspired by failure (VOTING-3985) to ensure an old SourceSystemId can't crash the system
+    /// Test case:
+    /// <list type="number">
+    ///     <item>import First Person with SourceId and empty Vn</item>
+    ///     <item>import First Person with same SourceId and Vn</item>
+    ///     <item>import First Person with other SourceId</item>
+    ///     <item>import First Person with same SourceId and empty Vn</item>
+    ///     <item>import First Person with other SourceId but right Vn</item>
+    ///     <item>import First Person with same dataset from first import</item>
+    /// </list>
+    /// In the last import from person should create a new RegisterId because the SourceSystemId was not found in latest state records.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+    ///
+    [Fact]
+    public async Task WhenImportedWithOtherSourceIdAndVnOnEmptyVnOnlyUpdate2_ShouldHaveSameRegisterId()
+    {
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginalEmptyVn);
+        var firstPerson = _personRepository.Query().IgnoreQueryFilters().FirstOrDefault();
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginal);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewSourceId);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileEmptyVn);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginalEmptyVn);
+        var importedPersons = await _personRepository.Query().IgnoreQueryFilters().ToListAsync();
+        importedPersons.Should().HaveCount(6);
+        importedPersons.FindAll(p => p.RegisterId == firstPerson?.RegisterId).Should().HaveCount(5);
+        importedPersons.FindAll(p => p.IsLatest).Should().HaveCount(2);
+        importedPersons.FindAll(p => p.IsLatest && p.IsDeleted).Should().HaveCount(1);
+    }
+
+    /// <summary>
+    /// represent special case from import inspired by failure (VOTING-3985) to ensure an old SourceSystemId can't crash the system
+    /// Test case:
+    /// <list type="number">
+    ///     <item>import First Person with SourceId and empty Vn</item>
+    ///     <item>import Person with same SourceId and empty Vn and changed Name</item>
+    ///     <item>import First Person again</item>
+    ///     <item>import Person with other SourceId and empty Vn</item>
+    ///     <item>import Person with same SourceId and Vn</item>
+    ///     <item>import First Person with other SourceId with Vn from last import</item>
+    /// </list>
+    /// If there are two persons in state latest with same SoureSystemId only one person sould habe the deletet flag to false.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+    ///
+    [Fact]
+    public async Task WhenImportedWithOtherSourceIdAndVnOnEmptyVnOnlyUpdate3_ShouldHaveSameRegisterId()
+    {
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileEmptyVn);
+        var firstPerson = _personRepository.Query().IgnoreQueryFilters().FirstOrDefault();
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewNameEmptyVn);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileEmptyVn);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginalEmptyVn);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginal);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewSourceId);
+        var importedPersons = await _personRepository.Query().IgnoreQueryFilters().ToListAsync();
+        importedPersons.Should().HaveCount(7);
+        importedPersons.FindAll(p => p.RegisterId == firstPerson?.RegisterId).Should().HaveCount(4);
+        importedPersons.FindAll(p => p.IsLatest).Should().HaveCount(2);
+        importedPersons.FindAll(p => p.IsLatest && p.IsDeleted).Should().HaveCount(1);
+    }
+
+    /// <summary>
+    /// represent special case from import inspired by failure (VOTING-3985) to ensure the system can handle same SourceSystemId in latest state and one entry set as not deleted.
+    /// Test case:
+    /// <list type="number">
+    ///     <item>import first Person with SourceId and empty Vn</item>
+    ///     <item>import Person with other SourceId and empty Vn</item>
+    ///     <item>import Person with same SourceId and Vn</item>
+    ///     <item>import first Person with other SourceId with Vn from last import</item>
+    ///     <item>import first Person again</item>
+    /// </list>
+    /// If person will be importet first with Vn und then without the person shoulb be recognized as same person.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+    ///
+    [Fact]
+    public async Task WhenImportedWithOldSourceSystemIdAndEmptyVn_ShouldFindOldSourceSystemIdAgain()
+    {
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileEmptyVn);
+        var firstPerson = _personRepository.Query().IgnoreQueryFilters().FirstOrDefault();
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginalEmptyVn);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileOriginal);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileNewSourceId);
+        await ImportPeopleFromFile(ShouldHaveSameRegisterIdPersonFileEmptyVn);
+        var importedPersons = await _personRepository.Query().IgnoreQueryFilters().ToListAsync();
+        importedPersons.Should().HaveCount(6);
+        importedPersons.FindAll(p => p.RegisterId == firstPerson?.RegisterId).Should().HaveCount(2);
+        importedPersons.FindAll(p => p.IsLatest).Should().HaveCount(2);
+        importedPersons.FindAll(p => p.IsLatest && p.IsDeleted).Should().HaveCount(1);
     }
 
     private static Mock<ICountryHelperService> CreateCountryHelperServiceMock()

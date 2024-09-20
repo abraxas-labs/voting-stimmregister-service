@@ -73,7 +73,7 @@ public class CobraPersonMapper : BasePersonMapper<CobraPersonCsvRecord>
         // (eCH-0045.Transformer/VotingPlaceHelper.cs#L64)
         // address line 1 is always first and official name
         // line 7 always the country
-        // line 2-6 are filled with the contact address lines 1-7 with duplicates and empty lines removed
+        // line 2-6 are filled with the contact address lines 1-7 with duplicates retained and empty lines removed
         // if there are more than 5 lines filled, the additional lines are not considered.
         const int maxLines = 5;
         var lines = new[]
@@ -87,7 +87,6 @@ public class CobraPersonMapper : BasePersonMapper<CobraPersonCsvRecord>
                 record.ContactAddressLine7,
             }
             .Where(x => !string.IsNullOrEmpty(x))
-            .Distinct()
             .Take(maxLines)
             .ToList();
 

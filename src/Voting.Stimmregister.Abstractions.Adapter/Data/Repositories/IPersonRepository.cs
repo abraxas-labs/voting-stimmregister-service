@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Voting.Lib.Database.Models;
 using Voting.Lib.Database.Repositories;
+using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Domain.Models.Utils;
 
@@ -49,6 +50,15 @@ public interface IPersonRepository : IDbRepository<DbContext, PersonEntity>
     /// <param name="referenceKeyDate">The date with which all date relevant queries are to be executed. Example: At which date the age is calculated.</param>
     /// <returns>The counts.</returns>
     Task<PersonCountsModel> GetCountsByFilter(IReadOnlyCollection<FilterCriteriaEntity> criteria, DateOnly referenceKeyDate);
+
+    /// <summary>
+    /// Gets the actuality date of persons by a given filter criteria. If filter consists of persons accross many BFS scopes, the oldest actuality is returned.
+    /// </summary>
+    /// <param name="criteria">The criteria to apply.</param>
+    /// <param name="referenceKeyDate">The date with which all date relevant queries are to be executed. Example: At which date the age is calculated.</param>
+    /// <param name="importType">The import type.</param>
+    /// <returns>The counts.</returns>
+    Task<DateTime?> GetActualityDateByFilter(IReadOnlyCollection<FilterCriteriaEntity> criteria, DateOnly referenceKeyDate, ImportType importType);
 
     /// <summary>
     /// Gets a list of <see cref="PersonEntity"/> with filter by given criteria.

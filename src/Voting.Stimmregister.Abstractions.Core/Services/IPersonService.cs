@@ -36,7 +36,16 @@ public interface IPersonService
     /// </summary>
     /// <param name="personRegisterId">The register Id of the person to be searched.</param>
     /// <returns>A resolved person.</returns>
-    Task<PersonEntityModel> GetSingleIncludingDoIs(Guid personRegisterId);
+    Task<PersonEntityModel> GetPersonModelIncludingDoIs(Guid personRegisterId);
+
+    /// <summary>
+    /// Gets the data of a single person based on a PersonEntity object.
+    /// </summary>
+    /// <param name="person">The person entity.</param>
+    /// <param name="includeComputedInfos">Whether to include computed infos.</param>
+    /// <param name="includeActuality">Whether to include actuality.</param>
+    /// <returns>The person.</returns>
+    Task<PersonEntityModel> GetPersonModelFromEntity(PersonEntity person, bool includeComputedInfos, bool includeActuality);
 
     /// <summary>
     /// Gets the data of a single person with voting rights based on the vn and canton bfs.

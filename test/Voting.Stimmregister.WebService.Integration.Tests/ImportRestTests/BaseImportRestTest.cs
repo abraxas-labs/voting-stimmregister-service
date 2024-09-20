@@ -4,8 +4,10 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.StaticFiles;
 using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Test.Utils.Helpers;
 using Voting.Stimmregister.Test.Utils.MockData;
@@ -67,6 +69,12 @@ public abstract class BaseImportRestTest : BaseWriteableDbRestTest
     private async Task<HttpResponseMessage> PostFile(HttpClient client, Stream file, string fileName)
     {
         using var fileContent = new StreamContent(file);
+        var provider = new FileExtensionContentTypeProvider();
+        if (provider.TryGetContentType(fileName, out var contentType))
+        {
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+        }
+
         using var content = new MultipartFormDataContent();
         content.Add(fileContent, "file", fileName);
         return await client.PostAsync(ImportEndpointUrl, content);
