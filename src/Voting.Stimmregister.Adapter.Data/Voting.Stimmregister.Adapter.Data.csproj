@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <PackageReference Include="DistributedLock.Postgres" Version="1.2.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(EfCoreVersion)" Condition="'$(Configuration)' != 'Release'" PrivateAssets="All" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
         <PackageReference Include="Voting.Lib.Database" Version="$(VotingLibVersion)" />

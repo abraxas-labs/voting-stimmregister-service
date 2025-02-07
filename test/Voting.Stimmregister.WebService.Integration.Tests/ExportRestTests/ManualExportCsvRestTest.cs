@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using Voting.Lib.Testing.Mocks;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Enums;
@@ -206,6 +207,7 @@ public class ManualExportCsvRestTest : BaseWriteableDbRestTest
     {
         using var response = await SgManualExporterClient.PostAsJsonAsync(Path.Combine(RouteController, RouteExportCsv), request);
         response.EnsureSuccessStatusCode();
+        response.Content.Headers.ContentDisposition!.FileName.Should().Be("stimmregister-" + MockedClock.UtcNowDate.ToString("yyyy-MM-dd") + ".csv");
 
         await using var stream = await response.Content.ReadAsStreamAsync();
         var fileStreamResult = new FileStreamResult(stream, new MediaTypeHeaderValue("text/csv"));

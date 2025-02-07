@@ -448,4 +448,19 @@ public class PersonEntity : ImportedEntity
     /// Gets or sets the canton bfs number, i.e. '17'.
     /// </summary>
     public short CantonBfs { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the version of person data is a householder.
+    /// </summary>
+    public bool IsHouseholder { get; set; }
+
+    /// <summary>
+    /// Gets or sets the residence building id (EGID).
+    /// </summary>
+    public int? ResidenceBuildingId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the residence apartment/flat id (EWID).
+    /// </summary>
+    public int? ResidenceApartmentId { get; set; }
 }

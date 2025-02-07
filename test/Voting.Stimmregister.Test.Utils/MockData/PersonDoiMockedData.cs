@@ -103,6 +103,28 @@ public static class PersonDoiMockedData
             DomainOfInfluenceType = DomainOfInfluenceType.Sk,
         };
 
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_OldVersion_2_PoliticalCircle_Osten
+        => new()
+        {
+            Id = Guid.Parse("4f864c1f-7da4-4fa1-863c-0d4893e5b9b7"),
+            PersonId = PersonMockedData.Person_3203_StGallen_OldVersion_2.Id,
+            Canton = "SG",
+            Identifier = "O",
+            Name = "Osten",
+            DomainOfInfluenceType = DomainOfInfluenceType.Sk,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_OldVersion_3_PoliticalCircle_Osten
+        => new()
+        {
+            Id = Guid.Parse("53f80ae6-d1c8-491f-bdf6-c7c854fef96a"),
+            PersonId = PersonMockedData.Person_3203_StGallen_OldVersion_3.Id,
+            Canton = "SG",
+            Identifier = "O",
+            Name = "Osten",
+            DomainOfInfluenceType = DomainOfInfluenceType.Sk,
+        };
+
     public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_PoliticalCircle_Westen
         => new()
         {
@@ -488,6 +510,8 @@ public static class PersonDoiMockedData
             yield return PersonDoi_Person_3203_StGallen_1_MunicipalityCircle;
             yield return PersonDoi_Person_3203_StGallen_1_Origin1;
             yield return PersonDoi_Person_3203_StGallen_OldVersion_1_PoliticalCircle_Osten;
+            yield return PersonDoi_Person_3203_StGallen_OldVersion_2_PoliticalCircle_Osten;
+            yield return PersonDoi_Person_3203_StGallen_OldVersion_3_PoliticalCircle_Osten;
             yield return PersonDoi_Person_3203_StGallen_2_PoliticalCircle_Westen;
             yield return PersonDoi_Person_3203_StGallen_2_Origin1;
             yield return PersonDoi_Person_9170_Auslandschweizer_2_Origin1_StGallen;

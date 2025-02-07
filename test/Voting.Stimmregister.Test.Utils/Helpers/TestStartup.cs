@@ -28,7 +28,7 @@ public class TestStartup : Startup
     {
         base.ConfigureServices(services);
         services
-            .AddMockedClock()
+            .AddMockedTimeProvider()
             .AddVotingLibIamMocks()
             .AddVotingLibPkcs11Mock()
             .RemoveHostedServices()

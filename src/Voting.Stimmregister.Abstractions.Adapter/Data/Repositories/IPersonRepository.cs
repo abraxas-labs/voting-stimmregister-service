@@ -124,4 +124,17 @@ public interface IPersonRepository : IDbRepository<DbContext, PersonEntity>
     /// <param name="referenceKeyDate">The date with which all date relevant queries are to be executed. Example: At which date the age is calculated.</param>
     /// <returns>The result container including the count and the data enumerable.</returns>
     Task<PersonSearchStreamedResultModel<PersonEntity>> StreamPersonsWithCounts(IReadOnlyCollection<FilterCriteriaEntity> criteria, DateOnly referenceKeyDate);
+
+    /// <summary>
+    /// Deletes outdated versions of <see cref="PersonEntity"/> from the database.
+    /// This method identifies and removes <see cref="PersonEntity"/> that:
+    /// - Are not the latest version.
+    /// - Were created before the specified threshold date.
+    /// - Are not referenced by any <see cref="FilterVersionEntity"/>.
+    /// - Are not the latest entry within the threshold for each RegisterId.
+    /// </summary>
+    /// <param name="thresholdDate">The date before which the <see cref="PersonEntity"/> should be considered outdated.</param>
+    /// <param name="sqlCommandTimeoutInSeconds">The sql command timeout in seconds.</param>
+    /// <returns>The number of rows affected by the delete operation.</returns>
+    Task<int> DeleteOutdatedPersonVersions(DateTime thresholdDate, int sqlCommandTimeoutInSeconds);
 }

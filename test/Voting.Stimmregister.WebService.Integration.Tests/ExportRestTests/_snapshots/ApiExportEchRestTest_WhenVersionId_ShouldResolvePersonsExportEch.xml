@@ -123,6 +123,11 @@
             <religionData>
               <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
             </religionData>
+            <extension>
+              <isHouseholder xmlns="">true</isHouseholder>
+              <residenceBuildingId xmlns="">999999999</residenceBuildingId>
+              <residenceApartmentId xmlns="">999</residenceApartmentId>
+            </extension>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Teufen</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">AR</canton>
@@ -276,6 +281,9 @@
                 <line6>Berlin </line6>
                 <line7>EH3 9QN </line7>
               </address>
+              <isHouseholder xmlns="">false</isHouseholder>
+              <residenceBuildingId xsi:nil="true" xmlns="" />
+              <residenceApartmentId xsi:nil="true" xmlns="" />
             </extension>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Basel Landschaft</originName>

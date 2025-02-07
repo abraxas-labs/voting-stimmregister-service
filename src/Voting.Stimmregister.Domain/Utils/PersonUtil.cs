@@ -17,9 +17,11 @@ public static class PersonUtil
            !string.IsNullOrWhiteSpace(person.ResidenceAddressPostOfficeBoxText) ||
            !string.IsNullOrWhiteSpace(person.ResidenceAddressZipCode);
 
-    public static bool HasResidenceStreetOrPostOfficeBoxText(PersonEntity person)
+    public static bool HasValidResidenceAddressComponent(PersonEntity person)
         => !string.IsNullOrWhiteSpace(person.ResidenceAddressStreet) ||
-           !string.IsNullOrWhiteSpace(person.ResidenceAddressPostOfficeBoxText);
+           !string.IsNullOrWhiteSpace(person.ResidenceAddressPostOfficeBoxText) ||
+           !string.IsNullOrWhiteSpace(person.ResidenceAddressExtensionLine1) ||
+           !string.IsNullOrWhiteSpace(person.ResidenceAddressExtensionLine2);
 
     public static bool HasContactAddress(PersonEntity person)
         => !string.IsNullOrWhiteSpace(person.ContactAddressExtensionLine1) ||
@@ -39,7 +41,9 @@ public static class PersonUtil
            !string.IsNullOrWhiteSpace(person.ContactAddressLine6) ||
            !string.IsNullOrWhiteSpace(person.ContactAddressLine7);
 
-    public static bool HasContactStreetOrPostOfficeBoxText(PersonEntity person)
+    public static bool HasValidContactAddressComponent(PersonEntity person)
         => !string.IsNullOrWhiteSpace(person.ContactAddressStreet) ||
-           !string.IsNullOrWhiteSpace(person.ContactAddressPostOfficeBoxText);
+           !string.IsNullOrWhiteSpace(person.ContactAddressPostOfficeBoxText) ||
+           !string.IsNullOrWhiteSpace(person.ContactAddressExtensionLine1) ||
+           !string.IsNullOrWhiteSpace(person.ContactAddressExtensionLine2);
 }

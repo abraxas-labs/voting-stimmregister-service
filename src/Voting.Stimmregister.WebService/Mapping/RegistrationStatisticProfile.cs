@@ -3,7 +3,7 @@
 
 using AutoMapper;
 using Voting.Stimmregister.Domain.Models;
-using Voting.Stimmregister.Domain.Models.RegistrationStatistic;
+using Voting.Stimmregister.Domain.Models.BfsStatistic;
 
 namespace Voting.Stimmregister.WebService.Mapping;
 

@@ -32,5 +32,7 @@ public class EVotingProfile : Profile
             .ForMember(dst => dst.Ahvn13, opts => opts.MapFrom(src => src.Ahvn13.ToNumber()))
             .ForMember(dst => dst.MunicipalityBfs, opts => opts.MapFrom(src => src.BfsMunicipality));
         CreateMap<EVotingAddressModel, GetRegistrationInformationAddress>();
+
+        CreateMap<BfsStatisticEntity, GetRegistrationInformationBfsStatistic>();
     }
 }

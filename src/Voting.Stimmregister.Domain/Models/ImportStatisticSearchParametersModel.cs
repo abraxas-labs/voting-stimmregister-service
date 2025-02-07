@@ -2,7 +2,6 @@
 // For license information see LICENSE file
 
 using System.Collections.Generic;
-using Voting.Lib.Database.Models;
 using Voting.Stimmregister.Domain.Enums;
 
 namespace Voting.Stimmregister.Domain.Models;
@@ -12,11 +11,6 @@ namespace Voting.Stimmregister.Domain.Models;
 /// </summary>
 public class ImportStatisticSearchParametersModel
 {
-    /// <summary>
-    /// Gets or sets the page to be loaded.
-    /// </summary>
-    public Pageable Page { get; set; } = new Pageable(1, 25);
-
     /// <summary>
     /// Gets or sets the import type id.
     /// If not set, it will not be included into search query.

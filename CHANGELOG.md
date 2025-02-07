@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.7.5`)
+# ✨ Changelog (`v2.14.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,110 +8,203 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.7.5
-Previous version ---- v2.6.15
+This version -------- v2.14.0
+Previous version ---- v2.7.5
 Initial version ----- v1.121.5
-Total commits ------- 11
+Total commits ------- 444
 ```
 
-## [v2.7.5] - 2024-09-05
+## [v2.14.0] - 2025-01-29
+
+### 🆕 Added
+
+- added STISTAT e-voting export
+
+## [v2.13.0] - 2025-01-29
+
+### 🆕 Added
+
+- add householder fields
+
+### 🔄 Changed
+
+- default integrity signature has been changed to v2
+
+## [v2.12.3] - 2025-01-24
+
+### ❌ Removed
+
+- removed obsolete fields: RegisteredEVotersInCanton, RegisteredEVotersInMunicipality
+
+## [v2.12.2] - 2025-01-20
+
+### 🔄 Changed
+
+- write metrics only for latest imports
+
+## [v2.12.1] - 2025-01-16
+
+### 🔄 Changed
+
+- check for multiple acl entries with the same bfs during import
+- match only acl entries of type "MU" during import
+
+## [v2.12.0] - 2025-01-13
+
+### 🔄 Changed
+
+- consider live e-voting limits
+
+## [v2.11.1] - 2025-01-10
+
+### 🔄 Changed
+
+- update voting library from 12.20.0 to 12.22.3
+
+### 🔒 Security
+
+- use updated Pkcs11Interop library version 5.2.0
+
+## [v2.11.0] - 2025-01-10
+
+### 🆕 Added
+
+- clean up filter versions and person versions
+
+## [v2.10.0] - 2024-12-19
+
+### 🆕 Added
+
+- add sorting to import statistics
+
+## [v2.9.1] - 2024-12-18
+
+### 🔄 Changed
+
+- restrict import statistics metrics to chosen source systems
+
+## [v2.9.0] - 2024-12-16
+
+### 🆕 Added
+
+- include user id in log output
+
+## [v2.8.4] - 2024-12-05
+
+### 🔄 Changed
+
+- exclude disabled import statistics in read operations
+
+## [v2.8.3] - 2024-11-25
+
+### 🔄 Changed
+
+- optimize SourceLink integration and use new ci/cd versioning capabilities
+- prevent duplicated commit ids in product version, only use SourceLink plugin.
+- extend .dockerignore file with additional exclusions
+
+## [v2.8.2] - 2024-11-22
+
+### 🔄 Changed
+
+- skip writing metrics for imports from a disabled source system
+
+## [v2.8.1] - 2024-11-22
+
+### 🔄 Changed
+
+- consider only writing metrics for valid imports
+
+## [v2.8.0] - 2024-11-20
+
+### 🆕 Added
+
+- Add new metric: timestamp of the latest import per bfs
+
+## [v2.7.9] - 2024-10-28
+
+### 🔄 Changed
+
+- Enhance address component validation by adding checks for address line 1 and address line 2.
+
+## [v2.7.8] - 2024-10-11
+
+### 🔄 Changed
+
+- enrich service model with PostOfficeBoxText
+
+### 🔄 Changed
+
+- enrich e-voting person address with post office box text.
+
+### ❌ Removed
+
+- remove e-voter registration count columns
 
 ### 🔄 Changed
 
 - update municipality exception list for sending voting cards with away addresses
 
-## [v2.7.4] - 2024-09-03
-
 ### 🔄 Changed
 
 - migrate from gcr to harbor
-
-## [v2.7.3] - 2024-08-27
 
 ### 🔄 Changed
 
 - update bug bounty template reference
 - patch ci-cd template version, align with new defaults
 
-## [v2.7.2] - 2024-08-22
-
 ### 🔄 Changed
 
 - move environment specific app settings out of default file
-
-## [v2.7.1] - 2024-08-21
 
 ### 🔄 Changed
 
 - ensure swagger generator can be disabled completely
 
-## [v2.7.0] - 2024-08-19
-
 ### 🔄 Changed
 
 - apply CORS allowed origin least privilege
-
-## [v2.6.19] - 2024-08-14
 
 ### 🔄 Changed
 
 - update cobra import to retain duplicate values in address line extension.
 
-## [v2.6.18] - 2024-08-14
-
 ### 🔄 Changed
 
 - fix voter total count in bfs statistics
-
-## [v2.6.17] - 2024-08-08
 
 ### 🔄 Changed
 
 - Updated the VotingLibVersion property in the Common.props file from 12.10.4 to 12.10.5. This update includes improvements for the proto string validation for better error reporting.
 
-## [v2.6.16] - 2024-08-07
-
 ### 🔒 Security
 
 - add content-type restriction for multipart import APIs and form data content.
-
-## [v2.6.15] - 2024-07-15
 
 ### 🔒 Security
 
 - upgrade npgsql to fix vulnerability CVE-2024-0057
 
-## [v2.6.14] - 2024-07-11
-
 ### 🔄 Changed
 
 - fix voter total count in bfs statistics
-
-## [v2.6.13] - 2024-07-11
 
 ### 🆕 Added
 
 - extend filter metadata with person actuality indicators
 
-## [v2.6.12] - 2024-07-04
-
 ### 🔄 Changed
 
 - update voting library to implement case-insensitivity for headers as per RFC-2616
-
-## [v2.6.11] - 2024-07-02
 
 ### 🔄 Changed
 
 - Method SoftDeleteUnprocessed in PersonImportStateModel set ImportStatisticId for deleted person record
 
-## [v2.6.10] - 2024-06-26
-
 ### 🔄 Changed
 
 - ignore navigation property ids when cloning a person entity
-
-## [v2.6.9] - 2024-06-21
 
 ### 🆕 Added
 
@@ -124,8 +217,6 @@ Total commits ------- 11
 ### ❌ Removed
 
 - Unique constraint for sourceSystemId, sourceSystemName, municipalityId, versionCount.
-
-## [v2.6.8] - 2024-06-03
 
 ### 🔄 Changed
 
@@ -1640,6 +1731,135 @@ Add GetByFilterId to IPersonService interface
 ### 🆕 Added
 
 - Loganto Adapter Init
+
+## [v2.7.7] - 2024-10-10
+
+### 🔄 Changed
+
+- enrich e-voting person address with post office box text.
+
+## [v2.7.6] - 2024-09-22
+
+### ❌ Removed
+
+- remove e-voter registration count columns
+
+## [v2.7.5] - 2024-09-05
+
+### 🔄 Changed
+
+- update municipality exception list for sending voting cards with away addresses
+
+## [v2.7.4] - 2024-09-03
+
+### 🔄 Changed
+
+- migrate from gcr to harbor
+
+## [v2.7.3] - 2024-08-27
+
+### 🔄 Changed
+
+- update bug bounty template reference
+- patch ci-cd template version, align with new defaults
+
+## [v2.7.2] - 2024-08-22
+
+### 🔄 Changed
+
+- move environment specific app settings out of default file
+
+## [v2.7.1] - 2024-08-21
+
+### 🔄 Changed
+
+- ensure swagger generator can be disabled completely
+
+## [v2.7.0] - 2024-08-19
+
+### 🔄 Changed
+
+- apply CORS allowed origin least privilege
+
+## [v2.6.19] - 2024-08-14
+
+### 🔄 Changed
+
+- update cobra import to retain duplicate values in address line extension.
+
+## [v2.6.18] - 2024-08-14
+
+### 🔄 Changed
+
+- fix voter total count in bfs statistics
+
+## [v2.6.17] - 2024-08-08
+
+### 🔄 Changed
+
+- Updated the VotingLibVersion property in the Common.props file from 12.10.4 to 12.10.5. This update includes improvements for the proto string validation for better error reporting.
+
+## [v2.6.16] - 2024-08-07
+
+### 🔒 Security
+
+- add content-type restriction for multipart import APIs and form data content.
+
+## [v2.6.15] - 2024-07-15
+
+### 🔒 Security
+
+- upgrade npgsql to fix vulnerability CVE-2024-0057
+
+## [v2.6.14] - 2024-07-11
+
+### 🔄 Changed
+
+- fix voter total count in bfs statistics
+
+## [v2.6.13] - 2024-07-11
+
+### 🆕 Added
+
+- extend filter metadata with person actuality indicators
+
+## [v2.6.12] - 2024-07-04
+
+### 🔄 Changed
+
+- update voting library to implement case-insensitivity for headers as per RFC-2616
+
+## [v2.6.11] - 2024-07-02
+
+### 🔄 Changed
+
+- Method SoftDeleteUnprocessed in PersonImportStateModel set ImportStatisticId for deleted person record
+
+## [v2.6.10] - 2024-06-26
+
+### 🔄 Changed
+
+- ignore navigation property ids when cloning a person entity
+
+## [v2.6.9] - 2024-06-21
+
+### 🆕 Added
+
+- Tests for special cases with SourceSystemId and Vn.
+
+### 🔄 Changed
+
+- Initialization of dictionary PersonIdsBySourceSystemId in PersonImportStateModel. Choose latest with deletet flag fals if dublicated SourceSystemId's exist.
+
+### ❌ Removed
+
+- Unique constraint for sourceSystemId, sourceSystemName, municipalityId, versionCount.
+
+## [v2.6.8] - 2024-06-03
+
+### 🔄 Changed
+
+- update link to code of conduct
 
 ## [v2.6.7] - 2024-04-16
 

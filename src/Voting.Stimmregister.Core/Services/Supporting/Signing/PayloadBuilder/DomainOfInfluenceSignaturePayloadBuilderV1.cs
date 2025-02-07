@@ -18,8 +18,10 @@ internal class DomainOfInfluenceSignaturePayloadBuilderV1 : IDisposable, ISignat
         ObjectPool<HashBuilder> hashBuilderPool,
         IHsmCryptoAdapter hsmCryptoAdapter)
     {
-        _payloadBuilder = new SignaturePayloadBuilder(nameof(DomainOfInfluenceEntity), 1, hsmCryptoAdapter.GetSignatureConfigLabels(), hashBuilderPool);
+        _payloadBuilder = new SignaturePayloadBuilder(nameof(DomainOfInfluenceEntity), Version, hsmCryptoAdapter.GetSignatureConfigLabels(), hashBuilderPool);
     }
+
+    public byte Version => 1;
 
     public SignaturePayload Build(DomainOfInfluenceEntity domainOfInfluence)
     {

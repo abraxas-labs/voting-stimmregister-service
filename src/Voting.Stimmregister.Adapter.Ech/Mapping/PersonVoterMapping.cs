@@ -40,8 +40,8 @@ public class PersonVoterMapping : IPersonVoterMapping
 
     public VotingPersonType ToEchVoter(PersonEntity person)
     {
-        var hasResidence = PersonUtil.HasResidenceStreetOrPostOfficeBoxText(person);
-        var hasContact = PersonUtil.HasContactStreetOrPostOfficeBoxText(person);
+        var hasResidence = PersonUtil.HasValidResidenceAddressComponent(person);
+        var hasContact = PersonUtil.HasValidContactAddressComponent(person);
 
         var votingPersonType = new VotingPersonType
         {
@@ -298,13 +298,19 @@ public class PersonVoterMapping : IPersonVoterMapping
 
         if (!person.IsSwissAbroad)
         {
+            var extension = new SwissPersonExtension
+            {
+                IsHouseholder = person.IsHouseholder,
+                ResidenceBuildingId = person.ResidenceBuildingId,
+                ResidenceApartmentId = person.ResidenceApartmentId,
+            };
+
             if (person.SendVotingCardsToDomainOfInfluenceReturnAddress)
             {
-                swissPerson.Extension = new SwissPersonExtension
-                {
-                    SendVotingCardsToDomainOfInfluenceReturnAddress = true,
-                };
+                extension.SendVotingCardsToDomainOfInfluenceReturnAddress = true;
             }
+
+            swissPerson.Extension = extension;
 
             return new VotingPersonTypePerson { Swiss = new SwissDomesticType { SwissDomesticPerson = swissPerson, Municipality = swissMunicipality } };
         }

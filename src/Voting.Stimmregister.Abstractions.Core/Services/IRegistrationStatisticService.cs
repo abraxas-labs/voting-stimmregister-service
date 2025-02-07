@@ -2,7 +2,7 @@
 // For license information see LICENSE file
 
 using System.Threading.Tasks;
-using Voting.Stimmregister.Domain.Models.RegistrationStatistic;
+using Voting.Stimmregister.Domain.Models.BfsStatistic;
 
 namespace Voting.Stimmregister.Abstractions.Core.Services;
 

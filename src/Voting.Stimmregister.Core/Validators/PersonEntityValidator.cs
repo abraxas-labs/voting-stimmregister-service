@@ -65,6 +65,7 @@ public class PersonEntityValidator : AbstractValidator<PersonEntity>
         RulesForPostOfficeBoxNumberTypes();
         RulesForDates();
         RulesForDois();
+        RulesForDwellingIdentificationType();
         RulesForWhitespaces();
     }
 
@@ -325,6 +326,21 @@ public class PersonEntityValidator : AbstractValidator<PersonEntity>
         RuleFor(p => p.ResidencePermitValidTill).DateOnlyMustNotHaveMinValue();
         RuleFor(p => p.ResidenceEntryDate).DateOnlyMustNotHaveMinValue();
         RuleFor(p => p.ResidencePermitValidFrom).DateOnlyMustNotHaveMinValue();
+    }
+
+    /// <summary>
+    /// See eCH-0185:dwellingIdentificationType.
+    /// </summary>
+    private void RulesForDwellingIdentificationType()
+    {
+        RuleFor(p => p.ResidenceBuildingId)
+            .GreaterThanOrEqualTo(1)
+            .LessThanOrEqualTo(999999999)
+            .When(p => p.ResidenceBuildingId != null);
+        RuleFor(p => p.ResidenceApartmentId)
+            .GreaterThanOrEqualTo(1)
+            .LessThanOrEqualTo(999)
+            .When(p => p.ResidenceApartmentId != null);
     }
 
     private void RulesForWhitespaces()

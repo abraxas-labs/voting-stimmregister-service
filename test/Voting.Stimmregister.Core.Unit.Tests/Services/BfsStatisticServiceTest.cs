@@ -45,6 +45,7 @@ public class BfsStatisticServiceTest : BaseWriteableDbTest
                 CreatePersonEntity(false, true),
                 CreatePersonEntity(false, false),
             },
+            CantonBfs = 17,
         };
 
         AddNewVoter(state, true, true);
@@ -64,10 +65,9 @@ public class BfsStatisticServiceTest : BaseWriteableDbTest
         bfsStatistics.Should().NotBeNull();
         bfsStatistics!.Bfs.Should().Be(EVotingBfsMunicipalityMockedData.BfsStGallen.ToString());
         bfsStatistics!.BfsName.Should().Be("St. Gallen");
+        bfsStatistics!.CantonBfs.Should().Be(17);
         bfsStatistics!.VoterTotalCount.Should().Be(6);
         bfsStatistics!.EVoterTotalCount.Should().Be(3);
-        bfsStatistics!.EVoterRegistrationCount.Should().Be(2);
-        bfsStatistics!.EVoterDeregistrationCount.Should().Be(1);
     }
 
     private void AddNewVoter(PersonImportStateModel state, bool isEvoter, bool isVotingAllowed)

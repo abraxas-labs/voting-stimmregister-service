@@ -2,7 +2,6 @@
 // For license information see LICENSE file
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Voting.Lib.Testing.Utils;
@@ -36,9 +35,19 @@ public class ListStatisticsTest : BaseWriteableDbGrpcTest<ImportStatisticService
         var request = NewValidRequest();
         var response = await SgManagerClient.ListAsync(request);
 
-        Assert.True(response.ImportStatistics.Count == 1);
-        Assert.True(response.ImportStatistics.All(i => i.MunicipalityId == 3203));
+        Assert.Single(response.ImportStatistics);
+        Assert.All(response.ImportStatistics, i => Assert.Equal(3203, i.MunicipalityId));
         response.MatchSnapshot();
+    }
+
+    [Fact]
+    public async Task ShouldIgnoreInactiveStatisticsWhenAuthorizedByAcl()
+    {
+        var request = NewValidRequest();
+        request.ImportSourceSystem = ImportSourceSystem.Loganto;
+        var response = await SgManagerClient.ListAsync(request);
+
+        Assert.Empty(response.ImportStatistics);
     }
 
     [Fact]
@@ -88,7 +97,7 @@ public class ListStatisticsTest : BaseWriteableDbGrpcTest<ImportStatisticService
         var request = new ListImportStatisticsRequest
         {
             ImportType = ImportType.DomainOfInfluence,
-            ImportSourceSystem = ImportSourceSystem.Loganto,
+            ImportSourceSystem = ImportSourceSystem.Innosolv,
             ImportStatusSimple = ImportStatusSimple.All,
             ImportSource = ImportSource.All,
             Paging = new PagingModel

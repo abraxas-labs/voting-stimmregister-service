@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Voting.Stimmregister.Domain.Models.RegistrationStatistic;
+namespace Voting.Stimmregister.Domain.Models.BfsStatistic;
 
 /// <summary>
 /// The import statistics search parameters model.

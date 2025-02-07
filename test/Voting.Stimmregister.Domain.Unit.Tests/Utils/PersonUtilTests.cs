@@ -38,4 +38,74 @@ public class PersonUtilTests
 
         result.Should().Be(expectedAvailability);
     }
+
+    [Theory]
+    [InlineData("Street1", null, null, null)]
+    [InlineData(null, "PostOfficeBox1", null, null)]
+    [InlineData(null, null, "Line1", null)]
+    [InlineData(null, null, null, "Line2")]
+    [InlineData("Street1", "PostOfficeBox1", "Line1", "Line2")]
+    public void ShouldReturnTrueWhenResidenceAddressComponentIsValid(string? street, string? postOfficeBoxText, string? line1, string? line2)
+    {
+        var result = PersonUtil.HasValidResidenceAddressComponent(new()
+        {
+            ResidenceAddressStreet = street,
+            ResidenceAddressPostOfficeBoxText = postOfficeBoxText,
+            ResidenceAddressExtensionLine1 = line1,
+            ResidenceAddressExtensionLine2 = line2,
+        });
+
+        result.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData("Street1", null, null, null)]
+    [InlineData(null, "PostOfficeBox1", null, null)]
+    [InlineData(null, null, "Line1", null)]
+    [InlineData(null, null, null, "Line2")]
+    [InlineData("Street1", "PostOfficeBox1", "Line1", "Line2")]
+    public void ShouldReturnTrueWhenContactAddressComponentIsValid(string? street, string? postOfficeBoxText, string? line1, string? line2)
+    {
+        var result = PersonUtil.HasValidContactAddressComponent(new()
+        {
+            ContactAddressStreet = street,
+            ContactAddressPostOfficeBoxText = postOfficeBoxText,
+            ContactAddressExtensionLine1 = line1,
+            ContactAddressExtensionLine2 = line2,
+        });
+
+        result.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(null, null, null, null)]
+    [InlineData("", "", "", "")]
+    public void ShouldReturnFalseWhenResidenceAddressComponentIsInvalid(string? street, string? postOfficeBoxText, string? line1, string? line2)
+    {
+        var result = PersonUtil.HasValidResidenceAddressComponent(new()
+        {
+            ResidenceAddressStreet = street,
+            ResidenceAddressPostOfficeBoxText = postOfficeBoxText,
+            ResidenceAddressExtensionLine1 = line1,
+            ResidenceAddressExtensionLine2 = line2,
+        });
+
+        result.Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData(null, null, null, null)]
+    [InlineData("", "", "", "")]
+    public void ShouldReturnFalseWhenContactAddressComponentIsInvalid(string? street, string? postOfficeBoxText, string? line1, string? line2)
+    {
+        var result = PersonUtil.HasValidContactAddressComponent(new()
+        {
+            ContactAddressStreet = street,
+            ContactAddressPostOfficeBoxText = postOfficeBoxText,
+            ContactAddressExtensionLine1 = line1,
+            ContactAddressExtensionLine2 = line2,
+        });
+
+        result.Should().BeFalse();
+    }
 }

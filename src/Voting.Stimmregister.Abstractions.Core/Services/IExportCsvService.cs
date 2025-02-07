@@ -16,21 +16,27 @@ public interface IExportCsvService
     /// <summary>
     /// Get the csv export file as <see cref="FileModel"/> including the result set from the passed search criteria.
     /// </summary>
+    /// <typeparam name="T">The export model type.</typeparam>
     /// <param name="criteria">The search criteria.</param>
+    /// <param name="options">The export options.</param>
     /// <returns>The <see cref="FileModel"/> representing the file download.</returns>
-    Task<FileModel> ExportCsv(IReadOnlyCollection<PersonSearchFilterCriteriaModel> criteria);
+    Task<FileModel> ExportCsv<T>(IReadOnlyCollection<PersonSearchFilterCriteriaModel> criteria, ExportCsvOptions options);
 
     /// <summary>
     /// Get the csv export file as <see cref="FileModel"/> including the result set from the filter resolved by its id.
     /// </summary>
+    /// <typeparam name="T">The export model type.</typeparam>
     /// <param name="filterId">The filter id.</param>
+    /// <param name="options">The export options.</param>
     /// <returns>A task wrapping the <see cref="FileModel"/>.</returns>
-    Task<FileModel> ExportCsvByFilter(Guid filterId);
+    Task<FileModel> ExportCsvByFilter<T>(Guid filterId, ExportCsvOptions options);
 
     /// <summary>
     /// Get the csv export file as <see cref="FileModel"/> including the result set from the filter version resolved by its id.
     /// </summary>
+    /// <typeparam name="T">The export model type.</typeparam>
     /// <param name="filterVersionId">The filter version id.</param>
+    /// <param name="options">The export options.</param>
     /// <returns>A task wrapping the <see cref="FileModel"/>.</returns>
-    Task<FileModel> ExportCsvByFilterVersion(Guid filterVersionId);
+    Task<FileModel> ExportCsvByFilterVersion<T>(Guid filterVersionId, ExportCsvOptions options);
 }

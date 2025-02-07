@@ -29,8 +29,8 @@ public class RenameVersionTest : BaseWriteableDbGrpcTest<FilterService.FilterSer
         await PersonMockedData.Seed(RunScoped);
         await AclDoiVotingBasisMockedData.Seed(RunScoped);
         await FilterMockedData.Seed(RunScoped);
-        await FilterCriteriaMockedData.Seed(RunScoped, seedWithFilterMockedData: false);
         await FilterVersionMockedData.Seed(RunScoped, seedWithFilterMockedData: false);
+        await FilterCriteriaMockedData.Seed(RunScoped, seedWithFilterMockedData: false);
     }
 
     [Fact]

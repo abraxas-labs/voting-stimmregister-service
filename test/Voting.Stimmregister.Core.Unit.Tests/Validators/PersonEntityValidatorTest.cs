@@ -323,6 +323,28 @@ public class PersonEntityValidatorTest
         await TestValidation(p => p.ContactAddressPostOfficeBoxNumber = value, expectIsValid, expectedErrorCode);
     }
 
+    [Theory]
+    [InlineData(0, false, "GreaterThanOrEqualValidator")]
+    [InlineData(1, true, null)]
+    [InlineData(999999999, true, null)]
+    [InlineData(1000000000, false, "LessThanOrEqualValidator")]
+    [InlineData(null, true, null)]
+    public async Task TestRuleForResidenceBuildingId(int? value, bool expectIsValid, string? expectedErrorCode)
+    {
+        await TestValidation(p => p.ResidenceBuildingId = value, expectIsValid, expectedErrorCode);
+    }
+
+    [Theory]
+    [InlineData(0, false, "GreaterThanOrEqualValidator")]
+    [InlineData(1, true, null)]
+    [InlineData(999, true, null)]
+    [InlineData(1000, false, "LessThanOrEqualValidator")]
+    [InlineData(null, true, null)]
+    public async Task TestRuleForResidenceApartmentId(int? value, bool expectIsValid, string? expectedErrorCode)
+    {
+        await TestValidation(p => p.ResidenceApartmentId = value, expectIsValid, expectedErrorCode);
+    }
+
     private static async Task TestValidation(
         Action<PersonEntity> changePersonAction,
         bool expectIsValid,

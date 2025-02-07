@@ -33,8 +33,7 @@ public static class BfsStatisticMockedData
             BfsName = MunicipalityNameStGallen,
             VoterTotalCount = 90000,
             EVoterTotalCount = 18000,
-            EVoterRegistrationCount = 20000,
-            EVoterDeregistrationCount = 200,
+            CantonBfs = 17,
         };
 
     public static BfsStatisticEntity BfsStatistic_3213_Goldach
@@ -46,8 +45,7 @@ public static class BfsStatisticMockedData
             BfsName = MunicipalityNameGoldach,
             VoterTotalCount = 9000,
             EVoterTotalCount = 0,
-            EVoterRegistrationCount = 0,
-            EVoterDeregistrationCount = 0,
+            CantonBfs = 17,
         };
 
     public static BfsStatisticEntity BfsStatistic_4566_Frauenfeld
@@ -58,9 +56,8 @@ public static class BfsStatisticMockedData
             Bfs = MunicipalityIdFrauenfeld,
             BfsName = MunicipalityNameFrauenfeld,
             VoterTotalCount = 20000,
-            EVoterTotalCount = 0,
-            EVoterRegistrationCount = 0,
-            EVoterDeregistrationCount = 0,
+            EVoterTotalCount = 1000,
+            CantonBfs = 0,
         };
 
     public static IEnumerable<BfsStatisticEntity> All

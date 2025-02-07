@@ -124,5 +124,7 @@ public class LogantoPersonRecordValidator : AbstractValidator<LogantoPersonCsvRe
         RuleFor(p => p.PeopleCircleId).MaximumLength(_maxStringLength);
         RuleFor(p => p.PeopleCircleName).MaximumLength(_maxStringLength);
         RuleFor(p => p.LanguageOfCorrespondence).MaximumLength(_maxStringLength);
+        RuleFor(p => p.ResidenceBuildingId).GreaterThanOrEqualTo(1).LessThanOrEqualTo(999999999);
+        RuleFor(p => p.ResidenceApartmentId).GreaterThanOrEqualTo(1).LessThanOrEqualTo(999);
     }
 }

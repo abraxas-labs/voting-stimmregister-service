@@ -15,7 +15,7 @@ public static class EVotingUserMockedData
     public static EVoterEntity EVoter1 => new()
     {
         Id = Guid.Parse("10000000-0000-0000-0000-000000000000"),
-        Ahvn13 = 756_0000_0000_00,
+        Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1,
         BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
         BfsMunicipality = EVotingBfsMunicipalityMockedData.BfsStGallen,
         ContextId = "1",
@@ -26,7 +26,7 @@ public static class EVotingUserMockedData
     public static EVoterEntity EVoter2 => new()
     {
         Id = Guid.Parse("20000000-0000-0000-0000-000000000000"),
-        Ahvn13 = 756_1302_6191_07,
+        Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid2,
         BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
         BfsMunicipality = EVotingBfsMunicipalityMockedData.BfsStGallen,
         ContextId = "2",
@@ -37,7 +37,7 @@ public static class EVotingUserMockedData
     public static EVoterEntity EVoter3 => new()
     {
         Id = Guid.Parse("30000000-0000-0000-0000-000000000000"),
-        Ahvn13 = 756_1110_0000_01,
+        Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid3,
         BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
         BfsMunicipality = EVotingBfsMunicipalityMockedData.BfsGoldach,
         ContextId = "3",
@@ -48,7 +48,7 @@ public static class EVotingUserMockedData
     public static EVoterEntity EVoter4 => new()
     {
         Id = Guid.Parse("40000000-0000-0000-0000-000000000000"),
-        Ahvn13 = 756_2220_0000_01,
+        Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid4,
         BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
         BfsMunicipality = EVotingBfsMunicipalityMockedData.BfsGoldach,
         ContextId = "4",

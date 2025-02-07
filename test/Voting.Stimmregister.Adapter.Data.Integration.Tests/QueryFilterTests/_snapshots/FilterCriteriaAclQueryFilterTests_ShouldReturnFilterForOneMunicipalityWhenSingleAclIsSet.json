@@ -21,6 +21,28 @@
         "ModifiedAt": "2020-01-10T13:12:10.2Z"
       },
       "Id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "ReferenceId": 0,
+      "FilterValue": "Wert",
+      "FilterType": 1,
+      "FilterOperator": 1,
+      "SortIndex": 0,
+      "FilterId": null,
+      "FilterVersionId": "2ddf8718-be9e-4730-a3ad-81253a16f5f7",
+      "LastSearchParameterId": null,
+      "Filter": null,
+      "FilterVersion": null,
+      "LastSearchParameter": null,
+      "AuditInfo": {
+        "CreatedById": "default-user-id",
+        "CreatedByName": "MockDataSeeder",
+        "CreatedAt": "2020-01-10T13:12:10.2Z",
+        "ModifiedById": "default-user-id",
+        "ModifiedByName": "MockDataSeeder",
+        "ModifiedAt": "2020-01-10T13:12:10.2Z"
+      },
+      "Id": "00000000-0000-0000-0000-000000000000"
     }
   ]
 }

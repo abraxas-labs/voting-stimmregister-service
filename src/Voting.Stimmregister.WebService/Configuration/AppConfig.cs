@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using Voting.Lib.Common.Net;
+using Voting.Lib.Iam.Configuration;
 using Voting.Stimmregister.Abstractions.Core.Configuration;
 using Voting.Stimmregister.Adapter.Data.Configuration;
 using Voting.Stimmregister.Adapter.Ech.Configuration;
@@ -150,4 +151,14 @@ public class AppConfig
     /// Should only be enabled for troubleshooting the performance.
     /// </summary>
     public bool EnableServerTiming { get; set; }
+
+    /// <summary>
+    /// Gets or sets cleanup related configurations.
+    /// </summary>
+    public CleanupConfig Cleanup { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the auth store configuration.
+    /// </summary>
+    public AuthStoreConfig AuthStore { get; set; } = new();
 }

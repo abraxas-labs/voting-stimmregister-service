@@ -29,11 +29,11 @@ public interface IAccessControlListDoiService
     Task<IReadOnlyCollection<string>> GetBfsNumberAccessControlListByTenantId(string tenantId, params DomainOfInfluenceType[] doiTypes);
 
     /// <summary>
-    /// Returns a boolean indicating whether a valid entry exists for a given bfs.
+    /// Returns a list of acl entries for a given bfs.
     /// </summary>
     /// <param name="bfs">The bfs.</param>
-    /// <returns>A boolean indicating whether a valid entry was found.</returns>
-    Task<AccessControlListDoiEntity?> GetValidEntryForBfs(string bfs);
+    /// <returns>A list of acl entries.</returns>
+    Task<IReadOnlyCollection<AccessControlListDoiEntity>> GetValidEntriesForBfs(string bfs);
 
     /// <summary>
     /// Returns the acl entry for a given bfs number including all its parent nodes.

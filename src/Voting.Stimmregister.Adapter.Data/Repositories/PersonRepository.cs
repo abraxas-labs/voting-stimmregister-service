@@ -7,7 +7,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Voting.Lib.Database.Models;
@@ -187,6 +186,47 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         var invalidCount = await queryable.CountAsync(x => !x.IsValid);
         var count = await queryable.CountAsync();
         return new(count, invalidCount, queryable.AsAsyncEnumerable());
+    }
+
+    /// <inheritdoc />
+    public Task<int> DeleteOutdatedPersonVersions(DateTime thresholdDate, int sqlCommandTimeoutInSeconds)
+    {
+        var filterVersionPersonsTable = "\"FilterVersionPersons\"";
+        var filterVersionPersonsTablePersonIdColumn = "\"PersonId\"";
+        var idColumnName = GetDelimitedColumnName(x => x.Id);
+        var registerIdColumnName = GetDelimitedColumnName(x => x.RegisterId);
+        var modifiedDateColumnName = GetDelimitedColumnName(x => x.ModifiedDate);
+        var isLatestColumnName = GetDelimitedColumnName(x => x.IsLatest);
+
+        var sqlQuery = $@"
+            WITH OutdatedPersons AS (
+                SELECT p.{idColumnName}, p.{registerIdColumnName}, p.{modifiedDateColumnName}
+                FROM {DelimitedSchemaAndTableName} AS p
+                WHERE NOT p.{isLatestColumnName}
+                  AND p.{modifiedDateColumnName} < @ThresholdDate
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM {filterVersionPersonsTable} AS f
+                      WHERE f.{filterVersionPersonsTablePersonIdColumn} = p.{idColumnName}
+                  )
+            ),
+            LatestPersonVersionBelowThreshold AS (
+                SELECT p.{registerIdColumnName}, MAX(p.{modifiedDateColumnName}) AS MaxModifiedDate
+                FROM OutdatedPersons AS p
+                GROUP BY p.{registerIdColumnName}
+            )
+            DELETE FROM {DelimitedSchemaAndTableName}
+            WHERE {idColumnName} IN (
+                SELECT p.{idColumnName}
+                FROM OutdatedPersons AS p
+                LEFT JOIN LatestPersonVersionBelowThreshold AS o
+                ON p.{registerIdColumnName} = o.{registerIdColumnName} AND p.{modifiedDateColumnName} = o.MaxModifiedDate
+                WHERE o.{registerIdColumnName} IS NULL
+            )";
+
+        Context.Database.SetCommandTimeout(sqlCommandTimeoutInSeconds);
+
+        return Context.Database.ExecuteSqlRawAsync(sqlQuery, new Npgsql.NpgsqlParameter("ThresholdDate", thresholdDate));
     }
 
     private static void AssertFilterCriteriaIsValid(FilterCriteriaEntity criteria)

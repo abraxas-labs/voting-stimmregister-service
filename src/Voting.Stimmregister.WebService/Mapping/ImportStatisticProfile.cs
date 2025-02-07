@@ -3,10 +3,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
-using Voting.Lib.Database.Models;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 
@@ -38,12 +38,12 @@ public class ImportStatisticProfile : Profile
         CreateMap<RecordValidationErrorModel, Proto.V1.Services.Models.RecordValidationErrorModel>();
         CreateMap<FieldValidationErrorModel, Proto.V1.Services.Models.FieldValidationErrorModel>();
 
-        CreateMap<Page<ImportStatisticEntity>, Proto.V1.Services.Responses.ListImportStatisticsResponse>()
-            .ForMember(dest => dest.TotalCount, opt => opt.MapFrom(x => x.TotalItemsCount))
-            .ForMember(dest => dest.ImportStatistics, opt => opt.MapFrom(x => x.Items));
-        CreateMap<Page<ImportStatisticEntity>, Proto.V1.Services.Responses.GetImportStatisticHistoryResponse>()
-            .ForMember(dest => dest.TotalCount, opt => opt.MapFrom(x => x.TotalItemsCount))
-            .ForMember(dest => dest.ImportStatistics, opt => opt.MapFrom(x => x.Items));
+        CreateMap<IEnumerable<ImportStatisticEntity>, Proto.V1.Services.Responses.ListImportStatisticsResponse>()
+            .ForMember(dest => dest.TotalCount, opt => opt.MapFrom(x => x.Count()))
+            .ForMember(dest => dest.ImportStatistics, opt => opt.MapFrom(x => x));
+        CreateMap<IEnumerable<ImportStatisticEntity>, Proto.V1.Services.Responses.GetImportStatisticHistoryResponse>()
+            .ForMember(dest => dest.TotalCount, opt => opt.MapFrom(x => x.Count()))
+            .ForMember(dest => dest.ImportStatistics, opt => opt.MapFrom(x => x));
 
         CreateMap<ImportSourceSystem, Proto.V1.Services.Models.ImportSourceSystem>()
             .ConvertUsingEnumMapping(opt => opt.MapByName());

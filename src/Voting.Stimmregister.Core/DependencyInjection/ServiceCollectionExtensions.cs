@@ -44,6 +44,7 @@ public static class ServiceCollectionExtensions
     /// <param name="filterConfig">The filter configuration.</param>
     /// <param name="personConfig">The person configuration.</param>
     /// <param name="importsConfig">The importers configuration.</param>
+    /// <param name="cleanupConfig">The cleanup configuration.</param>
     /// <returns>The updated service collection.</returns>
     public static IServiceCollection AddCoreServices(
         this IServiceCollection services,
@@ -51,7 +52,8 @@ public static class ServiceCollectionExtensions
         MemoryCacheConfig memoryCacheConfig,
         FilterConfig filterConfig,
         PersonConfig personConfig,
-        ImportsConfig importsConfig)
+        ImportsConfig importsConfig,
+        CleanupConfig cleanupConfig)
     {
         services
             .AddSingleton<ICantonBfsCache, CantonBfsCache>()
@@ -62,6 +64,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton(memoryCacheConfig)
             .AddSingleton(filterConfig)
             .AddSingleton(personConfig)
+            .AddSingleton(cleanupConfig)
             .AddScoped<IDomainOfInfluenceImportQueue, DomainOfInfluenceImportQueue>()
             .AddScoped<ImportQueue>()
             .AddSingleton<ImportFileService>()
@@ -71,9 +74,12 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPersonImportQueue, PersonImportQueue>()
             .AddSingleton<SignaturePayloadBuilderFactory>()
             .AddTransient<PersonSignaturePayloadBuilderV1>()
+            .AddTransient<PersonSignaturePayloadBuilderV2>()
             .AddTransient<IntegritySignaturePayloadBuilderV1>()
+            .AddTransient<IntegritySignaturePayloadBuilderV2>()
             .AddTransient<DomainOfInfluenceSignaturePayloadBuilderV1>()
             .AddTransient<FilterVersionSignaturePayloadBuilderV1>()
+            .AddTransient<FilterVersionSignaturePayloadBuilderV2>()
             .AddSingleton<SignatureVerifier>()
             .AddSingleton<SignatureCreator>()
             .AddScoped<BfsIntegrityPersonsVerifier>()
@@ -93,7 +99,10 @@ public static class ServiceCollectionExtensions
             .AddScoped<ILastSearchParameterService, LastSearchParameterService>()
             .AddScoped<IRegistrationStatisticService, RegistrationStatisticService>()
             .AddHashBuilderPool(HashAlgorithmName.SHA512)
-            .AddSystemClock();
+            .AddSystemClock()
+            .AddHostedService<ImportMetricsHostedService>()
+            .AddScoped<IDatabaseCleanupService, DatabaseCleanupService>()
+            .AddCronJob<CleanupScheduledJob>(cleanupConfig);
 
         if (importsConfig.RunImports)
         {

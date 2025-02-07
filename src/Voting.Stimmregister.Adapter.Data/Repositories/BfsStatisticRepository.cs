@@ -24,8 +24,6 @@ public class BfsStatisticRepository : DbRepository<DataContext, BfsStatisticEnti
 
         if (existingEntity != null)
         {
-            existingEntity.EVoterRegistrationCount = bfsStatisticEntity.EVoterRegistrationCount;
-            existingEntity.EVoterDeregistrationCount = bfsStatisticEntity.EVoterDeregistrationCount;
             existingEntity.EVoterTotalCount = bfsStatisticEntity.EVoterTotalCount;
             existingEntity.VoterTotalCount = bfsStatisticEntity.VoterTotalCount;
             existingEntity.AuditInfo.ModifiedAt = bfsStatisticEntity.AuditInfo.CreatedAt;

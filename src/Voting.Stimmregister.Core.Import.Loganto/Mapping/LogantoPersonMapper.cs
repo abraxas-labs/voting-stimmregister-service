@@ -101,6 +101,9 @@ public class LogantoPersonMapper : BasePersonMapper<LogantoPersonCsvRecord>
             record,
             _config.BfsThatAllowSendingVotingCardForPeopleWithAwayAddresses,
             _config.BfsThatAllowSendingVotingCardForPeopleWithUnknownMainResidenceAddresses);
+        entity.IsHouseholder = record.IsHouseholder;
+        entity.ResidenceBuildingId = record.ResidenceBuildingId;
+        entity.ResidenceApartmentId = record.ResidenceApartmentId;
 
         if (!Countries.IsSwitzerland(entity.Country))
         {

@@ -13,9 +13,8 @@ namespace Voting.Stimmregister.Core.Mapping;
 /// <summary>
 /// AutoMapper Profile for person model mappings between:
 /// <list type="bullet">
-///     <item><see cref="Proto.V1.Services.Models.PersonModel"/></item>
-///     <item><see cref="Domain.Models.PersonModel"/></item>
-///     <item><see cref="Abstractions.Adapter.Data.Entities.PersonEntity"/></item>
+///     <item><see cref="PersonEntity"/></item>
+///     <item><see cref="PersonCsvExportModel"/></item>
 /// </list>
 /// </summary>
 public class PersonCsvExportProfile : Profile
@@ -40,6 +39,7 @@ public class PersonCsvExportProfile : Profile
             .ForMember(dest => dest.TypeOfResidence, opt => opt.MapFrom(src => ConvertResidence(src.TypeOfResidence)))
             .ForMember(dest => dest.TypeOfResidenceCode, opt => opt.MapFrom(src => GetEnumValueResidence(src.TypeOfResidence)))
             .ForMember(dest => dest.Vn, opt => opt.MapFrom(src => ConvertVn(src.Vn)))
+            .ForMember(dest => dest.IsHouseholder, opt => opt.MapFrom(src => src.IsHouseholder ? DefaultYes : DefaultNo))
             .AfterMap((src, dest) =>
             {
                 if (src.PersonDois != null)

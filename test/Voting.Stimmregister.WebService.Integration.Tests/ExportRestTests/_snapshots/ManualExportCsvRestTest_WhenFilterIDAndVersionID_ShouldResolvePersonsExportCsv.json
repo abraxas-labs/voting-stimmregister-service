@@ -101,7 +101,10 @@
       "EVoting": "Nein",
       "TypeOfResidenceCode": 3,
       "TypeOfResidence": "Unbekannt",
-      "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein"
+      "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein",
+      "IsHouseholder": "Nein",
+      "ResidenceBuildingId": null,
+      "ResidenceApartmentId": null
     },
     {
       "Vn": "",
@@ -204,7 +207,10 @@
       "EVoting": "Nein",
       "TypeOfResidenceCode": 3,
       "TypeOfResidence": "Unbekannt",
-      "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein"
+      "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein",
+      "IsHouseholder": "Ja",
+      "ResidenceBuildingId": 999999999,
+      "ResidenceApartmentId": 999
     },
     {
       "Vn": "",
@@ -307,7 +313,10 @@
       "EVoting": "Ja",
       "TypeOfResidenceCode": 3,
       "TypeOfResidence": "Weder Haupt- noch Nebenwohnsitz",
-      "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein"
+      "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein",
+      "IsHouseholder": "Nein",
+      "ResidenceBuildingId": null,
+      "ResidenceApartmentId": null
     }
   ]
 }

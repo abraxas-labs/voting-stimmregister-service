@@ -57,21 +57,30 @@ public class ExportController : ControllerBase
     [Route("csv")]
     public async Task<FileResult> ExportCsv([FromBody] PersonSearchParametersExportModel searchParameters, CancellationToken ct)
     {
-        var validationResult = _exportRequestParameterValidator.Validate(searchParameters);
+        var options = new ExportCsvOptions { FileNamePrefix = "stimmregister" };
 
-        if (validationResult?.IsValid != true)
-        {
-            _logger.LogError("Input validation failed with errors: {ValidationErrors}", validationResult?.ToString());
-            throw new InvalidExportPayloadException();
-        }
+        return await ExportCsv<PersonCsvExportModel>(searchParameters, options, ct);
+    }
 
-        var file = searchParameters.VersionId.HasValue
-            ? await _exportCsvService.ExportCsvByFilterVersion(searchParameters.VersionId.Value)
-            : searchParameters.FilterId.HasValue
-                ? await _exportCsvService.ExportCsvByFilter(searchParameters.FilterId.Value)
-                : await _exportCsvService.ExportCsv(searchParameters.Criteria);
+    /// <summary>
+    /// Exports STISTAT e-voting people data based on a filter.
+    /// Exports can be done based on the following search criteria:
+    ///    - FilterID
+    ///    - FilterID and VersionID
+    ///    - Filter criteria.
+    /// </summary>
+    /// <param name="searchParameters">The search parameters.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>A task wrapping the <see cref="FileResult"/>.</returns>
+    [AuthorizeManualExporter]
+    [HttpPost]
+    [Produces("text/csv")]
+    [Route("stistat")]
+    public async Task<FileResult> ExportStistatCsv([FromBody] PersonSearchParametersExportModel searchParameters, CancellationToken ct)
+    {
+        var options = new ExportCsvOptions { FileNamePrefix = "stimmregister-stistat" };
 
-        return SingleFileResult.Create(file.MimeType, file.Filename, writer => file.Write(writer, ct));
+        return await ExportCsv<PersonStistatCsvExportModel>(searchParameters, options, ct);
     }
 
     /// <summary>
@@ -109,6 +118,25 @@ public class ExportController : ControllerBase
             : searchParameters.FilterId.HasValue
                 ? await _exportEchService.ExportEch0045ByFilter(searchParameters.FilterId.Value)
                 : await _exportEchService.ExportEch0045(searchParameters.Criteria);
+
+        return SingleFileResult.Create(file.MimeType, file.Filename, writer => file.Write(writer, ct));
+    }
+
+    private async Task<FileResult> ExportCsv<T>([FromBody] PersonSearchParametersExportModel searchParameters, ExportCsvOptions options, CancellationToken ct)
+    {
+        var validationResult = _exportRequestParameterValidator.Validate(searchParameters);
+
+        if (validationResult?.IsValid != true)
+        {
+            _logger.LogError("Input validation failed with errors: {ValidationErrors}", validationResult?.ToString());
+            throw new InvalidExportPayloadException();
+        }
+
+        var file = searchParameters.VersionId.HasValue
+            ? await _exportCsvService.ExportCsvByFilterVersion<T>(searchParameters.VersionId.Value, options)
+            : searchParameters.FilterId.HasValue
+                ? await _exportCsvService.ExportCsvByFilter<T>(searchParameters.FilterId.Value, options)
+                : await _exportCsvService.ExportCsv<T>(searchParameters.Criteria, options);
 
         return SingleFileResult.Create(file.MimeType, file.Filename, writer => file.Write(writer, ct));
     }

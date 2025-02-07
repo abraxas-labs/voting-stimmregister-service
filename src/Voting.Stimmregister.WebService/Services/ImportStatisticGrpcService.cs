@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Grpc.Core;
-using Voting.Lib.Database.Models;
 using Voting.Stimmregister.Abstractions.Core.Services;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Proto.V1.Services;
@@ -54,7 +53,6 @@ public class ImportStatisticGrpcService : ImportStatisticService.ImportStatistic
     {
         var searchParameters = new ImportStatisticSearchParametersModel
         {
-            Page = _mapper.Map<Pageable>(request.Paging),
             ImportType = _mapper.Map<Domain.Enums.ImportType?>(request.ImportType),
             ImportStatus = _importStatusMapping.GetValueOrDefault(request.ImportStatusSimple),
             ImportSourceSystem = _mapper.Map<Domain.Enums.ImportSourceSystem?>(request.ImportSourceSystem),
@@ -72,7 +70,6 @@ public class ImportStatisticGrpcService : ImportStatisticService.ImportStatistic
     {
         var searchParameters = new ImportStatisticSearchParametersModel
         {
-            Page = _mapper.Map<Pageable>(request.Paging),
             MunicipalityId = request.MunicipalityId,
             ImportType = _mapper.Map<Domain.Enums.ImportType?>(request.ImportType),
             ImportSourceSystem = _mapper.Map<Domain.Enums.ImportSourceSystem?>(request.ImportSourceSystem),

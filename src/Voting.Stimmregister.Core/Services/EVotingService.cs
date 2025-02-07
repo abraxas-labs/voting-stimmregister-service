@@ -13,6 +13,7 @@ using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Abstractions.Adapter.EVoting.Kewr;
 using Voting.Stimmregister.Abstractions.Adapter.EVoting.Loganto;
 using Voting.Stimmregister.Abstractions.Adapter.VotingIam;
+using Voting.Stimmregister.Abstractions.Core.Import.Services;
 using Voting.Stimmregister.Abstractions.Core.Services;
 using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.Constants.EVoting;
@@ -37,6 +38,7 @@ public class EVotingService : IEVotingService
     private readonly IClock _clock;
     private readonly EVotingConfig _config;
     private readonly IPersonService _personService;
+    private readonly IBfsStatisticService _bfsStatisticService;
 
     public EVotingService(
         ILogger<EVotingService> logger,
@@ -50,7 +52,8 @@ public class EVotingService : IEVotingService
         IEVoterAuditRepository voterAuditRepo,
         IClock clock,
         EVotingConfig config,
-        IPersonService personService)
+        IPersonService personService,
+        IBfsStatisticService bfsStatisticService)
     {
         _logger = logger;
         _permissionService = permissionService;
@@ -64,6 +67,7 @@ public class EVotingService : IEVotingService
         _clock = clock;
         _config = config;
         _personService = personService;
+        _bfsStatisticService = bfsStatisticService;
     }
 
     public async Task<EVotingInformationModel> GetEVotingInformation(Ahvn13 ahvn13, short bfsCanton)
@@ -89,11 +93,13 @@ public class EVotingService : IEVotingService
 
         // Get person data to evaluate voting permissions.
         eVotingInformation.Person = await GetEVotingPerson(ahvn13, bfsCanton);
-        eVotingInformation.RegisteredEVotersInCanton =
-            await _voterRepository.Query().CountAsync(x => x.BfsCanton == bfsCanton && x.EVoterFlag == true);
 
-        eVotingInformation.RegisteredEVotersInMunicipality =
-            await _voterRepository.Query().CountAsync(x => x.BfsMunicipality == eVotingInformation.Person.BfsMunicipality && x.EVoterFlag == true);
+        var bfsStatistics = await _bfsStatisticService.GetStatistics(true, bfsCanton);
+
+        eVotingInformation.CantonStatistic = bfsStatistics.TotalStatistic;
+        eVotingInformation.MunicipalityStatistic =
+            bfsStatistics.MunicipalityStatistics.First(b =>
+                b.Bfs.Equals(eVotingInformation.Person.BfsMunicipality.ToString()));
 
         return eVotingInformation;
     }
@@ -283,6 +289,7 @@ public class EVotingService : IEVotingService
             return new EVotingAddressModel
             {
                 Street = person.ContactAddressStreet ?? string.Empty,
+                PostOfficeBoxText = person.ContactAddressPostOfficeBoxText ?? string.Empty,
                 Town = person.ContactAddressTown ?? string.Empty,
                 HouseNumber = person.ContactAddressHouseNumber ?? string.Empty,
                 ZipCode = person.ContactAddressZipCode ?? string.Empty,
@@ -294,6 +301,7 @@ public class EVotingService : IEVotingService
             return new EVotingAddressModel
             {
                 Street = person.ResidenceAddressStreet ?? string.Empty,
+                PostOfficeBoxText = person.ResidenceAddressPostOfficeBoxText ?? string.Empty,
                 Town = person.ResidenceAddressTown ?? string.Empty,
                 HouseNumber = person.ResidenceAddressHouseNumber ?? string.Empty,
                 ZipCode = person.ResidenceAddressZipCode ?? string.Empty,

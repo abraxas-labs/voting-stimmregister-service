@@ -1,0 +1,32 @@
+{
+  "VotingStatus": 1,
+  "Person": {
+    "Ahvn13": 7561302619107,
+    "AllowedToVote": true,
+    "MunicipalityBfs": 3213,
+    "Nationality": "Schweiz",
+    "DateOfBirth": "1962-05-02",
+    "Sex": 3,
+    "OfficialName": "Gerber",
+    "FirstName": "Gabriela",
+    "Address": {
+      "Street": "Hafenstr.",
+      "PostOfficeBoxText": "",
+      "HouseNumber": "12",
+      "Town": "Goldach",
+      "ZipCode": "9016"
+    }
+  },
+  "CantonStatistic": {
+    "Bfs": "17",
+    "VoterTotalCount": 99000,
+    "EVoterTotalCount": 18000
+  },
+  "MunicipalityStatistic": {
+    "Bfs": "3213",
+    "VoterTotalCount": 9000,
+    "EVoterTotalCount": 0
+  },
+  "ProcessStatusCode": 0,
+  "ProcessStatusMessage": ""
+}

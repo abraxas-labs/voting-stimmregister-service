@@ -61,7 +61,7 @@ public class Startup
     {
         services.AddWebServiceServices(AppConfig);
         services.AddDomainServices(AppConfig.Imports);
-        services.AddCoreServices(AppConfig.EVoting, AppConfig.MemoryCache, AppConfig.Filter, AppConfig.Person, AppConfig.Imports);
+        services.AddCoreServices(AppConfig.EVoting, AppConfig.MemoryCache, AppConfig.Filter, AppConfig.Person, AppConfig.Imports, AppConfig.Cleanup);
         services.AddIamServices(AppConfig.SecureConnect);
         services.AddAdapterDataServices(AppConfig.Database, ConfigureDatabase);
         services.AddAdapterEch(AppConfig.Ech);
@@ -81,7 +81,7 @@ public class Startup
             AppConfig.EVoting.SecureConnectSharedEVoting);
 
         ConfigureHealthChecks(services.AddHealthChecks());
-        ConfigureAuthentication(services.AddVotingLibIam(new() { BaseUrl = AppConfig.SecureConnectApi }));
+        ConfigureAuthentication(services.AddVotingLibIam(new() { BaseUrl = AppConfig.SecureConnectApi }, AppConfig.AuthStore));
 
         services
             .AddControllers()

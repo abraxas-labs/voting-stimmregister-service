@@ -19,8 +19,10 @@ public class PersonSignaturePayloadBuilderV1 : IDisposable, ISignaturePayloadBui
         ObjectPool<HashBuilder> hashBuilderPool,
         IHsmCryptoAdapter hsmCryptoAdapter)
     {
-        _payloadBuilder = new SignaturePayloadBuilder(nameof(PersonEntity), 1, hsmCryptoAdapter.GetSignatureConfigLabels(), hashBuilderPool);
+        _payloadBuilder = new SignaturePayloadBuilder(nameof(PersonEntity), Version, hsmCryptoAdapter.GetSignatureConfigLabels(), hashBuilderPool);
     }
+
+    public byte Version => 1;
 
     public SignaturePayload Build(PersonEntity person)
     {

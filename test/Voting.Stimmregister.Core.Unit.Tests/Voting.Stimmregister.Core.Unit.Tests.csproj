@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Services\Supporting\Signing\" />
+    <Folder Include="Services\_snapshots\" />
   </ItemGroup>
   
 </Project>

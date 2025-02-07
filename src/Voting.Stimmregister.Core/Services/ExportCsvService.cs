@@ -25,7 +25,8 @@ namespace Voting.Stimmregister.Core.Services;
 /// <inheritdoc cref="IExportCsvService" />
 public class ExportCsvService : IExportCsvService
 {
-    private const string ExportFileNameFormat = "stimmregister-{0}.csv";
+    private const string ExportFileNameFormat = "{0}-{1}.csv";
+    private const string ExportFileNamePrefixDefault = "stimmregister";
 
     private readonly IPersonService _personService;
     private readonly IMapper _mapper;
@@ -56,13 +57,13 @@ public class ExportCsvService : IExportCsvService
         _bfsIntegrityPersonsVerifier = bfsIntegrityPersonsVerifier;
     }
 
-    public async Task<FileModel> ExportCsv(IReadOnlyCollection<PersonSearchFilterCriteriaModel> criteria)
+    public async Task<FileModel> ExportCsv<T>(IReadOnlyCollection<PersonSearchFilterCriteriaModel> criteria, ExportCsvOptions options)
     {
         var transaction = await _dataContext.BeginTransaction();
         try
         {
             var persons = _personService.StreamAll(criteria);
-            return VerifyPersonSignaturesAndBuildExport(persons, transaction);
+            return VerifyPersonSignaturesAndBuildExport<T>(persons, transaction, options);
         }
         catch (Exception)
         {
@@ -71,13 +72,13 @@ public class ExportCsvService : IExportCsvService
         }
     }
 
-    public async Task<FileModel> ExportCsvByFilter(Guid filterId)
+    public async Task<FileModel> ExportCsvByFilter<T>(Guid filterId, ExportCsvOptions options)
     {
         var transaction = await _dataContext.BeginTransaction();
         try
         {
             var persons = await _personService.StreamAllByFilter(filterId);
-            return VerifyPersonSignaturesAndBuildExport(persons, transaction);
+            return VerifyPersonSignaturesAndBuildExport<T>(persons, transaction, options);
         }
         catch (Exception)
         {
@@ -86,7 +87,7 @@ public class ExportCsvService : IExportCsvService
         }
     }
 
-    public async Task<FileModel> ExportCsvByFilterVersion(Guid filterVersionId)
+    public async Task<FileModel> ExportCsvByFilterVersion<T>(Guid filterVersionId, ExportCsvOptions options)
     {
         var transaction = await _dataContext.BeginTransaction();
         try
@@ -100,7 +101,7 @@ public class ExportCsvService : IExportCsvService
                 return p;
             });
 
-            return BuildCsvExport(persons, transaction, verifier.EnsureValid);
+            return BuildCsvExport<T>(persons, transaction, options, verifier.EnsureValid);
         }
         catch (Exception)
         {
@@ -109,34 +110,38 @@ public class ExportCsvService : IExportCsvService
         }
     }
 
-    private FileModel VerifyPersonSignaturesAndBuildExport(
+    private FileModel VerifyPersonSignaturesAndBuildExport<T>(
         IAsyncEnumerable<PersonEntity> persons,
-        IDbContextTransaction transaction)
+        IDbContextTransaction transaction,
+        ExportCsvOptions options)
     {
         var municipalityIds = new HashSet<int>();
         persons = persons.Peek(p => municipalityIds.Add(p.MunicipalityId));
-        return BuildCsvExport(persons, transaction, async ct => await _bfsIntegrityPersonsVerifier.Verify(municipalityIds, ct));
+        return BuildCsvExport<T>(persons, transaction, options, async ct => await _bfsIntegrityPersonsVerifier.Verify(municipalityIds, ct));
     }
 
-    private FileModel BuildCsvExport(
+    private FileModel BuildCsvExport<T>(
         IAsyncEnumerable<PersonEntity> persons,
         IDbContextTransaction transaction,
+        ExportCsvOptions options,
         Action onComplete)
     {
-        return BuildCsvExport(persons, transaction, _ =>
+        return BuildCsvExport<T>(persons, transaction, options, _ =>
         {
             onComplete();
             return Task.CompletedTask;
         });
     }
 
-    private FileModel BuildCsvExport(
+    private FileModel BuildCsvExport<T>(
         IAsyncEnumerable<PersonEntity> persons,
         IDbContextTransaction transaction,
+        ExportCsvOptions options,
         Func<CancellationToken, Task> onComplete)
     {
-        var fileName = string.Format(ExportFileNameFormat, _clock.UtcNow.ToString("yyyy-MM-dd"));
-        var mappedPersons = persons.Select(p => _mapper.Map<PersonCsvExportModel>(p));
+        var fileNamePrefix = !string.IsNullOrEmpty(options.FileNamePrefix) ? options.FileNamePrefix : ExportFileNamePrefixDefault;
+        var fileName = string.Format(ExportFileNameFormat, fileNamePrefix, _clock.UtcNow.ToString("yyyy-MM-dd"));
+        var mappedPersons = persons.Select(p => _mapper.Map<T>(p));
 
         return new FileModel(
             fileName,

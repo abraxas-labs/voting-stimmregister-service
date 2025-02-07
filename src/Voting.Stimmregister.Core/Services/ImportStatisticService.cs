@@ -2,13 +2,15 @@
 // For license information see LICENSE file
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Voting.Lib.Database.Models;
+using Voting.Lib.Common;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Abstractions.Adapter.VotingIam;
 using Voting.Stimmregister.Abstractions.Core.Services;
+using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Core.Services;
@@ -20,28 +22,34 @@ public class ImportStatisticService : IImportStatisticService
 
     private readonly IImportStatisticRepository _importStatisticRepository;
     private readonly IPermissionService _permissionService;
+    private readonly ImportsConfig _importsConfig;
+    private readonly IClock _clock;
 
     public ImportStatisticService(
         IImportStatisticRepository importStatisticRepository,
-        IPermissionService permissionService)
+        IPermissionService permissionService,
+        ImportsConfig importsConfig,
+        IClock clock)
     {
         _importStatisticRepository = importStatisticRepository;
         _permissionService = permissionService;
+        _importsConfig = importsConfig;
+        _clock = clock;
     }
 
-    public async Task<Page<ImportStatisticEntity>> GetHistory(ImportStatisticSearchParametersModel searchParameters)
+    public async Task<IEnumerable<ImportStatisticEntity>> GetHistory(ImportStatisticSearchParametersModel searchParameters)
     {
         var queryable = BuildQuery(searchParameters);
         queryable = FilterByStatus(queryable, searchParameters);
 
-        var pagedResult = await queryable
+        var result = await queryable
             .OrderByDescending(i => i.AuditInfo.CreatedAt)
-            .ToPageAsync(searchParameters.Page);
+            .ToListAsync();
 
-        return SanatizeResult(pagedResult);
+        return SanatizeResult(result);
     }
 
-    public async Task<Page<ImportStatisticEntity>> List(ImportStatisticSearchParametersModel searchParameters)
+    public async Task<IEnumerable<ImportStatisticEntity>> List(ImportStatisticSearchParametersModel searchParameters)
     {
         if (!searchParameters.ImportType.HasValue)
         {
@@ -56,9 +64,9 @@ public class ImportStatisticService : IImportStatisticService
         var query = BuildQuery(searchParameters).Where(x => x.IsLatest);
         query = FilterByStatus(query, searchParameters);
 
-        var pagedResult = await query.ToPageAsync(searchParameters.Page);
+        var result = await query.ToListAsync();
 
-        return SanatizeResult(pagedResult);
+        return SanatizeResult(result);
     }
 
     private IQueryable<ImportStatisticEntity> BuildQuery(ImportStatisticSearchParametersModel searchParameters)
@@ -85,6 +93,21 @@ public class ImportStatisticService : IImportStatisticService
             queryable = queryable.Where(i => _permissionService.BfsAccessControlList.Contains(i.MunicipalityId.ToString()));
         }
 
+        // exclude disabled source systems
+        if (_importsConfig.AllowedPersonImportSourceSystem.Any())
+        {
+            var bfsToExclude = _importsConfig.AllowedPersonImportSourceSystem
+                .Where(a =>
+                    a.ImportSourceSystem != searchParameters.ImportSourceSystem &&
+                    a.StartingDate < _clock.UtcNow)
+                .Select(a => a.MunicipalityId);
+
+            if (bfsToExclude.Count() > 0)
+            {
+                queryable = queryable.Where(i => i.MunicipalityId == null || !bfsToExclude.Contains(i.MunicipalityId.Value));
+            }
+        }
+
         return queryable;
     }
 
@@ -95,14 +118,14 @@ public class ImportStatisticService : IImportStatisticService
             : query;
     }
 
-    private Page<ImportStatisticEntity> SanatizeResult(Page<ImportStatisticEntity> pagedResult)
+    private List<ImportStatisticEntity> SanatizeResult(List<ImportStatisticEntity> result)
     {
         if (_permissionService.IsImportObserver())
         {
-            return pagedResult;
+            return result;
         }
 
-        pagedResult.Items.ForEach(item =>
+        result.ForEach(item =>
         {
             if (!string.IsNullOrEmpty(item.ProcessingErrors))
             {
@@ -110,6 +133,6 @@ public class ImportStatisticService : IImportStatisticService
             }
         });
 
-        return pagedResult;
+        return result;
     }
 }

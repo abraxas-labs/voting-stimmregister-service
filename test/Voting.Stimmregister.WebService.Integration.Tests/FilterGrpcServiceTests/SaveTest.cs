@@ -31,8 +31,8 @@ public class SaveTest : BaseWriteableDbGrpcTest<FilterService.FilterServiceClien
         await PersonMockedData.Seed(RunScoped);
         await AclDoiVotingBasisMockedData.Seed(RunScoped);
         await FilterMockedData.Seed(RunScoped);
-        await FilterCriteriaMockedData.Seed(RunScoped, seedWithFilterMockedData: false);
         await FilterVersionMockedData.Seed(RunScoped, seedWithFilterMockedData: false);
+        await FilterCriteriaMockedData.Seed(RunScoped, seedWithFilterMockedData: false);
     }
 
     [Fact]

@@ -10,38 +10,59 @@ using Voting.Stimmregister.Abstractions.Core.Import.Models;
 using Voting.Stimmregister.Abstractions.Core.Import.Services;
 using Voting.Stimmregister.Abstractions.Core.Services;
 using Voting.Stimmregister.Domain.Models;
+using Voting.Stimmregister.Domain.Models.BfsStatistic;
 
 namespace Voting.Stimmregister.Core.Services;
 
 public class BfsStatisticService : IBfsStatisticService
 {
-    private readonly IEVoterAuditRepository _evoterAuditRepo;
     private readonly IBfsStatisticRepository _bfsStatisticRepository;
     private readonly IPermissionService _permissionService;
     private readonly IPersonService _personService;
 
     public BfsStatisticService(
-        IEVoterAuditRepository evoterAuditRepo,
         IBfsStatisticRepository bfsStatisticRepository,
         IPermissionService permissionService,
         IPersonService personService)
     {
-        _evoterAuditRepo = evoterAuditRepo;
         _bfsStatisticRepository = bfsStatisticRepository;
         _permissionService = permissionService;
         _personService = personService;
     }
 
+    public async Task<BfsStatisticModel> GetStatistics(bool disableQueryFilter = false, short? cantonBfs = null)
+    {
+        var queryable = _bfsStatisticRepository.Query();
+        var totalStatistic = new BfsStatisticEntity();
+
+        if (disableQueryFilter)
+        {
+            queryable = queryable.IgnoreQueryFilters();
+        }
+
+        if (cantonBfs != null)
+        {
+            queryable = queryable.Where(b => b.CantonBfs.Equals(cantonBfs));
+            totalStatistic.Bfs = cantonBfs.Value.ToString();
+        }
+
+        var municipalityStatistics = await queryable.OrderBy(b => b.BfsName).ToListAsync();
+
+        foreach (var municipalityStatistic in municipalityStatistics)
+        {
+            totalStatistic.EVoterTotalCount += municipalityStatistic.EVoterTotalCount;
+            totalStatistic.VoterTotalCount += municipalityStatistic.VoterTotalCount;
+        }
+
+        return new BfsStatisticModel
+        {
+            MunicipalityStatistics = municipalityStatistics,
+            TotalStatistic = totalStatistic,
+        };
+    }
+
     public async Task CreateOrUpdateStatistics(PersonImportStateModel state)
     {
-        var evoterRegistrationCount = await _evoterAuditRepo
-            .Query()
-            .CountAsync(v => v.BfsMunicipality == state.MunicipalityId && v.EVoterFlag == true);
-
-        var evoterDeregistrationCount = await _evoterAuditRepo
-            .Query()
-            .CountAsync(v => v.BfsMunicipality == state.MunicipalityId && v.EVoterFlag == false);
-
         var evoterTotalCount =
             state.EntitiesToCreate.Count(e => !e.IsDeleted && e.EVoting)
             + state.EntitiesToUpdate.Count(e => e.IsLatest && e.EVoting)
@@ -70,8 +91,7 @@ public class BfsStatisticService : IBfsStatisticService
             BfsName = state.MunicipalityName!,
             VoterTotalCount = voterTotalCount,
             EVoterTotalCount = evoterTotalCount,
-            EVoterRegistrationCount = evoterRegistrationCount,
-            EVoterDeregistrationCount = evoterDeregistrationCount,
+            CantonBfs = state.CantonBfs!.Value,
         };
 
         _permissionService.SetCreated(entity);

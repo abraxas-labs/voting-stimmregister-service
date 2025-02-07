@@ -62,18 +62,19 @@ internal class AccessControlListDoiService : IAccessControlListDoiService
     }
 
     /// <inheritdoc />
-    public async Task<AccessControlListDoiEntity?> GetValidEntryForBfs(string bfs)
-        => await _aclDoiRepo.Query().FirstOrDefaultAsync(x => x.Bfs == bfs && x.IsValid);
+    public async Task<IReadOnlyCollection<AccessControlListDoiEntity>> GetValidEntriesForBfs(string bfs)
+        => await _aclDoiRepo
+    .Query()
+    .Where(x => x.Bfs == bfs && x.IsValid && x.Type == DomainOfInfluenceType.Mu)
+    .ToListAsync();
 
     public async Task<IReadOnlyCollection<AccessControlListDoiEntity>> GetEntriesForBfsIncludingParents(string bfs)
     {
         var entries = await _aclDoiRepo.Query().ToListAsync();
         BuildTree(entries);
-        var entry = entries.Find(x => x.Bfs == bfs && x.IsValid);
+        var entry = entries.First(x => x.Bfs == bfs && x.IsValid && x.Type == DomainOfInfluenceType.Mu);
 
-        return entry == null
-            ? Array.Empty<AccessControlListDoiEntity>()
-            : GetFlattenParentsInclSelf(entry).ToList();
+        return GetFlattenParentsInclSelf(entry).ToList();
     }
 
     private async Task<IReadOnlyCollection<AccessControlListDoiEntity>> GetDoiAccessControlListByTenantIdInternal(string tenantId)

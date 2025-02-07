@@ -243,6 +243,26 @@ public class LogantoDomainOfInfluenceImportTest : BaseWriteableDbTest
         importStatistic.MatchSnapshot(p => p.Id, p => p.TotalElapsedMilliseconds!);
     }
 
+    [Fact]
+    public async Task ShouldThrowIfMultipleValidAclAvailable()
+    {
+        await RunOnDb(async db =>
+        {
+            var acl = new AccessControlListDoiEntity
+            {
+                Id = Guid.NewGuid(),
+                Bfs = AclDoiVotingBasisMockedData.SG_Moerschwil_L5_MU.Bfs,
+                Type = DomainOfInfluenceType.Mu,
+                IsValid = true,
+            };
+            db.AccessControlListDois.Add(acl);
+            await db.SaveChangesAsync();
+        });
+        var importStatistic = await ImportDomainOfInfluenceFromFile(DoiFileValid);
+        importStatistic.ImportStatus.Should().Be(ImportStatus.Failed);
+        importStatistic.MatchSnapshot(p => p.Id, p => p.TotalElapsedMilliseconds!);
+    }
+
     private async Task<ImportStatisticEntity> ImportDomainOfInfluenceFromFile(string fileName)
     {
         var domainOfInfluenceImportservice = NewDomainOfInfluenceImportService();

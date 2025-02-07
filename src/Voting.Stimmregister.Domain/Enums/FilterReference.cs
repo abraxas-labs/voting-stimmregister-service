@@ -74,4 +74,7 @@ public enum FilterReference
     PeopleCircleName,
     HasValidationErrors,
     SendVotingCardsToDomainOfInfluenceReturnAddress,
+    IsHouseholder,
+    ResidenceBuildingId,
+    ResidenceApartmentId,
 }

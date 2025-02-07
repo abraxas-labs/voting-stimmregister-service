@@ -370,7 +370,7 @@ public class PersonCsvExportModel
     public string MunicipalityName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the , i.e. '9001'.
+    /// Gets or sets the municipality id, i.e. '9001'.
     /// </summary>
     [Name("BFS-Gemeindenummer")]
     public int MunicipalityId { get; set; }
@@ -623,7 +623,7 @@ public class PersonCsvExportModel
     public string? CorporationsCircleName { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether gets or sets the , i.e. 'Ja' / 'Nein'.
+    /// Gets or sets a value indicating whether the person is an e-voter, i.e. 'Ja' / 'Nein'.
     /// </summary>
     [Name("E-Voting")]
     public string EVoting { get; set; } = string.Empty;
@@ -653,4 +653,22 @@ public class PersonCsvExportModel
     /// <inheritdoc cref="PersonEntity.SendVotingCardsToDomainOfInfluenceReturnAddress"/>
     [Name("Nicht zustellen")]
     public string? SendVotingCardsToDomainOfInfluenceReturnAddress { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether gets or sets the , i.e. 'Ja' / 'Nein'.
+    /// </summary>
+    [Name("Haushaltsvorstand")]
+    public string IsHouseholder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the , i.e. '123456789'.
+    /// </summary>
+    [Name("Gebäude (Id)")]
+    public int? ResidenceBuildingId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the , i.e. '356'.
+    /// </summary>
+    [Name("Wohnung (Id)")]
+    public int? ResidenceApartmentId { get; set; }
 }

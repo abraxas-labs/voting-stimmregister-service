@@ -199,8 +199,17 @@ public abstract class BaseImportService<TState, TRecord, TEntity> : IImportServi
 
         EnsureMunicipalityIdNotBlacklisted(municipalityId);
 
-        var aclEntry = await AclDoiService.GetValidEntryForBfs(municipalityId.ToString())
-            ?? throw new ImportException($"No valid acl entry found for {municipalityId}");
+        var aclEntries = await AclDoiService.GetValidEntriesForBfs(municipalityId.ToString());
+
+        switch (aclEntries.Count)
+        {
+            case < 1:
+                throw new ImportException($"No valid acl entry found for {municipalityId}");
+            case > 1:
+                throw new ImportException($"Multiple valid acl entries found for {municipalityId}");
+        }
+
+        var aclEntry = aclEntries.First();
 
         state.MunicipalityId = municipalityId;
         state.MunicipalityName = aclEntry.Name;
@@ -420,6 +429,7 @@ public abstract class BaseImportService<TState, TRecord, TEntity> : IImportServi
     {
         var importEntity = await _importStatisticRepository.GetByKey(state.ImportStatisticId)
             ?? throw new EntityNotFoundException(typeof(ImportStatisticEntity), state.ImportStatisticId);
+        var finishedDate = _clock.UtcNow;
 
         importEntity.ImportStatus = state.HasRecordValidationErrors ?
             ImportStatus.FinishedWithErrors :
@@ -429,7 +439,7 @@ public abstract class BaseImportService<TState, TRecord, TEntity> : IImportServi
         importEntity.DatasetsCountCreated = state.CreateCount;
         importEntity.DatasetsCountUpdated = state.UpdateCount;
         importEntity.DatasetsCountDeleted = state.DeleteCount;
-        importEntity.FinishedDate = _clock.UtcNow;
+        importEntity.FinishedDate = finishedDate;
         importEntity.HasValidationErrors = state.EntityIdsWithValidationErrors.Count > 0;
         importEntity.EntitiesWithValidationErrors = state.EntityIdsWithValidationErrors;
         importEntity.RecordNumbersWithValidationErrors = state.RecordIdsWithValidationErrors;
@@ -447,5 +457,15 @@ public abstract class BaseImportService<TState, TRecord, TEntity> : IImportServi
             importEntity.ImportType.ToString(),
             state.MunicipalityId,
             state.CreateCount + state.UpdateCount + state.DeleteCount);
+
+        if (state.ImportSourceSystem is ImportSourceSystem.Loganto or ImportSourceSystem.Innosolv
+            && importEntity.ImportStatus.Equals(ImportStatus.FinishedSuccessfully))
+        {
+            DiagnosticsConfig.SetImportLatestTimestamp(
+                importEntity.ImportType.ToString(),
+                state.MunicipalityId,
+                state.MunicipalityName,
+                finishedDate);
+        }
     }
 }

@@ -310,8 +310,6 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
         bfsStatistics!.BfsName.Should().Be("Goldach (MU)");
         bfsStatistics!.VoterTotalCount.Should().Be(2);
         bfsStatistics!.EVoterTotalCount.Should().Be(1);
-        bfsStatistics!.EVoterRegistrationCount.Should().Be(2);
-        bfsStatistics!.EVoterDeregistrationCount.Should().Be(1);
 
         // 2. import same two valid person with changed properties
         await ImportPeopleFromFile(PeopleFileValidChanged);
@@ -324,8 +322,6 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
         bfsStatistics!.BfsName.Should().Be("Goldach (MU)");
         bfsStatistics!.VoterTotalCount.Should().Be(2);
         bfsStatistics!.EVoterTotalCount.Should().Be(1);
-        bfsStatistics!.EVoterRegistrationCount.Should().Be(2);
-        bfsStatistics!.EVoterDeregistrationCount.Should().Be(1);
 
         // 3. import same file with one deleted person
         await ImportPeopleFromFile(PeopleFileValidOneDeleted);
@@ -338,8 +334,6 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
         bfsStatistics!.BfsName.Should().Be("Goldach (MU)");
         bfsStatistics!.VoterTotalCount.Should().Be(1);
         bfsStatistics!.EVoterTotalCount.Should().Be(1);
-        bfsStatistics!.EVoterRegistrationCount.Should().Be(2);
-        bfsStatistics!.EVoterDeregistrationCount.Should().Be(1);
     }
 
     /// <summary>
@@ -589,6 +583,26 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
             var acl = await db.AccessControlListDois.SingleAsync(x => x.Id == Guid.Parse(AclDoiVotingBasisMockedData.SG_Goldach_L5_MU.Id));
             acl.IsValid = false;
             db.AccessControlListDois.Update(acl);
+            await db.SaveChangesAsync();
+        });
+        var importStatistic = await ImportPeopleFromFile(PeopleFileValid);
+        importStatistic.ImportStatus.Should().Be(ImportStatus.Failed);
+        importStatistic.MatchSnapshot(p => p.Id, p => p.TotalElapsedMilliseconds!);
+    }
+
+    [Fact]
+    public async Task ShouldThrowIfMultipleValidAclAvailable()
+    {
+        await RunOnDb(async db =>
+        {
+            var acl = new AccessControlListDoiEntity
+            {
+                Id = Guid.NewGuid(),
+                Bfs = AclDoiVotingBasisMockedData.SG_Goldach_L5_MU.Bfs,
+                Type = DomainOfInfluenceType.Mu,
+                IsValid = true,
+            };
+            db.AccessControlListDois.Add(acl);
             await db.SaveChangesAsync();
         });
         var importStatistic = await ImportPeopleFromFile(PeopleFileValid);

@@ -78,7 +78,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 2,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     }
   ]
 }

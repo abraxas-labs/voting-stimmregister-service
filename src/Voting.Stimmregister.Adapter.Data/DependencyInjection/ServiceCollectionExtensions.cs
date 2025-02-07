@@ -2,6 +2,8 @@
 // For license information see LICENSE file
 
 using System;
+using Medallion.Threading;
+using Medallion.Threading.Postgres;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Voting.Lib.Database.Interceptors;
@@ -58,6 +60,7 @@ public static class ServiceCollectionExtensions
 
         return services
             .AddSingleton(dataConfig)
+            .AddSingleton<IDistributedLockProvider>(_ => new PostgresDistributedSynchronizationProvider(dataConfig.ConnectionString))
             .AddScoped<IBatchInserter, DataContextBatchInserter>()
             .AddScoped<IAccessControlListDoiRepository, AccessControlListDoiRepository>()
             .AddScoped<IDomainOfInfluenceRepository, DomainOfInfluenceRepository>()

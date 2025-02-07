@@ -18,7 +18,7 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -120,11 +120,8 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("EVoterDeregistrationCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("EVoterRegistrationCount")
-                        .HasColumnType("integer");
+                    b.Property<short>("CantonBfs")
+                        .HasColumnType("smallint");
 
                     b.Property<int>("EVoterTotalCount")
                         .HasColumnType("integer");
@@ -692,6 +689,9 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsHouseholder")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsLatest")
                         .HasColumnType("boolean");
 
@@ -771,6 +771,12 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
 
                     b.Property<string>("ResidenceAddressZipCode")
                         .HasColumnType("text");
+
+                    b.Property<int?>("ResidenceApartmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ResidenceBuildingId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ResidenceCantonAbbreviation")
                         .HasColumnType("text");

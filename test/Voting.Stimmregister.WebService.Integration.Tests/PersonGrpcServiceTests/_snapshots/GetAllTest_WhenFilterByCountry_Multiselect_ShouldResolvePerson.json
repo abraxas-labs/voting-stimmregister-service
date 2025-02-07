@@ -75,7 +75,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": true,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "12359c10-3767-4045-b310-d0d12580e08e",
@@ -152,7 +155,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "1bcf78fc-66df-42eb-9adf-157f884eb360",
@@ -229,7 +235,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "33cf78fc-66df-42eb-9adf-157f884eb360",
@@ -312,11 +321,14 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "37595c68-3535-419d-8f18-6e2f6a7d9ede",
-      "Vn": 0,
+      "Vn": 7561302619107,
       "DomainOfInfluenceId": "858",
       "SourceSystemId": "09645231479",
       "OfficialName": "Gerber",
@@ -386,7 +398,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "55c578fc-66df-42eb-9adf-157f884eb450",
@@ -469,7 +484,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "589a05e8-9548-4f64-96b2-8cce5fb55c2d",
@@ -559,7 +577,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "67de7b86-71a8-43d3-b5e4-a17fa008d41a",
@@ -633,7 +654,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "93735eae-92a2-47e3-846d-fc50350b1c16",
@@ -735,7 +759,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 1,
-      "ContactAddressPostOfficeBoxNumber": 1
+      "ContactAddressPostOfficeBoxNumber": 1,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "ef3fd8ad-b603-44a8-a7cc-e994e1df4222",
@@ -815,7 +842,10 @@
       "IsSwissAbroad": true,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 2,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     }
   ]
 }

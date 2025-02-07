@@ -11,6 +11,8 @@ namespace Voting.Stimmregister.Domain.Diagnostics;
 /// </summary>
 public static class DiagnosticsConfig
 {
+    private const string NotAvailable = "n/a";
+
     private static readonly Histogram _personSearchDuration = Metrics
         .CreateHistogram(
             "voting_stimmregister_person_search_duration_seconds",
@@ -36,6 +38,12 @@ public static class DiagnosticsConfig
         "voting_stimmregister_import_jobs_processed",
         "Count of succeeded import jobs.",
         labelNames: new[] { "import_type", "import_status" });
+
+    private static readonly Gauge _importLatestTimestampByBfs = Metrics
+        .CreateGauge(
+            "voting_stimmregister_import_timestamp_by_bfs",
+            "Timestamp of the latest import by bfs.",
+            labelNames: new[] { "import_type", "bfs", "municipalityName" });
 
     /// <summary>
     /// Initializes the diagnostic instances.
@@ -85,12 +93,28 @@ public static class DiagnosticsConfig
 
     public static void SetImportDatasetsMutated(string importType, int? bfs, int mutatedDatasetsCount)
     {
-        var bfsLabel = bfs == null ? "n/a" : bfs.Value.ToString();
+        var bfsLabel = GetBfsLabel(bfs);
         _importDatasetsMutatedByBfs.WithLabels(importType, bfsLabel).Set(mutatedDatasetsCount);
     }
 
     public static void IncreaseProcessedImportJobs(string importType, string importStatus)
     {
         _importJobsProcessed.WithLabels(importType, importStatus).Inc();
+    }
+
+    public static void SetImportLatestTimestamp(string importType, int? bfs, string? municipalityName, DateTime? date)
+    {
+        date ??= DateTime.MinValue;
+        municipalityName ??= NotAvailable;
+
+        var bfsLabel = GetBfsLabel(bfs);
+        var timestamp = new DateTimeOffset(date.Value).ToUnixTimeSeconds();
+
+        _importLatestTimestampByBfs.WithLabels(importType, bfsLabel, municipalityName).Set(timestamp);
+    }
+
+    private static string GetBfsLabel(int? bfs)
+    {
+        return bfs == null ? NotAvailable : bfs.Value.ToString();
     }
 }

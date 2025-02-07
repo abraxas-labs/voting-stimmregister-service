@@ -11,7 +11,7 @@ public class GetRegistrationInformationResponse : ProcessStatusResponseBase
 
     public GetRegistrationInformationPerson? Person { get; set; }
 
-    public int RegisteredEVotersInCanton { get; init; }
+    public GetRegistrationInformationBfsStatistic CantonStatistic { get; set; } = new();
 
-    public int RegisteredEVotersInMunicipality { get; init; }
+    public GetRegistrationInformationBfsStatistic MunicipalityStatistic { get; set; } = new();
 }

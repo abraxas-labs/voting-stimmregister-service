@@ -18,12 +18,13 @@ namespace Voting.Stimmregister.Test.Utils.MockData;
 public static class ImportMockedData
 {
     public const int MunicipalityId = 3203;
-    public const string IdDomainOfInfluenceImportStatistic = "79425de7-a2d2-47e4-b34f-b4b0f9b5a762";
+    public const string IdDomainOfInfluenceImportStatisticLoganto = "79425de7-a2d2-47e4-b34f-b4b0f9b5a762";
+    public const string IdDomainOfInfluenceImportStatisticInnosolv = "89425de7-a2d2-47e4-b34f-b4b0f9b5a763";
 
-    public static ImportStatisticEntity DomainOfInfluenceImportStatisticSuccess
+    public static ImportStatisticEntity DomainOfInfluenceImportStatisticSuccessLoganto
         => new()
         {
-            Id = Guid.Parse(IdDomainOfInfluenceImportStatistic),
+            Id = Guid.Parse(IdDomainOfInfluenceImportStatisticLoganto),
             AuditInfo = MockedAuditInfo.Get(),
             FileName = "DomainOfInfluenceSuccessMock.csv",
             ImportType = ImportType.DomainOfInfluence,
@@ -40,11 +41,32 @@ public static class ImportMockedData
             IsLatest = true,
         };
 
+    public static ImportStatisticEntity DomainOfInfluenceImportStatisticSuccessInnosolv
+        => new()
+        {
+            Id = Guid.Parse(IdDomainOfInfluenceImportStatisticInnosolv),
+            AuditInfo = MockedAuditInfo.Get(),
+            FileName = "DomainOfInfluenceSuccessMock.csv",
+            ImportType = ImportType.DomainOfInfluence,
+            SourceSystem = ImportSourceSystem.Innosolv,
+            ImportStatus = ImportStatus.FinishedSuccessfully,
+            ImportRecordsCountTotal = 10,
+            DatasetsCountCreated = 7,
+            DatasetsCountUpdated = 2,
+            DatasetsCountDeleted = 1,
+            FinishedDate = MockedClock.GetDate(),
+            HasValidationErrors = false,
+            TotalElapsedMilliseconds = 100,
+            MunicipalityId = MunicipalityId,
+            IsLatest = true,
+        };
+
     public static IEnumerable<ImportStatisticEntity> All
     {
         get
         {
-            yield return DomainOfInfluenceImportStatisticSuccess;
+            yield return DomainOfInfluenceImportStatisticSuccessLoganto;
+            yield return DomainOfInfluenceImportStatisticSuccessInnosolv;
         }
     }
 

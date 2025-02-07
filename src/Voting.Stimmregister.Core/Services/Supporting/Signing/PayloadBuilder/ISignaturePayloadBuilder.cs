@@ -5,5 +5,7 @@ namespace Voting.Stimmregister.Core.Services.Supporting.Signing.PayloadBuilder;
 
 public interface ISignaturePayloadBuilder<in T>
 {
+    byte Version { get; }
+
     SignaturePayload Build(T entity);
 }

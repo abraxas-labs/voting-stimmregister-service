@@ -28,7 +28,9 @@ public class FilterCriteriaAclQueryFilterTests : BaseWriteableDbTest
     {
         await ResetDb();
         await PersonMockedData.Seed(RunScoped);
-        await FilterCriteriaMockedData.Seed(RunScoped);
+        await FilterMockedData.Seed(RunScoped);
+        await FilterVersionMockedData.Seed(RunScoped, false);
+        await FilterCriteriaMockedData.Seed(RunScoped, false);
     }
 
     [Fact]

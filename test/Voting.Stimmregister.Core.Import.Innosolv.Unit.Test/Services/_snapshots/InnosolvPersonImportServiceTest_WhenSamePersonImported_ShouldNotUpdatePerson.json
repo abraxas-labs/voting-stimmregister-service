@@ -147,6 +147,9 @@
     }
   ],
   "CantonBfs": 17,
+  "IsHouseholder": false,
+  "ResidenceBuildingId": null,
+  "ResidenceApartmentId": null,
   "MunicipalityId": 3203,
   "IsValid": true,
   "ValidationErrors": null,

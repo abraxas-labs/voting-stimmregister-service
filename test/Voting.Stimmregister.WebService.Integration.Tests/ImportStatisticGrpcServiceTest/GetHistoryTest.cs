@@ -67,7 +67,7 @@ public class GetHistoryTest : BaseWriteableDbGrpcTest<ImportStatisticService.Imp
         var request = new GetImportStatisticHistoryRequest
         {
             ImportType = ImportType.DomainOfInfluence,
-            ImportSourceSystem = ImportSourceSystem.Loganto,
+            ImportSourceSystem = ImportSourceSystem.Innosolv,
             MunicipalityId = ImportMockedData.MunicipalityId,
             Paging = new PagingModel
             {

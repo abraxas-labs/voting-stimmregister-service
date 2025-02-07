@@ -101,6 +101,9 @@ internal sealed class PersonEntityImportedDataComparer : IEqualityComparer<Perso
             && Nullable.Equals(x.DeletedDate, y.DeletedDate)
             && x.IsDeleted == y.IsDeleted
             && x.CantonBfs == y.CantonBfs
+            && x.IsHouseholder == y.IsHouseholder
+            && x.ResidenceBuildingId == y.ResidenceBuildingId
+            && x.ResidenceApartmentId == y.ResidenceApartmentId
 
             // the hash set SequenceEqual does ignore duplicates
             // and ignores the order
@@ -180,6 +183,9 @@ internal sealed class PersonEntityImportedDataComparer : IEqualityComparer<Perso
         hashCode.Add(obj.IsDeleted);
         hashCode.Add(obj.PersonDois.Count);
         hashCode.Add(obj.CantonBfs);
+        hashCode.Add(obj.IsHouseholder);
+        hashCode.Add(obj.ResidenceBuildingId);
+        hashCode.Add(obj.ResidenceApartmentId);
         return hashCode.ToHashCode();
     }
 }

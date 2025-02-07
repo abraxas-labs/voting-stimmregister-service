@@ -24,8 +24,10 @@ public abstract class IncrementalPersonPayloadBuilderV1<T> : IDisposable, IIncre
         PersonSignaturePayloadBuilderV1 personPayloadBuilder)
     {
         _personPayloadBuilder = personPayloadBuilder;
-        _builder = new SignaturePayloadBuilder(typeName, 1, hsmCryptoAdapter.GetSignatureConfigLabels(), hashBuilderPool);
+        _builder = new SignaturePayloadBuilder(typeName, Version, hsmCryptoAdapter.GetSignatureConfigLabels(), hashBuilderPool);
     }
+
+    public byte Version => 1;
 
     protected HashBuilder HashBuilder => _builder.HashBuilder;
 

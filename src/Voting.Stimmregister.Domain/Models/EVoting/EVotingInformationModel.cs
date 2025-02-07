@@ -11,7 +11,7 @@ public class EVotingInformationModel
 
     public EVotingPersonDataModel? Person { get; set; }
 
-    public int RegisteredEVotersInCanton { get; set; }
+    public BfsStatisticEntity CantonStatistic { get; set; } = new();
 
-    public int RegisteredEVotersInMunicipality { get; set; }
+    public BfsStatisticEntity MunicipalityStatistic { get; set; } = new();
 }

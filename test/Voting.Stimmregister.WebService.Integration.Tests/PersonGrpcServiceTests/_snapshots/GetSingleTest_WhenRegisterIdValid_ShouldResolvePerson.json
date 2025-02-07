@@ -74,7 +74,10 @@
     "IsSwissAbroad": false,
     "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
     "SourceSystemName": 1,
-    "ContactAddressPostOfficeBoxNumber": null
+    "ContactAddressPostOfficeBoxNumber": null,
+    "IsHouseholder": true,
+    "ResidenceBuildingId": 999999999,
+    "ResidenceApartmentId": 999
   },
   "LatestDomainOfInfluences": [
     {

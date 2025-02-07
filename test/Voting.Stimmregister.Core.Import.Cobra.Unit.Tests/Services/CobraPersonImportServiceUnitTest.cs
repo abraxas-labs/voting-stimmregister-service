@@ -330,6 +330,26 @@ public class CobraPersonImportServiceUnitTest : BaseWriteableDbTest
     }
 
     [Fact]
+    public async Task ShouldThrowIfMultipleValidAclAvailable()
+    {
+        await RunOnDb(async db =>
+        {
+            var acl = new AccessControlListDoiEntity
+            {
+                Id = Guid.NewGuid(),
+                Bfs = AclDoiVotingBasisMockedData.SG_Auslandschweizer_L2_MU.Bfs,
+                Type = DomainOfInfluenceType.Mu,
+                IsValid = true,
+            };
+            db.AccessControlListDois.Add(acl);
+            await db.SaveChangesAsync();
+        });
+        var importStatistic = await ImportPeopleFromFile(PersonFileValidOnePerson);
+        importStatistic.ImportStatus.Should().Be(ImportStatus.Failed);
+        importStatistic.MatchSnapshot(p => p.Id, p => p.TotalElapsedMilliseconds!);
+    }
+
+    [Fact]
     public async Task ShouldFailIfDuplicatedPerson()
     {
         var importStatistic = await ImportPeopleFromFile(PersonFileWhithDuplicatedEntries);

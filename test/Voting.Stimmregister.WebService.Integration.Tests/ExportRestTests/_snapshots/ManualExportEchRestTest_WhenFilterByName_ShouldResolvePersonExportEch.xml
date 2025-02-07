@@ -49,6 +49,11 @@
             <religionData>
               <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
             </religionData>
+            <extension>
+              <isHouseholder xmlns="">true</isHouseholder>
+              <residenceBuildingId xmlns="">999999999</residenceBuildingId>
+              <residenceApartmentId xmlns="">999</residenceApartmentId>
+            </extension>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Teufen</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">AR</canton>

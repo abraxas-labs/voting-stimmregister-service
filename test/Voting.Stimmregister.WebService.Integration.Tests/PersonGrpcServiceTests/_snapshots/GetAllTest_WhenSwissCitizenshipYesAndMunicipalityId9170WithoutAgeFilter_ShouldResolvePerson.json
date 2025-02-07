@@ -78,7 +78,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 2,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "e44fd8ad-b603-44a8-a7cc-e994e1df4222",
@@ -158,7 +161,10 @@
       "IsSwissAbroad": false,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 2,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     },
     {
       "Id": "ef3fd8ad-b603-44a8-a7cc-e994e1df4222",
@@ -238,7 +244,10 @@
       "IsSwissAbroad": true,
       "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
       "SourceSystemName": 2,
-      "ContactAddressPostOfficeBoxNumber": null
+      "ContactAddressPostOfficeBoxNumber": null,
+      "IsHouseholder": false,
+      "ResidenceBuildingId": 0,
+      "ResidenceApartmentId": 0
     }
   ]
 }

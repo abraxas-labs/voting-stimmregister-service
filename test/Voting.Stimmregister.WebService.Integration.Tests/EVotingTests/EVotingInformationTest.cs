@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.Constants.EVoting;
 using Voting.Stimmregister.Test.Utils.Helpers;
@@ -43,7 +44,44 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
     public override async Task InitializeAsync()
     {
         await base.InitializeAsync();
+        await PersonMockedData.Seed(RunScoped);
+        await EVotingUserMockedData.Seed(RunScoped);
+        await BfsStatisticMockedData.Seed(RunScoped);
         _config.EnableKewrAndLoganto = true;
+    }
+
+    [Fact]
+    public async Task ShouldReturnValidInformationWhenPersonIsEVoter()
+    {
+        _config.EnableKewrAndLoganto = false;
+
+        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
+        {
+            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid4Formatted,
+            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
+        });
+
+        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
+
+        content.Should().NotBeNull();
+        content.MatchSnapshot();
+    }
+
+    [Fact]
+    public async Task ShouldReturnValidInformationWhenPersonIsNotEVoter()
+    {
+        _config.EnableKewrAndLoganto = false;
+
+        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
+        {
+            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid3Formatted,
+            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
+        });
+
+        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
+
+        content.Should().NotBeNull();
+        content.MatchSnapshot();
     }
 
     [Fact]

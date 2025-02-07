@@ -173,8 +173,6 @@ public class InnosolvPersonImportServiceTest : BaseWriteableDbTest
         bfsStatistics!.BfsName.Should().Be("St.Gallen (MU)");
         bfsStatistics!.VoterTotalCount.Should().Be(1);
         bfsStatistics!.EVoterTotalCount.Should().Be(1);
-        bfsStatistics!.EVoterRegistrationCount.Should().Be(2);
-        bfsStatistics!.EVoterDeregistrationCount.Should().Be(1);
 
         await RunImport(SinglePersonValidModified);
 
@@ -186,8 +184,6 @@ public class InnosolvPersonImportServiceTest : BaseWriteableDbTest
         bfsStatistics!.BfsName.Should().Be("St.Gallen (MU)");
         bfsStatistics!.VoterTotalCount.Should().Be(1);
         bfsStatistics!.EVoterTotalCount.Should().Be(1);
-        bfsStatistics!.EVoterRegistrationCount.Should().Be(2);
-        bfsStatistics!.EVoterDeregistrationCount.Should().Be(1);
     }
 
     [Fact]

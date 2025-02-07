@@ -78,6 +78,40 @@ public static class FilterCriteriaMockedData
             FilterValue = FilterMockedData.SomeFilter_MunicipalityId9170_SwissAbroad.MunicipalityId.ToString(),
         };
 
+    public static FilterCriteriaEntity SomeFilterCriteria_MunicipalityId_FilterVersion
+        => new()
+        {
+            Id = Guid.Parse("A4CED7D8-EBD3-400A-A9C3-A66045FF3B2F"),
+            AuditInfo = MockedAuditInfo.Get(),
+            FilterVersionId = FilterVersionMockedData.SomeFilterVersion_MunicipalityId.Id,
+            FilterOperator = FilterOperatorType.Contains,
+            FilterType = FilterDataType.String,
+            FilterValue = "Wert",
+        };
+
+    public static FilterCriteriaEntity SomeFilterCriteria_MunicipalityIdOther_FilterVersion
+        => new()
+        {
+            Id = Guid.Parse("E4EAFB5B-85D2-44A0-A694-401AF86B6A28"),
+            AuditInfo = MockedAuditInfo.Get(),
+            FilterVersionId = FilterVersionMockedData.SomeFilterVersion_MunicipalityIdOther.Id,
+            FilterOperator = FilterOperatorType.Contains,
+            FilterType = FilterDataType.String,
+            FilterValue = "Wert",
+        };
+
+    public static FilterCriteriaEntity SomeFilterCriteria_MunicipalityIdOther2_FilterVersion
+        => new()
+        {
+            Id = Guid.Parse("BF8473BC-2D9B-44E5-9350-94839A6B6C5E"),
+            ReferenceId = FilterReference.FirstName,
+            AuditInfo = MockedAuditInfo.Get(),
+            FilterVersionId = FilterVersionMockedData.SomeFilterVersion_MunicipalityIdOther2.Id,
+            FilterOperator = FilterOperatorType.Contains,
+            FilterType = FilterDataType.String,
+            FilterValue = "Natalie",
+        };
+
     public static IEnumerable<FilterCriteriaEntity> All
     {
         get
@@ -87,6 +121,9 @@ public static class FilterCriteriaMockedData
             yield return SomeFilterCriteria_MunicipalityIdOther2;
             yield return SomeFilterCriteria_MunicipalityIdOther3;
             yield return SomeFilterCriteria_MunicipalityId9170_SwissAbroad;
+            yield return SomeFilterCriteria_MunicipalityId_FilterVersion;
+            yield return SomeFilterCriteria_MunicipalityIdOther_FilterVersion;
+            yield return SomeFilterCriteria_MunicipalityIdOther2_FilterVersion;
         }
     }
 

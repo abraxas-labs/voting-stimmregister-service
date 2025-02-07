@@ -10,6 +10,7 @@ using Voting.Lib.Testing.Mocks;
 using Voting.Stimmregister.Abstractions.Adapter.Data.DataContexts;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
+using Voting.Stimmregister.Test.Utils.MockData.EVoting;
 
 namespace Voting.Stimmregister.Test.Utils.MockData;
 
@@ -47,6 +48,7 @@ public static class PersonMockedData
             RegisterId = Guid.Parse("d13ea9e8-ce71-4d8f-9121-05bba13033a8"),
             SourceSystemId = "04999781365",
             CreatedDate = MockedClock.GetDate(),
+            ModifiedDate = MockedClock.GetDate(),
             MunicipalityId = MunicipalityIdStGallen,
             MunicipalityName = MunicipalityNameStGallen,
             DomainOfInfluenceId = 7354,
@@ -72,6 +74,9 @@ public static class PersonMockedData
             ResidenceCountry = "CH",
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
+            IsHouseholder = true,
+            ResidenceBuildingId = 999999999,
+            ResidenceApartmentId = 999,
             VersionCount = 1,
         };
 
@@ -82,6 +87,71 @@ public static class PersonMockedData
             RegisterId = Person_3203_StGallen_1.RegisterId,
             SourceSystemId = "07988896311",
             CreatedDate = MockedClock.GetDate(),
+            ModifiedDate = MockedClock.GetDate(),
+            MunicipalityId = MunicipalityIdStGallen,
+            MunicipalityName = MunicipalityNameStGallen,
+            DomainOfInfluenceId = 7354,
+            FirstName = "Natalie",
+            OfficialName = "Lavigne",
+            DateOfBirth = new DateOnly(1999, 12, 30),
+            ResidenceAddressStreet = "Achslenstr.",
+            ResidenceAddressHouseNumber = "3",
+            ResidenceAddressZipCode = "9016",
+            ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
+            Country = "CH",
+            CountryNameShort = "Schweiz",
+            RestrictedVotingAndElectionRightFederation = false,
+            IsValid = true,
+            IsLatest = false,
+            DeletedDate = null,
+            ContactAddressCountryIdIso2 = "CH",
+            SourceSystemName = ImportSourceSystem.Loganto,
+            CantonBfs = CantonBfsStGallen,
+            VersionCount = 0,
+        };
+
+    public static PersonEntity Person_3203_StGallen_OldVersion_2
+        => new()
+        {
+            Id = Guid.Parse("41a69233-2c88-4e82-a72b-232c43fb1d63"),
+            RegisterId = Person_3203_StGallen_1.RegisterId,
+            SourceSystemId = "07988896311",
+            CreatedDate = MockedClock.GetDate(),
+            ModifiedDate = MockedClock.GetDate(-3),
+            MunicipalityId = MunicipalityIdStGallen,
+            MunicipalityName = MunicipalityNameStGallen,
+            DomainOfInfluenceId = 7354,
+            FirstName = "Natalie",
+            OfficialName = "Lavigne",
+            DateOfBirth = new DateOnly(1999, 12, 30),
+            ResidenceAddressStreet = "Achslenstr.",
+            ResidenceAddressHouseNumber = "3",
+            ResidenceAddressZipCode = "9016",
+            ResidenceAddressTown = "St. Gallen",
+            ResidenceCantonAbbreviation = "SG",
+            ResidenceCountry = "CH",
+            Country = "CH",
+            CountryNameShort = "Schweiz",
+            RestrictedVotingAndElectionRightFederation = false,
+            IsValid = true,
+            IsLatest = false,
+            DeletedDate = null,
+            ContactAddressCountryIdIso2 = "CH",
+            SourceSystemName = ImportSourceSystem.Loganto,
+            CantonBfs = CantonBfsStGallen,
+            VersionCount = 0,
+        };
+
+    public static PersonEntity Person_3203_StGallen_OldVersion_3
+        => new()
+        {
+            Id = Guid.Parse("ee1d32d7-f960-4990-bad4-b18765ed2550"),
+            RegisterId = Person_3203_StGallen_1.RegisterId,
+            SourceSystemId = "07988896311",
+            CreatedDate = MockedClock.GetDate(),
+            ModifiedDate = MockedClock.GetDate(-4),
             MunicipalityId = MunicipalityIdStGallen,
             MunicipalityName = MunicipalityNameStGallen,
             DomainOfInfluenceId = 7354,
@@ -415,7 +485,7 @@ public static class PersonMockedData
             SourceSystemId = "04977989856",
             CreatedDate = MockedClock.GetDate(),
             ModifiedDate = MockedClock.GetDate(),
-            Vn = 7563149003309,
+            Vn = EVotingUserMockedData.EVoter3.Ahvn13,
             MunicipalityId = MunicipalityIdGoldach,
             MunicipalityName = MunicipalityNameGoldach,
             DomainOfInfluenceId = 858,
@@ -482,6 +552,7 @@ public static class PersonMockedData
             RegisterId = Guid.Parse("f91f101e-1528-4f4f-8fba-0a480ce81cb1"),
             SourceSystemId = "09645231479",
             CreatedDate = MockedClock.GetDate(),
+            Vn = EVotingUserMockedData.EVoter4.Ahvn13,
             MunicipalityId = MunicipalityIdGoldach,
             MunicipalityName = MunicipalityNameGoldach,
             DomainOfInfluenceId = 858,
@@ -962,6 +1033,8 @@ public static class PersonMockedData
         {
             yield return Person_3203_StGallen_1;
             yield return Person_3203_StGallen_OldVersion_1;
+            yield return Person_3203_StGallen_OldVersion_2;
+            yield return Person_3203_StGallen_OldVersion_3;
             yield return Person_3203_StGallen_2;
             yield return Person_3203_StGallen_Foreigner_With_ResidenceValidDateRestriction;
             yield return Person_3203_StGallen_Foreigner_With_ResidenceValidDateRestriction_Expired;

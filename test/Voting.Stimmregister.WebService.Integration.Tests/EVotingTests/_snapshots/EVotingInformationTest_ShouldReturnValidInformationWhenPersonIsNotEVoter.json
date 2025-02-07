@@ -1,0 +1,32 @@
+{
+  "VotingStatus": 2,
+  "Person": {
+    "Ahvn13": 7566523572040,
+    "AllowedToVote": true,
+    "MunicipalityBfs": 3213,
+    "Nationality": "Schweiz",
+    "DateOfBirth": "1959-02-01",
+    "Sex": 3,
+    "OfficialName": "Ross",
+    "FirstName": "Mikael",
+    "Address": {
+      "Street": "Libellenstr.",
+      "PostOfficeBoxText": "",
+      "HouseNumber": "6",
+      "Town": "Goldach",
+      "ZipCode": "9016"
+    }
+  },
+  "CantonStatistic": {
+    "Bfs": "17",
+    "VoterTotalCount": 99000,
+    "EVoterTotalCount": 18000
+  },
+  "MunicipalityStatistic": {
+    "Bfs": "3213",
+    "VoterTotalCount": 9000,
+    "EVoterTotalCount": 0
+  },
+  "ProcessStatusCode": 0,
+  "ProcessStatusMessage": ""
+}

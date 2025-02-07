@@ -551,6 +551,26 @@ public class LogantoPersonCsvRecord : IPersonCsvRecord
     [Name("WOHNVIERTEL_TXT")]
     public string? ResidentialDistrictCircleName { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the person is the householder as xs:boolean (eCH unknown), i.e. 'false'.
+    /// </summary>
+    [BooleanFalseValues("")]
+    [BooleanTrueValues("X")]
+    [Name("HEAD_OF_HH_TYPE")]
+    public bool IsHouseholder { get; set; }
+
+    /// <summary>
+    /// Gets or sets the residence building id, i.e. '10'.
+    /// </summary>
+    [Name("EGID")]
+    public int? ResidenceBuildingId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the residence apartment/flat id, i.e. '10'.
+    /// </summary>
+    [Name("EWID")]
+    public int? ResidenceApartmentId { get; set; }
+
     public string BuildRecordIdentifier()
         => $"{FirstName} {OfficialName} ({DateOfBirth}, {Vn})";
 

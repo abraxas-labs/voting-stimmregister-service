@@ -49,6 +49,11 @@
             <religionData>
               <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
             </religionData>
+            <extension>
+              <isHouseholder xmlns="">false</isHouseholder>
+              <residenceBuildingId xsi:nil="true" xmlns="" />
+              <residenceApartmentId xsi:nil="true" xmlns="" />
+            </extension>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Zürich</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">ZH</canton>
@@ -215,6 +220,11 @@
             <religionData>
               <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
             </religionData>
+            <extension>
+              <isHouseholder xmlns="">false</isHouseholder>
+              <residenceBuildingId xsi:nil="true" xmlns="" />
+              <residenceApartmentId xsi:nil="true" xmlns="" />
+            </extension>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">St. Gallen</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">SG</canton>
@@ -337,6 +347,9 @@
                 <line6>Berlin </line6>
                 <line7>EH3 9QN </line7>
               </address>
+              <isHouseholder xmlns="">false</isHouseholder>
+              <residenceBuildingId xsi:nil="true" xmlns="" />
+              <residenceApartmentId xsi:nil="true" xmlns="" />
             </extension>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Basel Landschaft</originName>
@@ -431,6 +444,11 @@
             <religionData>
               <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">121</religion>
             </religionData>
+            <extension>
+              <isHouseholder xmlns="">false</isHouseholder>
+              <residenceBuildingId xsi:nil="true" xmlns="" />
+              <residenceApartmentId xsi:nil="true" xmlns="" />
+            </extension>
             <placeOfOrigin>
               <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Mörschwil</originName>
               <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">SG</canton>

@@ -18,6 +18,7 @@ public class ImportsConfig
 {
     private IReadOnlyDictionary<int, DateTime>? _municipalityIdBlacklistById;
     private IReadOnlyDictionary<int, AllowedPersonImportSourceSystemConfig>? _allowedPersonImportSourceSystemByMunicipalityId;
+    private List<AllowedPersonImportSourceSystemConfig> _allowedPersonImportSourceSystem = new();
 
     /// <summary>
     /// Gets or sets the municipality blacklist.
@@ -89,7 +90,15 @@ public class ImportsConfig
     /// <summary>
     /// Gets or sets the allowed person import source system.
     /// </summary>
-    public List<AllowedPersonImportSourceSystemConfig> AllowedPersonImportSourceSystem { get; set; } = new();
+    public List<AllowedPersonImportSourceSystemConfig> AllowedPersonImportSourceSystem
+    {
+        get => _allowedPersonImportSourceSystem;
+        set
+        {
+            _allowedPersonImportSourceSystem = value;
+            _allowedPersonImportSourceSystemByMunicipalityId = null; // Reset cache
+        }
+    }
 
     /// <summary>
     /// Gets the allowed person import source system configuration by municipality id.

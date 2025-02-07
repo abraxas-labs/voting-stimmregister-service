@@ -26,12 +26,7 @@ public class BfsStatisticEntity : AuditedEntity
     public int EVoterTotalCount { get; set; }
 
     /// <summary>
-    /// Gets or sets the amount of e-voter registrations.
+    /// Gets or sets the canton bfs number, i.e. '17'.
     /// </summary>
-    public int EVoterRegistrationCount { get; set; }
-
-    /// <summary>
-    /// Gets or sets the amount of e-voter deregistration.
-    /// </summary>
-    public int EVoterDeregistrationCount { get; set; }
+    public short CantonBfs { get; set; }
 }
