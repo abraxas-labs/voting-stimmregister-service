@@ -134,6 +134,9 @@
               </dateOfBirth>
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
+            <religionData>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+            </religionData>
           </foreignerPerson>
           <municipality>
             <municipalityId xmlns="http://www.ech.ch/xmlns/eCH-0007/6">9170</municipalityId>

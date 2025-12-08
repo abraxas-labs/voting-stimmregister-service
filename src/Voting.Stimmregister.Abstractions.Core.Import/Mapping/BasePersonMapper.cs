@@ -70,7 +70,7 @@ public abstract class BasePersonMapper<TRecord> : IPersonRecordEntityMapper<TRec
         entity.ContactAddressExtensionLine2 = state.MunicipalityAddress.AddressLine2;
         entity.ContactAddressTown = state.MunicipalityAddress.City;
         entity.ContactAddressCountryIdIso2 =
-            _countryHelperService.GetCountryTwoLetterIsoCode(state.MunicipalityAddress.Country, null) ?? "CH";
+            _countryHelperService.GetCountryTwoLetterIsoCode(state.MunicipalityAddress.Country) ?? "CH";
         entity.ContactAddressZipCode = state.MunicipalityAddress.ZipCode;
 
         // VOTING Basis provides the street name and number only in a concatenated form. Therefore, we save the whole string in one field as well.

@@ -12,7 +12,7 @@ public class CobraUtilUnitTest
 {
     [Theory]
     [InlineData("21.09.1960", 21, 9, 1960, false)]
-    public void WhenValidDateSting_ShouldReturnRightDate(
+    public void WhenValidDateString_ShouldReturnRightDate(
         string dateString,
         int expectedDay,
         int expectedMonth,
@@ -29,7 +29,7 @@ public class CobraUtilUnitTest
     [InlineData("")]
     [InlineData("12.31.2022")]
     [InlineData("29.02.2021")]
-    public void WhenInvalidDateSting_ShouldReturnDateMinValueAdjusted(string dateString)
+    public void WhenInvalidDateString_ShouldReturnDateMinValueAdjusted(string dateString)
     {
         var parsedDateOnly = CobraUtil.ConvertDateOfBirth(dateString, out var dateAdjusted);
         Assert.True(dateAdjusted);

@@ -84,7 +84,8 @@
       "ContactAddressPostOfficeBoxNumber": null,
       "IsHouseholder": false,
       "ResidenceBuildingId": 0,
-      "ResidenceApartmentId": 0
+      "ResidenceApartmentId": 0,
+      "EVotingEmail": ""
     }
   ]
 }

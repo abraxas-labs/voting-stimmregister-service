@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -51,24 +51,8 @@ public class ServerTimingMiddleware : IMiddleware
 
         public string BuildHeaderString()
         {
-            var sb = new StringBuilder();
-            foreach (var activity in _activities.Values)
-            {
-                sb.Append(',');
-                sb.Append(activity.Name);
-                sb.Append(";dur=");
-                sb.Append((int)activity.Duration.TotalMilliseconds);
-                sb.Append(";desc=\"");
-                sb.Append(activity.Description);
-                sb.Append('"');
-            }
-
-            if (!_activities.IsEmpty)
-            {
-                sb.Remove(0, 1); // rm initial ','
-            }
-
-            return sb.ToString();
+            return string.Join(",", _activities.Values.Select(activity =>
+                $"{activity.Name};dur={(int)activity.Duration.TotalMilliseconds};desc=\"{activity.Description}\""));
         }
     }
 }

@@ -30,11 +30,8 @@ tools/Voting.Stimmregister.ImportClient/Files/DomainOfInfluence
 tools/Voting.Stimmregister.ImportClient/Files/People
 
 # Anonymizer Files
-tools/Voting.Stimmregister.Anonymizer/Files/Source/MunicipalityDirectory
-tools/Voting.Stimmregister.Anonymizer/Files/Source/PersonCobra
-tools/Voting.Stimmregister.Anonymizer/Files/Target/PersonCobra
-tools/Voting.Stimmregister.Anonymizer/Files/Source/PersonLoganto
-tools/Voting.Stimmregister.Anonymizer/Files/Target/PersonLoganto
+tools/Voting.Stimmregister.Anonymizer/Files/Source/**
+tools/Voting.Stimmregister.Anonymizer/Files/Target/**
 
 # Logs
 logs/

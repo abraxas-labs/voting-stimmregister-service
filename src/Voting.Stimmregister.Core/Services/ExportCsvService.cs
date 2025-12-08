@@ -124,12 +124,11 @@ public class ExportCsvService : IExportCsvService
         IAsyncEnumerable<PersonEntity> persons,
         IDbContextTransaction transaction,
         ExportCsvOptions options,
-        Action onComplete)
+        Func<Task> onComplete)
     {
-        return BuildCsvExport<T>(persons, transaction, options, _ =>
+        return BuildCsvExport<T>(persons, transaction, options, async _ =>
         {
-            onComplete();
-            return Task.CompletedTask;
+            await onComplete();
         });
     }
 

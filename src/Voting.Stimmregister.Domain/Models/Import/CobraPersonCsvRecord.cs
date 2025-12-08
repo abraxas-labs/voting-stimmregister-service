@@ -6,7 +6,7 @@ using CsvHelper.Configuration.Attributes;
 namespace Voting.Stimmregister.Domain.Models.Import;
 
 /// <summary>
-/// CSV import model for person records from COBRA.
+/// CSV import model for person records from Cobra (SG).
 /// </summary>
 public class CobraPersonCsvRecord : IPersonCsvRecord
 {

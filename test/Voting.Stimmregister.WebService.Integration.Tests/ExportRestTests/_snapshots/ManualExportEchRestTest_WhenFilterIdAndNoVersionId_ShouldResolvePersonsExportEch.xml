@@ -156,6 +156,7 @@
         <swiss>
           <swissDomesticPerson>
             <personIdentification>
+              <vn xmlns="http://www.ech.ch/xmlns/eCH-0044/4">7568093905969</vn>
               <localPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
                 <personIdCategory>LOC.EW</personIdCategory>
                 <personId>09876256412</personId>

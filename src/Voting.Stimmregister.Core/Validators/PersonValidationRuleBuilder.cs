@@ -26,4 +26,22 @@ public static class PersonValidationRuleBuilder
         return ruleBuilder.Must(u => string.IsNullOrEmpty(u) || u!.Trim().Length > 0)
             .WithMessage("Das Feld enthält ungültige Whitespaces.");
     }
+
+    /// <summary>
+    /// See eCH-0044:vnType.
+    /// </summary>
+    /// <typeparam name="T">The type of the object being validated.</typeparam>
+    /// <param name="ruleBuilder">The rule builder for the property being validated.</param>
+    /// <returns>An <see cref="IRuleBuilderOptions{T, TProperty}"/> to configure the validation rule.</returns>
+    public static IRuleBuilderOptions<T, long?> MustBeValidVn<T>(this IRuleBuilder<T, long?> ruleBuilder)
+    {
+        return ruleBuilder.InclusiveBetween(7560000000001, 7569999999999);
+    }
+
+    public static IRuleBuilderOptions<T, int> MustBeValidMunicipalityIdType<T>(this IRuleBuilder<T, int> ruleBuilder)
+    {
+        return ruleBuilder
+            .NotEmpty()
+            .InclusiveBetween(1, 9999);
+    }
 }

@@ -2,6 +2,7 @@
 // For license information see LICENSE file
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Voting.Stimmregister.Core.Diagnostics;
 using Voting.Stimmregister.Domain.Cryptography;
 using Voting.Stimmregister.Domain.Models;
@@ -28,39 +29,39 @@ public class CreateVerifySignatureService : ICreateSignatureService, IVerifySign
         _activityFactory = activityFactory;
     }
 
-    public void SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<DomainOfInfluenceEntity> dois)
+    public Task SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<DomainOfInfluenceEntity> dois)
     {
         using var activity = _activityFactory.Start("sign-integrity-dois");
         var payload = _signaturePayloadBuilderFactory.Get(integrity).Build((integrity, dois));
-        _signatureCreator.Sign(payload, integrity);
+        return _signatureCreator.Sign(payload, integrity);
     }
 
-    public void SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons)
+    public Task SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons)
     {
         using var activity = _activityFactory.Start("sign-integrity-persons");
         var payload = _signaturePayloadBuilderFactory.Get(integrity).Build((integrity, persons));
-        _signatureCreator.Sign(payload, integrity);
+        return _signatureCreator.Sign(payload, integrity);
     }
 
-    public void SignFilterVersion(FilterVersionEntity filterVersion, IReadOnlyCollection<PersonEntity> persons)
+    public Task SignFilterVersion(FilterVersionEntity filterVersion, IReadOnlyCollection<PersonEntity> persons)
     {
         using var activity = _activityFactory.Start("sign-filter-version");
         var payload = _signaturePayloadBuilderFactory.Get(filterVersion).Build((filterVersion, persons));
-        _signatureCreator.Sign(payload, filterVersion);
+        return _signatureCreator.Sign(payload, filterVersion);
     }
 
-    public void EnsureBfsIntegritySignatureValid(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons)
+    public Task EnsureBfsIntegritySignatureValid(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons)
     {
         using var activity = _activityFactory.Start("assert-bfs-integrity-signature");
         var payload = _signaturePayloadBuilderFactory.Get(integrity).Build((integrity, persons));
-        _signatureVerifier.EnsureValidSignature(integrity, payload);
+        return _signatureVerifier.EnsureValidSignature(integrity, payload);
     }
 
-    public void EnsureFilterVersionSignatureValid(FilterVersionEntity filterVersion, IReadOnlyCollection<PersonEntity> persons)
+    public Task EnsureFilterVersionSignatureValid(FilterVersionEntity filterVersion, IReadOnlyCollection<PersonEntity> persons)
     {
         using var activity = _activityFactory.Start("assert-filter-version-signature");
         var payload = _signaturePayloadBuilderFactory.Get(filterVersion).Build((filterVersion, persons));
-        _signatureVerifier.EnsureValidSignature(filterVersion, payload);
+        return _signatureVerifier.EnsureValidSignature(filterVersion, payload);
     }
 
     public IIncrementalSignatureCreator<PersonEntity> CreateFilterVersionSignatureCreator(FilterVersionEntity filterVersion)

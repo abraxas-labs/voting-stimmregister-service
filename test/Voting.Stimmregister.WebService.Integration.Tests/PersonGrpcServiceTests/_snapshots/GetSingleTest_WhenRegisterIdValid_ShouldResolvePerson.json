@@ -77,7 +77,8 @@
     "ContactAddressPostOfficeBoxNumber": null,
     "IsHouseholder": true,
     "ResidenceBuildingId": 999999999,
-    "ResidenceApartmentId": 999
+    "ResidenceApartmentId": 999,
+    "EVotingEmail": ""
   },
   "LatestDomainOfInfluences": [
     {

@@ -9,10 +9,10 @@ namespace Voting.Stimmregister.Domain.Cache;
 public interface IEVotersCache
 {
     /// <summary>
-    /// Returns a set of all ahvn13 which have evoting enabled
+    /// Returns a dictionary of all ahvn13 which have evoting enabled, together with their optional e-voting email,
     /// in the canton of the given municipality id.
     /// </summary>
     /// <param name="municipalityId">The municipality id.</param>
-    /// <returns>A set of ahvn13.</returns>
-    Task<HashSet<long>> GetEnabledAhvN13ForCantonWithMunicipalityId(int municipalityId);
+    /// <returns>A dictionary of ahvn13 and optional emails.</returns>
+    Task<Dictionary<long, string?>> GetEnabledAhvN13WithEmailForCantonWithMunicipalityId(int municipalityId);
 }

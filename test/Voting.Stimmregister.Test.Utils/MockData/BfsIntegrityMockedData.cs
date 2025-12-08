@@ -23,8 +23,8 @@ public static class BfsIntegrityMockedData
 {
     private static readonly IReadOnlyDictionary<Guid, string> _signatures = new Dictionary<Guid, string>
     {
-        [Guid.Parse("28da12c1-6e19-4e94-9f68-751014ffbae1")] = "AdHW+k3CyyOTELoY9iuQcW8c6QQtoAr6euk30C5IcF6/wGZCpnNdCuQW2OYy6E1GNRik3zsYmSx0Xtwx4KyHqwFPAGWKCwySr2YU2bUL9KexuAOHlVFn4UV1pEA6AujZuVal6E6fAAfwzBVcSpUwlt2cYz6uDDFd3Ml6tDDQVExxgVvU",
-        [Guid.Parse("f04d2243-d71a-4dea-931d-871e4f6fa4eb")] = "AFhGYOEvNFb8tGGs3DWycsiz0lUuWBTRH30xxYLqopM9v/+zF/Er1FeGvDYF9iiTUn0lam3QMSwYihiVFT7rcHmfABE37aBzbZSraLCZSmkQfcXJntZr/8GopOnXkdvie9/Siy4oweTxfbBtl3XPvcnPSnvgXWHy4WOi3/Ts4+YgerlT",
+        [Guid.Parse("28da12c1-6e19-4e94-9f68-751014ffbae1")] = "ouaZYfDUiRSz8aS5HXLV/kjkuFpxqcktLMj/hB2llC+y/iMsJTkcEQRmLjB3bhNGSA6hgaPWxHFv0qrkBabmpw==",
+        [Guid.Parse("f04d2243-d71a-4dea-931d-871e4f6fa4eb")] = "ExacLBeMBVMVUe4CoqlYyUdNGeTs+o4r2aC3Wj5gH+4Ly1dvlvg5b/atSf3K7jJx3ZPvdbvEYNWQaVzAleEgOQ==",
     };
 
     public static BfsIntegrityEntity Person_3203_UpToDate
@@ -85,7 +85,7 @@ public static class BfsIntegrityMockedData
             }
 
             integrity.Signature = Convert.FromBase64String(signatureB64);
-            integrity.SignatureVersion = 1;
+            integrity.SignatureVersion = 2;
             integrity.SignatureKeyId = "VOSR_ECDSA_PUBLIC_KEY_PRE";
         }
 
@@ -100,13 +100,14 @@ public static class BfsIntegrityMockedData
             .Where(x => x.IsLatest && !x.IsDeleted && bfs.Contains(x.MunicipalityId.ToString()))
             .Include(x => x.PersonDois.OrderBy(y => y.Id))
             .ToListAsync();
+
         var personsByBfs = persons
             .GroupBy(x => x.MunicipalityId)
             .ToDictionary(x => x.Key.ToString(), x => x.OrderBy(y => y.Id).ToList());
 
         foreach (var integrity in toSign)
         {
-            signer.SignIntegrity(integrity, personsByBfs.GetValueOrDefault(integrity.Bfs) ?? new List<PersonEntity>());
+            await signer.SignIntegrity(integrity, personsByBfs.GetValueOrDefault(integrity.Bfs) ?? []);
         }
 
         // all integrity entities should have a valid signature
@@ -118,7 +119,7 @@ public static class BfsIntegrityMockedData
         // and update the _signatures dictionary.
         foreach (var integrity in all)
         {
-            signatureVerifier.EnsureBfsIntegritySignatureValid(integrity, personsByBfs.GetValueOrDefault(integrity.Bfs) ?? new List<PersonEntity>());
+            await signatureVerifier.EnsureBfsIntegritySignatureValid(integrity, personsByBfs.GetValueOrDefault(integrity.Bfs) ?? new List<PersonEntity>());
         }
 
         if (toSign.Count > 0)

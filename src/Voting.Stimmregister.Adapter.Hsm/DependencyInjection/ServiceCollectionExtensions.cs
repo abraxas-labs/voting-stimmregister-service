@@ -2,7 +2,7 @@
 // For license information see LICENSE file
 
 using Microsoft.Extensions.DependencyInjection;
-using Voting.Lib.Cryptography.Configuration;
+using Voting.Lib.Cryptography.Pkcs11.Configuration;
 using Voting.Stimmregister.Abstractions.Adapter.Hsm;
 using Voting.Stimmregister.Adapter.Hsm.Configuration;
 using Voting.Stimmregister.Adapter.Hsm.Services;
@@ -31,13 +31,12 @@ public static class ServiceCollectionExtensions
                 LibraryPath = hsmConfig.LibraryPath,
                 LoginPin = hsmConfig.LoginPin,
                 SlotId = hsmConfig.SlotId,
-                PublicKeyCkaLabel = hsmConfig.VosrEcdsaPublicKey,
             };
             services.AddVotingLibPkcs11(dummyConfig);
         }
         else
         {
-            services.AddVotingLibPkcs11Mock();
+            services.AddVotingLibCryptoProviderMock();
         }
 
         return services

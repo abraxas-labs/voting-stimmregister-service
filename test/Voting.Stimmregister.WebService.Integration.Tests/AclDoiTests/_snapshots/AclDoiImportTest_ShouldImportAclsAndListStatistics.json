@@ -58,13 +58,11 @@
       "MunicipalityId": null,
       "MunicipalityName": null,
       "ProcessingErrors": "",
-      "HasValidationErrors": true,
-      "EntitiesWithValidationErrors": [
-        "cf0fb17f-8e71-4f9e-ab80-6412d42d00aa"
-      ],
+      "HasValidationErrors": false,
+      "EntitiesWithValidationErrors": [],
       "RecordNumbersWithValidationErrors": [],
       "RecordValidationErrors": null,
-      "ImportStatus": 4,
+      "ImportStatus": 5,
       "ImportType": 3,
       "WorkerName": "test-runner",
       "IsLatest": true,

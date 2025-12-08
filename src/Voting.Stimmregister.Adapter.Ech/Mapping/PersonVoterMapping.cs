@@ -151,7 +151,7 @@ public class PersonVoterMapping : IPersonVoterMapping
             Town = person.ContactAddressTown,
             Country = new CountryType
             {
-                CountryIdIso2 = countryInfo?.Iso2Id,
+                CountryIdIso2 = countryInfo?.Iso2,
                 CountryNameShort = countryInfo?.ShortNameDe ?? AddressCountryUnknown,
             },
         };
@@ -175,7 +175,7 @@ public class PersonVoterMapping : IPersonVoterMapping
             Town = PlaceholderIfEmptyOrNull(person.ResidenceAddressTown ?? person.ContactAddressTown),
             Country = new CountryType
             {
-                CountryIdIso2 = countryInfo?.Iso2Id,
+                CountryIdIso2 = countryInfo?.Iso2,
                 CountryNameShort = countryInfo?.ShortNameDe ?? AddressCountryUnknown,
             },
             PostOfficeBoxText = person.ResidenceAddressPostOfficeBoxText,
@@ -258,6 +258,11 @@ public class PersonVoterMapping : IPersonVoterMapping
             DateOfBirth = person.DateOfBirth.ToEchDatePartiallyKnown(),
         };
 
+        var religionData = new ReligionDataType
+        {
+            Religion = ((int)person.Religion).ToString("D3"),
+        };
+
         personIdentification.OtherPersonId.AddRange(BuildOtherPersonIds(person));
 
         var swissMunicipality = new SwissMunicipalityType
@@ -277,6 +282,7 @@ public class PersonVoterMapping : IPersonVoterMapping
                     {
                         PersonIdentification = personIdentification,
                         LanguageOfCorrespondance = language,
+                        ReligionData = religionData,
                     },
                     Municipality = swissMunicipality,
                 },
@@ -288,10 +294,7 @@ public class PersonVoterMapping : IPersonVoterMapping
         {
             PersonIdentification = personIdentification,
             LanguageOfCorrespondance = language,
-            ReligionData = new ReligionDataType
-            {
-                Religion = ((int)person.Religion).ToString("D3"),
-            },
+            ReligionData = religionData,
         };
 
         swissPerson.PlaceOfOrigin.AddRange(BuildPlaceOfOrigins(person));
@@ -343,8 +346,8 @@ public class PersonVoterMapping : IPersonVoterMapping
                     person.MoveInArrivalDate?.ToDateTime(TimeOnly.MinValue) ?? person.CreatedDate,
                 ResidenceCountry = new Ech0008_3_0.CountryType
                 {
-                    CountryId = (ushort?)residenceCountryInfo?.Id,
-                    CountryIdIso2 = residenceCountryInfo?.Iso2Id,
+                    CountryId = (ushort?)residenceCountryInfo?.BfsId,
+                    CountryIdIso2 = residenceCountryInfo?.Iso2,
                     CountryNameShort = residenceCountryInfo?.ShortNameEn ??
                                        person.ResidenceCountry ?? AddressCountryUnknown,
                 },

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
 using Voting.Lib.Common.DependencyInjection;
+using Voting.Lib.Cryptography.Extensions;
 using Voting.Lib.Grpc.DependencyInjection;
 using Voting.Lib.Grpc.Interceptors;
 using Voting.Lib.Rest.Middleware;
@@ -27,6 +28,7 @@ using Voting.Stimmregister.Adapter.VotingBasis.DependencyInjection;
 using Voting.Stimmregister.Adapter.VotingIam.DependencyInjection;
 using Voting.Stimmregister.Core.DependencyInjection;
 using Voting.Stimmregister.Core.Import.Cobra.DependencyInjection;
+using Voting.Stimmregister.Core.Import.Cobra.Tg.DependencyInjection;
 using Voting.Stimmregister.Core.Import.Innosolv.DependencyInjection;
 using Voting.Stimmregister.Core.Import.Loganto.DependencyInjection;
 using Voting.Stimmregister.Domain.Configuration;
@@ -69,13 +71,18 @@ public class Startup
         services.AddAdapterLogantoServices();
         services.AddAdapterEvotingLogantoServices(AppConfig.EVoting.LogantoServiceUrl);
         services.AddAdapterCobraServices();
+        services.AddAdapterCobraTgServices();
         services.AddAdapterInnosolv();
         services.AddAdapterEVotingKewrServices(AppConfig.EVoting.KewrServiceUrl);
         services.AddAdapterVotingBasisServices(AppConfig.Imports.VotingBasis);
         services.AddCertificatePinning(AppConfig.CertificatePinning);
         services.AddAdapterHsmServices(AppConfig.Hsm, AppConfig.EnablePkcs11Mock);
         services.AddVotingLibPrometheusAdapter(new() { Interval = AppConfig.PrometheusAdapterInterval });
-        services.AddAutoMapper(typeof(ArchMarker), typeof(Abstractions.Adapter.Markers.ArchMarker), typeof(Core.Markers.ArchMarker));
+        services.AddAutoMapper(
+            typeof(ArchMarker),
+            typeof(Abstractions.Adapter.Markers.ArchMarker),
+            typeof(Core.Markers.ArchMarker),
+            typeof(Domain.Markers.ArchMarker));
         services.AddSecureConnectServiceAccount(
             EVotingConfig.SecureConnectSharedEVotingOptionKey,
             AppConfig.EVoting.SecureConnectSharedEVoting);
@@ -169,6 +176,8 @@ public class Startup
             options.ServiceAccount = AppConfig.SecureConnect.ServiceAccount;
             options.ServiceAccountPassword = AppConfig.SecureConnect.ServiceAccountPassword;
             options.ServiceAccountScopes = AppConfig.SecureConnect.ServiceAccountScopes;
+            options.AllowOnBehalfToken = AppConfig.SecureConnect.AllowOnBehalfToken;
+            options.AllowAccessToken = AppConfig.SecureConnect.AllowAccessToken;
         });
 
     protected virtual void ConfigureDatabase(DbContextOptionsBuilder db)
@@ -188,13 +197,14 @@ public class Startup
         endpoints.MapGrpcService<FilterGrpcService>();
         endpoints.MapGrpcService<ImportStatisticGrpcService>();
         endpoints.MapGrpcService<RegistrationStatisticGrpcService>();
+        endpoints.MapGrpcService<EcollectingGrpcService>();
     }
 
     private void ConfigureHealthChecks(IHealthChecksBuilder checks)
     {
         checks
             .AddDbContextCheck<DataContext>()
-            .AddPkcs11HealthCheck()
+            .AddCryptoProviderHealthCheck("Pkcs11")
             .ForwardToPrometheus();
     }
 }

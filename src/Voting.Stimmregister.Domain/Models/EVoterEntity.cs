@@ -14,4 +14,6 @@ public class EVoterEntity : AuditedEntity
     public bool? EVoterFlag { get; set; } = false;
 
     public string? ContextId { get; set; }
+
+    public string? EVotingEmail { get; set; }
 }

@@ -2,6 +2,7 @@
 // For license information see LICENSE file
 
 using FluentAssertions;
+using Voting.Stimmregister.Domain.Mapping;
 using Voting.Stimmregister.Domain.Utils;
 using Xunit;
 
@@ -9,27 +10,44 @@ namespace Voting.Stimmregister.Domain.Unit.Tests.Utils;
 
 public class CountryHelperServiceTests
 {
-    private readonly ICountryHelperService _countryHelperService = new CountryHelperService();
+    private readonly ICountryHelperService _countryHelperService;
+
+    public CountryHelperServiceTests()
+    {
+        var mapper = new AutoMapper.MapperConfiguration(cfg => cfg.AddProfile<EchMappingProfile>()).CreateMapper();
+        _countryHelperService = new CountryHelperService(mapper);
+    }
 
     [Theory]
-    [InlineData("GERMANY", "7777", "DE")]
-    [InlineData("Switzerland", "8100", "CH")]
-    [InlineData("UNITED STATES OF AMERICA", "8439", "US")]
-    [InlineData("SRI LANKA", null, "LK")]
-    public void WhenPassingValidCountryOrBfs_ShouldResolveIso2(string countryInput, string? countryNumberInput, string expectedCountryOutput)
+    [InlineData("GERMANY", "7777", null, "DE")]
+    [InlineData("Switzerland", "8100", null, "CH")]
+    [InlineData("UNITED STATES OF AMERICA", "8439", null, "US")]
+    [InlineData("UNITED STATES OF AMERICA", null, "US", "US")]
+    [InlineData("SRI LANKA", null, null, "LK")]
+    [InlineData(null, null, "LK", "LK")]
+    public void WhenPassingValidCountryOrBfs_ShouldResolveIso2(string? countryInput, string? countryNumberInput, string? iso2Input, string expectedCountryOutput)
     {
-        var countryOutput = _countryHelperService.GetCountryTwoLetterIsoCode(countryInput, countryNumberInput);
+        var countryOutput = _countryHelperService.GetCountryTwoLetterIsoCode(countryInput, countryNumberInput, iso2Input);
         Assert.Equal(expectedCountryOutput, countryOutput);
     }
 
     [Theory]
-    [InlineData("UNITED STATES OF AMERICA", null)]
-    [InlineData(null, "1")]
-    [InlineData("", "")]
-    [InlineData(null, null)]
-    public void WhenPassingInvalidCountryAndBfs_ShouldReturnNull(string? countryInput, string? countryNumberInput)
+    [InlineData("8551", "AE")]
+    public void WhenPassingCountryNumberNotRecognizedByCh_ShouldResolveIso2(string countryNumberInput, string expectedIso2)
     {
-        var countryOutput = _countryHelperService.GetCountryTwoLetterIsoCode(countryInput, countryNumberInput);
+        var iso2Code = _countryHelperService.GetCountryTwoLetterIsoCode(null, countryNumberInput);
+        Assert.Equal(expectedIso2, iso2Code);
+    }
+
+    [Theory]
+    [InlineData("UNITED STATES OF AMERICA", null, null)]
+    [InlineData(null, "1", null)]
+    [InlineData(null, null, "XY")]
+    [InlineData("", "", "")]
+    [InlineData(null, null, null)]
+    public void WhenPassingInvalidCountryAndBfs_ShouldReturnNull(string? countryInput, string? countryNumberInput, string? iso2Input)
+    {
+        var countryOutput = _countryHelperService.GetCountryTwoLetterIsoCode(countryInput, countryNumberInput, iso2Input);
         Assert.Null(countryOutput);
     }
 
@@ -39,7 +57,7 @@ public class CountryHelperServiceTests
     public void WhenPassingInvalidCountryIso2Code_ShouldReturnNull(string countryTwoLetterCode, int expectedBfs)
     {
         var countryInfo = _countryHelperService.GetCountryInfo(countryTwoLetterCode);
-        Assert.Equal(expectedBfs, countryInfo!.Id);
+        Assert.Equal(expectedBfs, countryInfo!.BfsId);
     }
 
     [Theory]
@@ -76,7 +94,7 @@ public class CountryHelperServiceTests
     {
         var countryOutput = _countryHelperService.GetLogantoCountryTwoLetterIsoAndShortNameDe(countryIdInput);
         countryOutput.Should().NotBeNull();
-        countryOutput!.Iso2Id.Should().Be(expactedIso2Code);
+        countryOutput!.Iso2.Should().Be(expactedIso2Code);
         countryOutput!.ShortNameDe.Should().Be(expactedName);
     }
 }

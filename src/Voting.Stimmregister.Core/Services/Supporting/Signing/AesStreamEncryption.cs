@@ -32,7 +32,7 @@ public class AesStreamEncryption : IStreamDecryptionService, IStreamEncryptionSe
     }
 
     /// <inheritdoc />
-    public (Stream EncryptedStream, AesCipherMetadata AesCipherMetadata) CreateAesMacEncryptCryptoStream(Stream target)
+    public async Task<(Stream EncryptedStream, AesCipherMetadata AesCipherMetadata)> CreateAesMacEncryptCryptoStream(Stream target)
     {
         // Initialize crypto parameters
         var iv = new byte[IvSize];
@@ -44,8 +44,8 @@ public class AesStreamEncryption : IStreamDecryptionService, IStreamEncryptionSe
         var macKey = new byte[MacKeySize];
         RandomNumberGenerator.Fill(macKey);
 
-        var encryptedAesKey = _hsmCryptoAdapter.EncryptAes(aesKey, _symmetricKeyConfig);
-        var encryptedMacKey = _hsmCryptoAdapter.EncryptAes(macKey, _symmetricKeyConfig);
+        var encryptedAesKey = await _hsmCryptoAdapter.EncryptAes(aesKey, _symmetricKeyConfig);
+        var encryptedMacKey = await _hsmCryptoAdapter.EncryptAes(macKey, _symmetricKeyConfig);
         var cipher = new AesCipherMetadata(iv, encryptedAesKey, encryptedMacKey);
         var macStream = new HmacSha256Stream(target, macKey, cipher);
 
@@ -57,9 +57,9 @@ public class AesStreamEncryption : IStreamDecryptionService, IStreamEncryptionSe
     }
 
     /// <inheritdoc />
-    public Stream CreateAesMacDecryptCryptoStream(Stream inputStream, AesCipherMetadata aesCipherMetadata)
+    public async Task<Stream> CreateAesMacDecryptCryptoStream(Stream inputStream, AesCipherMetadata aesCipherMetadata)
     {
-        var aesKey = _hsmCryptoAdapter.DecryptAes(aesCipherMetadata.EncryptedAesKey, _symmetricKeyConfig);
+        var aesKey = await _hsmCryptoAdapter.DecryptAes(aesCipherMetadata.EncryptedAesKey, _symmetricKeyConfig);
 
         using var aes = CreateAes(aesCipherMetadata.AesIv, aesKey);
 
@@ -70,7 +70,7 @@ public class AesStreamEncryption : IStreamDecryptionService, IStreamEncryptionSe
     /// <inheritdoc />
     public async Task<bool> VerifyHMAC(Stream inputStream, AesCipherMetadata aesCipherMetadata)
     {
-        var macKey = _hsmCryptoAdapter.DecryptAes(aesCipherMetadata.EncryptedMacKey, _symmetricKeyConfig);
+        var macKey = await _hsmCryptoAdapter.DecryptAes(aesCipherMetadata.EncryptedMacKey, _symmetricKeyConfig);
         using var hmac = new HMACSHA256(macKey);
         await using var hmacCryptoStream = new CryptoStream(inputStream, hmac, CryptoStreamMode.Read, true);
 

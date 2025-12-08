@@ -11,6 +11,7 @@ using FluentAssertions;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.Constants.EVoting;
+using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Test.Utils.Helpers;
 using Voting.Stimmregister.Test.Utils.MockData;
 using Voting.Stimmregister.Test.Utils.MockData.EVoting;
@@ -54,6 +55,78 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
     public async Task ShouldReturnValidInformationWhenPersonIsEVoter()
     {
         _config.EnableKewrAndLoganto = false;
+
+        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
+        {
+            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid4Formatted,
+            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
+        });
+
+        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
+
+        content.Should().NotBeNull();
+        content.MatchSnapshot();
+    }
+
+    [Fact]
+    public async Task ShouldReturnEmailWhenPersonHasEVotingEmail()
+    {
+        _config.EnableKewrAndLoganto = false;
+
+        await ModifyDbEntities<PersonEntity>(
+            p => p.Vn == EVotingAhvn13MockedData.Ahvn13Valid4,
+            p => p.EVotingEmail = "test@example.invalid");
+        await ModifyDbEntities<EVoterEntity>(
+            p => p.Ahvn13 == EVotingAhvn13MockedData.Ahvn13Valid4,
+            p => p.EVotingEmail = "test@example.invalid");
+
+        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
+        {
+            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid4Formatted,
+            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
+        });
+
+        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
+
+        content.Should().NotBeNull();
+        content.MatchSnapshot();
+    }
+
+    [Fact]
+    public async Task ShouldReturnEmailWhenPersonHasLocalEVotingData()
+    {
+        _config.EnableKewrAndLoganto = false;
+
+        await ModifyDbEntities<EVoterEntity>(
+            p => p.Ahvn13 == EVotingAhvn13MockedData.Ahvn13Valid4,
+            p => p.EVotingEmail = "test@example.invalid");
+
+        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
+        {
+            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid4Formatted,
+            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
+        });
+
+        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
+
+        content.Should().NotBeNull();
+        content.MatchSnapshot();
+    }
+
+    [Fact]
+    public async Task ShouldNotReturnEmailWhenPersonIsLocallyUnregistered()
+    {
+        _config.EnableKewrAndLoganto = false;
+
+        // Has email on person (not yet synced)
+        await ModifyDbEntities<PersonEntity>(
+            p => p.Vn == EVotingAhvn13MockedData.Ahvn13Valid4,
+            p => p.EVotingEmail = "test@example.invalid");
+
+        // No email in local e-voting data (e.g. unregistered recently)
+        await ModifyDbEntities<EVoterEntity>(
+            p => p.Ahvn13 == EVotingAhvn13MockedData.Ahvn13Valid4,
+            p => p.EVotingEmail = null);
 
         var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
         {

@@ -20,6 +20,7 @@ using Voting.Stimmregister.Core.Services;
 using Voting.Stimmregister.Core.Services.Caching;
 using Voting.Stimmregister.Core.Services.Supporting.Signing;
 using Voting.Stimmregister.Core.Services.Supporting.Signing.PayloadBuilder;
+using Voting.Stimmregister.Core.Services.Supporting.Voting;
 using Voting.Stimmregister.Core.Validators;
 using Voting.Stimmregister.Domain.Cache;
 using Voting.Stimmregister.Domain.Configuration;
@@ -75,11 +76,14 @@ public static class ServiceCollectionExtensions
             .AddSingleton<SignaturePayloadBuilderFactory>()
             .AddTransient<PersonSignaturePayloadBuilderV1>()
             .AddTransient<PersonSignaturePayloadBuilderV2>()
+            .AddTransient<PersonSignaturePayloadBuilderV3>()
             .AddTransient<IntegritySignaturePayloadBuilderV1>()
             .AddTransient<IntegritySignaturePayloadBuilderV2>()
+            .AddTransient<IntegritySignaturePayloadBuilderV3>()
             .AddTransient<DomainOfInfluenceSignaturePayloadBuilderV1>()
             .AddTransient<FilterVersionSignaturePayloadBuilderV1>()
             .AddTransient<FilterVersionSignaturePayloadBuilderV2>()
+            .AddTransient<FilterVersionSignaturePayloadBuilderV3>()
             .AddSingleton<SignatureVerifier>()
             .AddSingleton<SignatureCreator>()
             .AddScoped<BfsIntegrityPersonsVerifier>()
@@ -87,7 +91,9 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IVerifySigningService, CreateVerifySignatureService>()
             .AddSingleton<IStreamEncryptionService, AesStreamEncryption>()
             .AddSingleton<IStreamDecryptionService, AesStreamEncryption>()
+            .AddSingleton<IVotingDerivedInfos, VotingDerivedInfos>()
             .AddScoped<ICsvService, CsvService>()
+            .AddScoped<IECollectingService, ECollectingService>()
             .AddScoped<IEVotingService, EVotingService>()
             .AddScoped<ILanguageService, LanguageService>()
             .AddScoped<IImportStatisticService, ImportStatisticService>()

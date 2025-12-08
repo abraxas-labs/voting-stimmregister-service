@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Voting.Lib.Cryptography" Version="$(VotingLibVersion)" />
+    <PackageReference Include="Voting.Lib.Cryptography.Pkcs11" Version="$(VotingLibVersion)" />
     <PackageReference Include="Voting.Lib.Cryptography.Mocks" Version="$(VotingLibVersion)" />
   </ItemGroup>
 

@@ -82,6 +82,6 @@ public class BfsIntegrityPersonsVerifier
             afterPersonAppended(person);
         }
 
-        signatureVerifier.EnsureValid();
+        await signatureVerifier.EnsureValid();
     }
 }

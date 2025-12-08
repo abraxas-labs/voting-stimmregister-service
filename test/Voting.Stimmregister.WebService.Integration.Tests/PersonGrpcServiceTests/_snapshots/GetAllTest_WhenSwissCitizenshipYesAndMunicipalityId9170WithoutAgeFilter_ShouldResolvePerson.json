@@ -81,7 +81,8 @@
       "ContactAddressPostOfficeBoxNumber": null,
       "IsHouseholder": false,
       "ResidenceBuildingId": 0,
-      "ResidenceApartmentId": 0
+      "ResidenceApartmentId": 0,
+      "EVotingEmail": ""
     },
     {
       "Id": "e44fd8ad-b603-44a8-a7cc-e994e1df4222",
@@ -164,7 +165,8 @@
       "ContactAddressPostOfficeBoxNumber": null,
       "IsHouseholder": false,
       "ResidenceBuildingId": 0,
-      "ResidenceApartmentId": 0
+      "ResidenceApartmentId": 0,
+      "EVotingEmail": ""
     },
     {
       "Id": "ef3fd8ad-b603-44a8-a7cc-e994e1df4222",
@@ -247,7 +249,8 @@
       "ContactAddressPostOfficeBoxNumber": null,
       "IsHouseholder": false,
       "ResidenceBuildingId": 0,
-      "ResidenceApartmentId": 0
+      "ResidenceApartmentId": 0,
+      "EVotingEmail": ""
     }
   ]
 }

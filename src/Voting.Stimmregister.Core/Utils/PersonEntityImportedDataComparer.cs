@@ -94,6 +94,7 @@ internal sealed class PersonEntityImportedDataComparer : IEqualityComparer<Perso
             && x.TypeOfResidence == y.TypeOfResidence
             && x.RestrictedVotingAndElectionRightFederation == y.RestrictedVotingAndElectionRightFederation
             && x.EVoting == y.EVoting
+            && x.EVotingEmail == y.EVotingEmail
             && x.IsSwissAbroad == y.IsSwissAbroad
             && x.SendVotingCardsToDomainOfInfluenceReturnAddress == y.SendVotingCardsToDomainOfInfluenceReturnAddress
             && x.IsValid == y.IsValid
@@ -175,6 +176,7 @@ internal sealed class PersonEntityImportedDataComparer : IEqualityComparer<Perso
         hashCode.Add((int)obj.TypeOfResidence);
         hashCode.Add(obj.RestrictedVotingAndElectionRightFederation);
         hashCode.Add(obj.EVoting);
+        hashCode.Add(obj.EVotingEmail);
         hashCode.Add(obj.IsSwissAbroad);
         hashCode.Add(obj.SendVotingCardsToDomainOfInfluenceReturnAddress);
         hashCode.Add(obj.IsValid);

@@ -2,6 +2,7 @@
 // For license information see LICENSE file
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Voting.Stimmregister.Domain.Models;
 
 // TODO: VOTING-2763 Move to Core Signing, after or with Adapter.Loganto is moved to Core.
@@ -18,14 +19,16 @@ public interface IVerifySigningService
     /// <param name="integrity">The integrity entity.</param>
     /// <param name="persons">The persons.</param>
     /// <exception cref="SignatureInvalidException">If an invalid signature is detected.</exception>
-    void EnsureBfsIntegritySignatureValid(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons);
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task EnsureBfsIntegritySignatureValid(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons);
 
     /// <summary>
     /// Ensures the signature of a filter version is valid.
     /// </summary>
     /// <param name="filterVersion">The filter version.</param>
     /// <param name="persons">The persons of the filter version.</param>
-    void EnsureFilterVersionSignatureValid(FilterVersionEntity filterVersion, IReadOnlyCollection<PersonEntity> persons);
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task EnsureFilterVersionSignatureValid(FilterVersionEntity filterVersion, IReadOnlyCollection<PersonEntity> persons);
 
     /// <summary>
     /// Creates an incremental bfs integrity signature verifier.

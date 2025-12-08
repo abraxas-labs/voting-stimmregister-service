@@ -14,6 +14,7 @@ using Voting.Lib.Database.Models;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Abstractions.Core.Services;
 using Voting.Stimmregister.Core.Configuration;
+using Voting.Stimmregister.Core.Services.Supporting.Voting;
 using Voting.Stimmregister.Domain.Constants;
 using Voting.Stimmregister.Domain.Diagnostics;
 using Voting.Stimmregister.Domain.Enums;
@@ -34,10 +35,11 @@ public class PersonService : IPersonService
     private readonly IBfsIntegrityRepository _bfsIntegrityRepository;
     private readonly IFilterVersionRepository _filterVersionRepository;
     private readonly ILastSearchParameterService _lastSearchParameterService;
+    private readonly IVotingDerivedInfos _votingDerivedInfos;
     private readonly PersonConfig _config;
 
     public PersonService(
-        ILogger<IPersonService> logger,
+        ILogger<PersonService> logger,
         IMapper mapper,
         IClock clock,
         IPersonRepository personRepository,
@@ -45,7 +47,8 @@ public class PersonService : IPersonService
         IFilterVersionRepository filterVersionRepository,
         IBfsIntegrityRepository bfsIntegrityRepository,
         PersonConfig config,
-        ILastSearchParameterService lastSearchParameterService)
+        ILastSearchParameterService lastSearchParameterService,
+        IVotingDerivedInfos votingDerivedInfos)
     {
         _logger = logger;
         _mapper = mapper;
@@ -56,6 +59,7 @@ public class PersonService : IPersonService
         _bfsIntegrityRepository = bfsIntegrityRepository;
         _config = config;
         _lastSearchParameterService = lastSearchParameterService;
+        _votingDerivedInfos = votingDerivedInfos;
     }
 
     public Task<LastSearchParameterEntity> GetLastUsedParameters(PersonSearchType searchType)
@@ -79,7 +83,7 @@ public class PersonService : IPersonService
                 searchResult,
                 opt => opt.Items[MappingConstants.ReferenceKeyDate] = referenceKeyDate);
 
-            DeriveComputedInfos(personEntitySearchResult.Items, referenceKeyDate);
+            _votingDerivedInfos.ComputeInfos(personEntitySearchResult.Items, referenceKeyDate);
             await DeriveActuality(personEntitySearchResult.Items);
             return personEntitySearchResult;
         }
@@ -107,7 +111,7 @@ public class PersonService : IPersonService
 
         if (includeComputedInfos)
         {
-            DeriveComputedInfos(_clock.Today, personModel);
+            _votingDerivedInfos.ComputeInfos(personModel, _clock.Today);
         }
 
         if (includeActuality)
@@ -127,7 +131,7 @@ public class PersonService : IPersonService
         }
 
         var person = _mapper.Map<PersonEntityModel>(personEntity, opt => opt.Items[MappingConstants.ReferenceKeyDate] = _clock.Today);
-        DeriveComputedInfos(_clock.Today, person);
+        _votingDerivedInfos.ComputeInfos(person, _clock.Today);
         await DeriveActuality(person);
         return person;
     }
@@ -161,7 +165,7 @@ public class PersonService : IPersonService
         }
 
         var personEntitySearchResult = _mapper.Map<PersonSearchResultPageModel<PersonEntityModel>>(searchResult);
-        DeriveComputedInfos(personEntitySearchResult.Items, referenceKeyDate);
+        _votingDerivedInfos.ComputeInfos(personEntitySearchResult.Items, referenceKeyDate);
         await DeriveActuality(personEntitySearchResult.Items);
         return personEntitySearchResult;
     }
@@ -213,44 +217,6 @@ public class PersonService : IPersonService
         }
     }
 
-    private static bool IsBirthDateValidForVotingRights(DateOnly referenceKeyDate, DateOnly dateOfBirth)
-    {
-        const int ageOfMajority = 18;
-        return referenceKeyDate.AddYears(-ageOfMajority).CompareTo(dateOfBirth) >= 0 && dateOfBirth > DateOnly.MinValue;
-    }
-
-    private static bool IsReferenceKeyDateAfterOrEqualMoveInArrivalDate(DateOnly referenceKeyDate, DateOnly? moveInArrivalDate)
-    {
-        // An empty moveInArrivalDate will result in true, as this is valid from a business point of view.
-        return referenceKeyDate.CompareTo(moveInArrivalDate) >= 0;
-    }
-
-    private static bool IsVotingAllowed(PersonEntityModel person, DateOnly referenceKeyDate)
-    {
-        return IsBirthDateValidForVotingRights(referenceKeyDate, person.DateOfBirth) &&
-               IsReferenceKeyDateAfterOrEqualMoveInArrivalDate(referenceKeyDate, person.MoveInArrivalDate) &&
-            person is
-            {
-                RestrictedVotingAndElectionRightFederation: false,
-                IsNationalityValidForVotingRights: true,
-            };
-    }
-
-    private void DeriveComputedInfos(IReadOnlyCollection<PersonEntityModel> persons, DateOnly referenceKeyDate)
-    {
-        foreach (var person in persons)
-        {
-            DeriveComputedInfos(referenceKeyDate, person);
-        }
-    }
-
-    private void DeriveComputedInfos(DateOnly referenceKeyDate, PersonEntityModel person)
-    {
-        person.IsNationalityValidForVotingRights = IsNationalityValidForVotingRights(person.Country);
-        person.IsBirthDateValidForVotingRights = IsBirthDateValidForVotingRights(referenceKeyDate, person.DateOfBirth);
-        person.IsVotingAllowed = IsVotingAllowed(person, referenceKeyDate);
-    }
-
     private async Task DeriveActuality(IReadOnlyCollection<PersonEntityModel> persons)
     {
         var bfs = persons.Select(p => p.MunicipalityId.ToString()).ToHashSet();
@@ -276,9 +242,6 @@ public class PersonService : IPersonService
             person.Actuality = _clock.UtcNow - integrity.LastUpdated < _config.ActualityTimeSpan;
         }
     }
-
-    private bool IsNationalityValidForVotingRights(string? country)
-        => country?.Equals(Countries.Switzerland, StringComparison.OrdinalIgnoreCase) == true;
 
     private void RegisterStatistics(PersonSearchParametersModel searchParameters, Stopwatch stopWatch, int resultsCount)
     {

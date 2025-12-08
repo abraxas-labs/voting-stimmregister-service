@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Voting.Lib.Ech.AbxVoting_1_0" Version="$(VotingLibVersion)" />
+    <PackageReference Include="Voting.Lib.Ech.AbxVoting_1_5" Version="$(VotingLibVersion)" />
     <PackageReference Include="Voting.Lib.Ech" Version="$(VotingLibVersion)" />
   </ItemGroup>
 

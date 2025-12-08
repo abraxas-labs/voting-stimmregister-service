@@ -376,6 +376,13 @@ public class PersonEntity : ImportedEntity
     public bool EVoting { get; set; }
 
     /// <summary>
+    /// Gets or sets the email used in the scope of e-voting.
+    /// Synced by the importers by reading the additional eVoter state (whether a person enabled eVoting incl. the email).
+    /// Therefore, it can take up to the next importer run for the email to be reflected on the person.
+    /// </summary>
+    public string? EVotingEmail { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the person is a swiss person living abroad.
     /// </summary>
     public bool IsSwissAbroad { get; set; }

@@ -94,6 +94,11 @@ public class EVotingService : IEVotingService
         // Get person data to evaluate voting permissions.
         eVotingInformation.Person = await GetEVotingPerson(ahvn13, bfsCanton);
 
+        if (voter != null)
+        {
+            eVotingInformation.Person.Email = voter.EVotingEmail;
+        }
+
         var bfsStatistics = await _bfsStatisticService.GetStatistics(true, bfsCanton);
 
         eVotingInformation.CantonStatistic = bfsStatistics.TotalStatistic;
@@ -104,14 +109,14 @@ public class EVotingService : IEVotingService
         return eVotingInformation;
     }
 
-    public async Task RegisterForEVoting(Ahvn13 ahvn13, short bfsCanton)
+    public async Task RegisterForEVoting(Ahvn13 ahvn13, short bfsCanton, string? email)
     {
         // Get person details
         var person = await GetEVotingPerson(ahvn13, bfsCanton);
 
         if (!_config.EnableKewrAndLoganto || _config.SkipForwardingEVoterFlag.Contains(person.BfsMunicipality))
         {
-            await SaveEVoter(ahvn13, bfsCanton, person.BfsMunicipality, true, null, null);
+            await SaveEVoter(ahvn13, bfsCanton, person.BfsMunicipality, true, email: email);
             return;
         }
 
@@ -128,7 +133,7 @@ public class EVotingService : IEVotingService
             eVoterFlag = true;
         }
 
-        await SaveEVoter(ahvn13, bfsCanton, person.BfsMunicipality, eVoterFlag, eVotingResponse.ReturnCode, eVotingResponse.Message);
+        await SaveEVoter(ahvn13, bfsCanton, person.BfsMunicipality, eVoterFlag, eVotingResponse.ReturnCode, eVotingResponse.Message, email);
 
         if (eVotingResponse.ReturnCode >= EkProcessStatusCodes.Status200)
         {
@@ -143,7 +148,7 @@ public class EVotingService : IEVotingService
 
         if (!_config.EnableKewrAndLoganto || _config.SkipForwardingEVoterFlag.Contains(person.BfsMunicipality))
         {
-            await SaveEVoter(person.Ahvn13, bfsCanton, person.BfsMunicipality, false, null, null);
+            await SaveEVoter(person.Ahvn13, bfsCanton, person.BfsMunicipality, false);
             return;
         }
 
@@ -217,6 +222,7 @@ public class EVotingService : IEVotingService
             OfficialName = person.OfficialName,
             FirstName = person.FirstName,
             Sex = person.Sex,
+            Email = person.EVotingEmail,
             Address = MapAddress(person),
         };
     }
@@ -232,7 +238,12 @@ public class EVotingService : IEVotingService
         };
     }
 
-    private async Task<EVoterEntity> AddOrUpdateEVoter(Ahvn13 ahvn13, short bfsCanton, short bfsMunicipality, bool? eVoterFlag)
+    private async Task<EVoterEntity> AddOrUpdateEVoter(
+        Ahvn13 ahvn13,
+        short bfsCanton,
+        short bfsMunicipality,
+        bool? eVoterFlag,
+        string? email)
     {
         var voter = await _voterRepository.Query().FirstOrDefaultAsync(e => e.Ahvn13 == ahvn13.ToNumber());
         var existingVoter = voter != null;
@@ -249,6 +260,7 @@ public class EVotingService : IEVotingService
         voter.BfsMunicipality = bfsMunicipality;
         voter.EVoterFlag = eVoterFlag;
         voter.ContextId = _tracingService.ContextId;
+        voter.EVotingEmail = email;
 
         if (existingVoter)
         {
@@ -311,9 +323,16 @@ public class EVotingService : IEVotingService
         return null;
     }
 
-    private async Task SaveEVoter(Ahvn13 ahvn13, short bfsCanton, short bfsMunicipality, bool? eVoterFlag, short? statusCode, string? message)
+    private async Task SaveEVoter(
+        Ahvn13 ahvn13,
+        short bfsCanton,
+        short bfsMunicipality,
+        bool? eVoterFlag,
+        short? statusCode = null,
+        string? message = null,
+        string? email = null)
     {
-        var eVoter = await AddOrUpdateEVoter(ahvn13, bfsCanton, bfsMunicipality, eVoterFlag);
+        var eVoter = await AddOrUpdateEVoter(ahvn13, bfsCanton, bfsMunicipality, eVoterFlag, email);
         await AddEVoterAudit(eVoter, statusCode, message);
 
         await _dbContext.SaveChangesAsync();

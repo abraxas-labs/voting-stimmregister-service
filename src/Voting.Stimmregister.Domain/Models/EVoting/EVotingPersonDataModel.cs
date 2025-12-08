@@ -32,5 +32,7 @@ public class EVotingPersonDataModel
 
     public string FirstName { get; set; } = string.Empty;
 
+    public string? Email { get; set; }
+
     public EVotingAddressModel? Address { get; set; }
 }

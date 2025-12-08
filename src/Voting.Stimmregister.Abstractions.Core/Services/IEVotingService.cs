@@ -13,7 +13,7 @@ public interface IEVotingService
 
     public Task<EVotingReportModel?> GetEVotingReport(Ahvn13 ahvn13);
 
-    public Task RegisterForEVoting(Ahvn13 ahvn13, short bfsCanton);
+    public Task RegisterForEVoting(Ahvn13 ahvn13, short bfsCanton, string? email);
 
     public Task UnregisterFromEVoting(Ahvn13 ahvn13, short bfsCanton);
 }

@@ -629,6 +629,12 @@ public class PersonCsvExportModel
     public string EVoting { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the email used for sending e-voting related emails.
+    /// </summary>
+    [Name("E-Voting Email")]
+    public string EVotingEmail { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the residence of type, i.e. '1'.
     /// <list type="bullet">
     ///     <item>1: HWS</item>

@@ -223,8 +223,8 @@ public class FilterService : IFilterService
             signatureCreator.Append(person);
         }
 
-        verifier.EnsureValid();
-        signatureCreator.Sign();
+        await verifier.EnsureValid();
+        await signatureCreator.Sign();
 
         await _filterVersionRepository.Update(filterVersionEntity);
         await transaction.CommitAsync(ct);
@@ -353,7 +353,7 @@ public class FilterService : IFilterService
         }
 
         await _bfsIntegrityPersonsVerifier.Verify(bfsNumbers, ProcessPerson, ct);
-        filterVersionSignatureCreator.Sign();
+        await filterVersionSignatureCreator.Sign();
     }
 
     private async Task<FilterVersionEntity> CreateFilterVersionEntity(FilterVersionEntity filterVersion, IReadOnlyCollection<FilterCriteriaEntity> criteria)

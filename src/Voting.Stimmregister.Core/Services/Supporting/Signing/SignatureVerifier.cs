@@ -1,6 +1,7 @@
 // (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Voting.Lib.Common;
 using Voting.Stimmregister.Abstractions.Adapter.Hsm;
@@ -27,9 +28,9 @@ public class SignatureVerifier
         _hsmCryptoAdapter = hsmCryptoAdapter;
     }
 
-    internal void EnsureValidSignature(BaseEntityWithSignature entity, SignaturePayload payload)
+    internal async Task EnsureValidSignature(BaseEntityWithSignature entity, SignaturePayload payload)
     {
-        if (IsValidSignature(entity.Signature, payload))
+        if (await IsValidSignature(entity.Signature, payload))
         {
             return;
         }
@@ -38,7 +39,7 @@ public class SignatureVerifier
         throw new SignatureInvalidException(payload.TypeName, entity.Id);
     }
 
-    private bool IsValidSignature(byte[] signature, SignaturePayload payload)
+    private Task<bool> IsValidSignature(byte[] signature, SignaturePayload payload)
     {
         using var activity = _activityFactory.Start("signature-is-valid");
         return _hsmCryptoAdapter.VerifyEcdsaSha384Signature(payload.Payload, signature, payload.Config);

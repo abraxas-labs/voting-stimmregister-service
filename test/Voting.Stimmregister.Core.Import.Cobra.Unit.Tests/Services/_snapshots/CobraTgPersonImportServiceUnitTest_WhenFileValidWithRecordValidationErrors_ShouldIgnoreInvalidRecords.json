@@ -1,0 +1,42 @@
+{
+  "FileName": "cobra_tg_valid_with_record_validation_errors.csv",
+  "QueuedFileName": "cobra_tg_valid_with_record_validation_errors.csv",
+  "SourceSystem": 5,
+  "IsManualUpload": false,
+  "ImportRecordsCountTotal": 1,
+  "DatasetsCountCreated": 0,
+  "DatasetsCountUpdated": 0,
+  "DatasetsCountDeleted": 0,
+  "FinishedDate": "2020-01-10T13:12:10.2Z",
+  "StartedDate": "2020-01-10T13:12:10.2Z",
+  "TotalElapsedMilliseconds": 0.0,
+  "MunicipalityId": 9200,
+  "MunicipalityName": "Auslandschweizer (MU)",
+  "ProcessingErrors": "",
+  "HasValidationErrors": false,
+  "EntitiesWithValidationErrors": [],
+  "RecordNumbersWithValidationErrors": [
+    1
+  ],
+  "RecordValidationErrors": "[{\"RecordNumber\":1,\"RecordIdentifier\":\"Miro  (13.01.1988 00:00:00, )\",\"Fields\":[{\"FieldName\":\"SourceSystemId\",\"Errors\":[\"\\u0027Source System Id\\u0027 darf nicht leer sein.\"]},{\"FieldName\":\"OfficialName\",\"Errors\":[\"\\u0027Official Name\\u0027 darf nicht leer sein.\"]}]}]",
+  "ImportStatus": 4,
+  "ImportType": 1,
+  "WorkerName": "TestMachine",
+  "IsLatest": false,
+  "Persons": [],
+  "DomainOfInfluences": [],
+  "AccessControlListDois": [],
+  "AcmEncryptedAesKey": "",
+  "AcmAesIv": "",
+  "AcmEncryptedMacKey": "",
+  "AcmHmac": "",
+  "AuditInfo": {
+    "CreatedById": "default-user-id",
+    "CreatedByName": "MockDataSeeder",
+    "CreatedAt": "2020-01-10T13:12:10.2Z",
+    "ModifiedById": "default-user-id",
+    "ModifiedByName": "MockDataSeeder",
+    "ModifiedAt": "2020-01-10T13:12:10.2Z"
+  },
+  "Id": "00000000-0000-0000-0000-000000000000"
+}

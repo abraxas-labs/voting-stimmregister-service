@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Voting.Lib.Iam.Exceptions;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
+using Voting.Stimmregister.Abstractions.Adapter.VotingBasis;
 using Voting.Stimmregister.Abstractions.Adapter.VotingIam;
 using Voting.Stimmregister.Core.Services;
 using Voting.Stimmregister.Core.Services.Supporting.Signing;
@@ -23,9 +24,10 @@ namespace Voting.Stimmregister.Core.Queues;
 /// </summary>
 public class ImportQueue
 {
-    private readonly ImportsConfig _importConfig;
+    private readonly ImportsConfig _importsConfig;
     private readonly IImportStatisticRepository _importRepository;
     private readonly IPermissionService _permissionService;
+    private readonly IAccessControlListDoiService _aclDoiService;
     private readonly ImportFileService _importFileService;
     private readonly ImportWorkerTrigger _trigger;
     private readonly ImportServiceRegistry _importServiceRegistry;
@@ -35,14 +37,16 @@ public class ImportQueue
         ImportsConfig importConfig,
         IImportStatisticRepository importRepository,
         IPermissionService permissionService,
+        IAccessControlListDoiService aclDoiService,
         ImportFileService importFileService,
         ImportWorkerTrigger trigger,
         ImportServiceRegistry importServiceRegistry,
         IServiceScopeFactory scopeFactory)
     {
-        _importConfig = importConfig;
+        _importsConfig = importConfig;
         _importRepository = importRepository;
         _permissionService = permissionService;
+        _aclDoiService = aclDoiService;
         _importFileService = importFileService;
         _trigger = trigger;
         _importServiceRegistry = importServiceRegistry;
@@ -96,7 +100,7 @@ public class ImportQueue
         {
             var municipalityId = await PeekMunicipalityIdFromFile(type, sourceSystem, queuedFileName, aesCipherMetadata);
 
-            if (!IsUserAuthorized(municipalityId, sourceSystem))
+            if (!await IsUserAuthorized(municipalityId, sourceSystem))
             {
                 throw new ForbiddenException("User is not allowed to import this file");
             }
@@ -128,21 +132,31 @@ public class ImportQueue
     }
 
     /// <summary>
-    /// Indicates whether the import user is authorized for the municipality id by checking
-    /// the Access Control List and
-    /// the imports config whitelist in case of swiss foreigners source system.
+    /// Determines whether the current import user is authorized to import data for the specified municipality.
+    /// Authorization is granted if the user is a service user or if the municipality ID is present
+    /// in the user's Access Control List (ACL) and the targeting source system is assigend for the targeting canton.
+    /// For Swiss Abroad source systems, the municipality must also be included in the import configuration whitelist.
     /// </summary>
-    /// <param name="municipalityId">The municipality id to lookup in the users ACL.</param>
-    /// <param name="sourceSystem">The source system.</param>
-    /// <returns>True if the user is authorized.</returns>
-    private bool IsUserAuthorized(int municipalityId, ImportSourceSystem sourceSystem)
+    /// <param name="municipalityId">The municipality ID to check authorization for.</param>
+    /// <param name="sourceSystem">The source system initiating the import.</param>
+    /// <returns><see langword="true"/> if the user is authorized; otherwise, <see langword="false"/>.</returns>
+    private async Task<bool> IsUserAuthorized(int municipalityId, ImportSourceSystem sourceSystem)
     {
         if (_permissionService.IsServiceUser())
         {
             return true;
         }
 
-        return _permissionService.BfsAccessControlList.Contains(municipalityId.ToString())
-            && (sourceSystem != ImportSourceSystem.Cobra || _importConfig.SwissAbroadMunicipalityIdWhitelist.Contains(municipalityId.ToString()));
+        var acl = await _aclDoiService.GetDoiAccessControlListByTenantId(_permissionService.TenantId);
+        var cantons = acl.Select(a => a.Canton).Distinct();
+        var supportedSourceSystems = _importsConfig.SupportedImportSourceSystemByCanton
+            .Where(s => cantons.Contains(s.Key))
+            .SelectMany(s => s.Value)
+            .Distinct();
+
+        return supportedSourceSystems.Contains(sourceSystem) &&
+            _permissionService.BfsAccessControlList.Contains(municipalityId.ToString())
+            && ((sourceSystem != ImportSourceSystem.Cobra && sourceSystem != ImportSourceSystem.CobraTg) ||
+                _importsConfig.SwissAbroadMunicipalityIdWhitelist.Contains(municipalityId.ToString()));
     }
 }

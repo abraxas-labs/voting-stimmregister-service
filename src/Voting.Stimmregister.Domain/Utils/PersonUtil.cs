@@ -1,6 +1,7 @@
 ﻿// (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using System;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Domain.Utils;
@@ -46,4 +47,17 @@ public static class PersonUtil
            !string.IsNullOrWhiteSpace(person.ContactAddressPostOfficeBoxText) ||
            !string.IsNullOrWhiteSpace(person.ContactAddressExtensionLine1) ||
            !string.IsNullOrWhiteSpace(person.ContactAddressExtensionLine2);
+
+    public static int GetAgeFrom(DateOnly dateOfBirth, DateOnly actualityDate)
+    {
+        var age = actualityDate.Year - dateOfBirth.Year;
+
+        // Adjust if the birthdate has not yet occurred in the reference year
+        if (actualityDate < dateOfBirth.AddYears(age))
+        {
+            age--;
+        }
+
+        return age;
+    }
 }

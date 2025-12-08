@@ -61,6 +61,7 @@
   "TypeOfResidence": 1,
   "RestrictedVotingAndElectionRightFederation": false,
   "EVoting": true,
+  "EVotingEmail": null,
   "IsSwissAbroad": false,
   "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
   "CreatedDate": "2020-01-10T13:12:10.2Z",
@@ -147,7 +148,7 @@
     }
   ],
   "CantonBfs": 17,
-  "IsHouseholder": false,
+  "IsHouseholder": true,
   "ResidenceBuildingId": null,
   "ResidenceApartmentId": null,
   "MunicipalityId": 3203,

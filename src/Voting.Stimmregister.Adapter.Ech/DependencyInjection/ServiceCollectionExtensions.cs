@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
         return services
             .AddSingleton(config)
             .AddVotingLibEch(config)
-            .AddEch0045()
+            .AddEch0045V4()
             .AddSingleton<IEchService, EchService>()
             .AddSingleton<IPersonVoterMapping, PersonVoterMapping>();
     }

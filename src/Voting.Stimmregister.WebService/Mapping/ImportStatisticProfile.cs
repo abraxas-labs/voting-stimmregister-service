@@ -44,6 +44,8 @@ public class ImportStatisticProfile : Profile
         CreateMap<IEnumerable<ImportStatisticEntity>, Proto.V1.Services.Responses.GetImportStatisticHistoryResponse>()
             .ForMember(dest => dest.TotalCount, opt => opt.MapFrom(x => x.Count()))
             .ForMember(dest => dest.ImportStatistics, opt => opt.MapFrom(x => x));
+        CreateMap<IEnumerable<ImportSourceSystem>, Proto.V1.Services.Responses.GetSupportedSourceSystemsResponse>()
+            .ForMember(dest => dest.SourceSystems, opt => opt.MapFrom(src => src));
 
         CreateMap<ImportSourceSystem, Proto.V1.Services.Models.ImportSourceSystem>()
             .ConvertUsingEnumMapping(opt => opt.MapByName());

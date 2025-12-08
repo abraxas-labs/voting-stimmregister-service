@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Voting.Stimmregister.Abstractions.Adapter.Hsm;
 using Voting.Stimmregister.Core.Diagnostics;
 using Voting.Stimmregister.Core.Services.Supporting.Signing.PayloadBuilder;
@@ -21,7 +22,7 @@ public class SignatureCreator
         _hsmCryptoAdapter = hsmCryptoAdapter;
     }
 
-    internal void BulkSign(IReadOnlyList<SignaturePayload> payloads, IEnumerable<BaseEntityWithSignature> entities)
+    internal async Task BulkSign(IReadOnlyList<SignaturePayload> payloads, IEnumerable<BaseEntityWithSignature> entities)
     {
         using var activity = _activityFactory.Start("bulk-sign");
 
@@ -32,7 +33,7 @@ public class SignatureCreator
 
         var primaryPayload = payloads[0];
         var rawPayloads = payloads.Select(x => x.Payload).ToList();
-        var bulkCreateSignatures = _hsmCryptoAdapter.BulkCreateEcdsaSha384Signature(rawPayloads, primaryPayload.Config);
+        var bulkCreateSignatures = await _hsmCryptoAdapter.BulkCreateEcdsaSha384Signature(rawPayloads, primaryPayload.Config);
 
         var i = 0;
         foreach (var domainOfInfluence in entities)
@@ -44,11 +45,11 @@ public class SignatureCreator
         }
     }
 
-    internal void Sign(SignaturePayload payload, BaseEntityWithSignature entity)
+    internal async Task Sign(SignaturePayload payload, BaseEntityWithSignature entity)
     {
         using var activity = _activityFactory.Start("sign");
 
-        var integritySignature = _hsmCryptoAdapter.CreateEcdsaSha384Signature(payload.Payload, payload.Config);
+        var integritySignature = await _hsmCryptoAdapter.CreateEcdsaSha384Signature(payload.Payload, payload.Config);
 
         entity.SignatureVersion = payload.Version;
         entity.SignatureKeyId = payload.Config.SignatureKeyId;

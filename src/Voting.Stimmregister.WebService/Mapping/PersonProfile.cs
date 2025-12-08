@@ -12,6 +12,7 @@ using Voting.Stimmregister.Proto.V1.Services.Models;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
 using Voting.Stimmregister.Proto.V1.Services.Responses;
 using Voting.Stimmregister.WebService.Mapping.Converter;
+using PageInfo = Voting.Lib.Database.Models.PageInfo;
 
 namespace Voting.Stimmregister.WebService.Mapping;
 
@@ -33,6 +34,14 @@ public class PersonProfile : Profile
             .ForMember(dest => dest.IsNationalityValidForVotingRights, opt => opt.Ignore())
             .ForMember(dest => dest.Actuality, opt => opt.Ignore())
             .ForMember(dest => dest.ActualityDate, opt => opt.Ignore());
+
+        CreateMap<PersonEntity, ECollectingPersonEntityModel>()
+            .ForMember(dest => dest.IsVotingAllowed, opt => opt.Ignore())
+            .ForMember(dest => dest.IsBirthDateValidForVotingRights, opt => opt.Ignore())
+            .ForMember(dest => dest.IsNationalityValidForVotingRights, opt => opt.Ignore())
+            .ForMember(dest => dest.Actuality, opt => opt.Ignore())
+            .ForMember(dest => dest.ActualityDate, opt => opt.Ignore())
+            .ForMember(dest => dest.Age, opt => opt.Ignore());
 
         CreateMap<IEnumerable<string>, Proto.V1.Services.Models.ValidationResultModel>()
             .ForMember(dest => dest.Messages, opt => opt.MapFrom(src => src));
@@ -77,6 +86,9 @@ public class PersonProfile : Profile
             .ForMember(dest => dest.Page, opt => opt.MapFrom(src => src.PageIndex + 1))
             .ReverseMap()
             .ForMember(dst => dst.PageIndex, opt => opt.MapFrom(src => src.Page - 1));
+        CreateMap<PageInfo, Proto.V1.Services.Models.PageInfo>()
+            .ForMember(dst => dst.TotalCount, opt => opt.MapFrom(src => src.TotalItemsCount))
+            .ForMember(dest => dest.PageIndex, opt => opt.MapFrom(src => src.CurrentPage - 1));
 
         CreateMap<PersonServiceGetSingleRequest, PersonSearchSingleParametersModel>();
         CreateMap<PersonServiceGetAllRequest, PersonSearchParametersModel>();

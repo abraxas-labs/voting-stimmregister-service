@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ABX_Voting_1_0;
+using AbxVoting_1_5;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Voting.Lib.Testing.Mocks;
@@ -36,6 +36,7 @@ public class InnosolvPersonImportServiceTest : BaseWriteableDbTest
     private const string OneDoublePersonsInvalid = "same_person_invalid.xml";
     private const string TestFilesBasePath = "_files";
     private const string SinglePersonValid3213 = "single_person_valid_3213.xml";
+    private const string Version15 = "version_1_5.xml";
 
     public InnosolvPersonImportServiceTest(TestApplicationFactory factory)
         : base(factory)
@@ -204,6 +205,33 @@ public class InnosolvPersonImportServiceTest : BaseWriteableDbTest
         }
 
         persons[1].ImportStatisticId.Should().NotBe(persons[2].ImportStatisticId.ToString());
+    }
+
+    [Fact]
+    public async Task WithVersion15_ShouldWork()
+    {
+        await RunImport(Version15);
+
+        var importedPersons = await RunOnDb(db => db.Persons
+            .IgnoreQueryFilters()
+            .Include(x => x.PersonDois.OrderBy(y => y.DomainOfInfluenceType).ThenBy(y => y.Name))
+            .OrderBy(x => x.FirstName)
+            .ToListAsync());
+        importedPersons.Should().HaveCount(3);
+
+        foreach (var person in importedPersons)
+        {
+            person.RegisterId = Guid.Empty;
+            person.Id = Guid.Empty;
+            foreach (var doi in person.PersonDois)
+            {
+                doi.Id = Guid.Empty;
+                doi.PersonId = Guid.Empty;
+                doi.Person = null;
+            }
+        }
+
+        importedPersons.MatchSnapshot(p => p.ImportStatisticId!);
     }
 
     [Fact]

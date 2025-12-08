@@ -114,7 +114,7 @@ public abstract class PersonImportService<TRecord> : BaseImportService<PersonImp
             await _personRepository.GetLatestPersonsByBfsNumberIgnoreAcl(state.MunicipalityId.Value),
             await _domainOfInfluenceRepository.GetDomainOfInfluencesByIdForBfsNumber(state.MunicipalityId.Value),
             _personMapper);
-        state.EVotingEnabledVns = await _eVotersCache.GetEnabledAhvN13ForCantonWithMunicipalityId(state.MunicipalityId.Value);
+        state.EVotingEnabledWithEmailByVns = await _eVotersCache.GetEnabledAhvN13WithEmailForCantonWithMunicipalityId(state.MunicipalityId.Value);
     }
 
     protected override void MarkUnprocessedAsDeleted(PersonImportStateModel state)
@@ -132,7 +132,8 @@ public abstract class PersonImportService<TRecord> : BaseImportService<PersonImp
 
     protected override async Task PostProcessImport(PersonImportStateModel state)
     {
-        if (state.ImportSourceSystem == ImportSourceSystem.Cobra)
+        if (state.ImportSourceSystem == ImportSourceSystem.Cobra ||
+            state.ImportSourceSystem == ImportSourceSystem.CobraTg)
         {
             return;
         }
@@ -181,7 +182,7 @@ public abstract class PersonImportService<TRecord> : BaseImportService<PersonImp
     /// </summary>
     private void EnsurePersonImportSourceSystemIsAllowed(int municipalityId, ImportSourceSystem importSourceSystem)
     {
-        if (importSourceSystem == ImportSourceSystem.Cobra &&
+        if ((importSourceSystem == ImportSourceSystem.Cobra || importSourceSystem == ImportSourceSystem.CobraTg) &&
             ImportConfig.SwissAbroadMunicipalityIdWhitelist.Contains(municipalityId.ToString()))
         {
             return;

@@ -3,9 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Voting.Lib.Cryptography.Asymmetric;
-using Voting.Lib.Cryptography.Configuration;
+using System.Threading.Tasks;
+using Voting.Lib.Cryptography;
 using Voting.Stimmregister.Abstractions.Adapter.Hsm;
 using Voting.Stimmregister.Adapter.Hsm.Configuration;
 using Voting.Stimmregister.Domain.Configuration;
@@ -16,10 +15,10 @@ namespace Voting.Stimmregister.Adapter.Hsm.Services;
 /// <inheritdoc cref="IHsmCryptoAdapter"/>
 public class HsmCryptoAdapter : IHsmCryptoAdapter
 {
-    private readonly IPkcs11DeviceAdapter _pkcs11DeviceAdapter;
+    private readonly ICryptoProvider _pkcs11DeviceAdapter;
     private readonly HsmConfig _hsmConfig;
 
-    public HsmCryptoAdapter(IPkcs11DeviceAdapter pkcs11DeviceAdapter, HsmConfig hsmConfig)
+    public HsmCryptoAdapter(ICryptoProvider pkcs11DeviceAdapter, HsmConfig hsmConfig)
     {
         _pkcs11DeviceAdapter = pkcs11DeviceAdapter;
         _hsmConfig = hsmConfig;
@@ -30,69 +29,45 @@ public class HsmCryptoAdapter : IHsmCryptoAdapter
         => new(_hsmConfig.VosrEcdsaPublicKey, _hsmConfig.VosrEcdsaPrivateKey, _hsmConfig.VosrAesKey);
 
     /// <inheritdoc />
-    public bool VerifyEcdsaSha384Signature(byte[] data, byte[] signature, AsymmetricKeyConfig signatureConfig)
-        => _pkcs11DeviceAdapter.VerifyEcdsaSha384Signature(data, signature);
+    public Task<bool> VerifyEcdsaSha384Signature(byte[] data, byte[] signature, AsymmetricKeyConfig signatureConfig)
+        => _pkcs11DeviceAdapter.VerifyEcdsaSha384Signature(data, signature, signatureConfig.PublicKeyCkaLabel);
 
     /// <inheritdoc />
-    public byte[] CreateEcdsaSha384Signature(byte[] data, AsymmetricKeyConfig signatureConfig)
+    public Task<byte[]> CreateEcdsaSha384Signature(byte[] data, AsymmetricKeyConfig signatureConfig)
     {
-        var bulkData = new List<byte[]> { data };
-        return BulkCreateEcdsaSha384Signature(bulkData, signatureConfig).Single();
+        return _pkcs11DeviceAdapter.CreateEcdsaSha384Signature(data, signatureConfig.PrivateKeyCkaLabel);
     }
 
     /// <inheritdoc />
-    public IReadOnlyList<byte[]> BulkCreateEcdsaSha384Signature(ICollection<byte[]> bulkData, AsymmetricKeyConfig signatureConfig)
+    public Task<IReadOnlyList<byte[]>> BulkCreateEcdsaSha384Signature(ICollection<byte[]> bulkData, AsymmetricKeyConfig signatureConfig)
     {
         if (bulkData.Count == 0)
         {
             throw new ArgumentOutOfRangeException(nameof(bulkData), "Contains no elements to sign.");
         }
 
-        return _pkcs11DeviceAdapter.BulkCreateEcdsaSha384Signature(bulkData, CreatePkcs11Config(signatureConfig));
+        return _pkcs11DeviceAdapter.BulkCreateEcdsaSha384Signature(bulkData, signatureConfig.PrivateKeyCkaLabel);
     }
 
     /// <inheritdoc />
-    public byte[] EncryptAes(byte[] data, SymmetricKeyConfig symmetricKeyConfig)
+    public Task<byte[]> EncryptAes(byte[] data, SymmetricKeyConfig symmetricKeyConfig)
     {
         if (data.Length == 0)
         {
             throw new ArgumentOutOfRangeException(nameof(data), "Contains nothing to encrypt.");
         }
 
-        return _pkcs11DeviceAdapter.EncryptAes(data, CreatePkcs11Config(symmetricKeyConfig));
+        return _pkcs11DeviceAdapter.EncryptAesGcm(data, symmetricKeyConfig.CkaLabel);
     }
 
     /// <inheritdoc />
-    public byte[] DecryptAes(byte[] data, SymmetricKeyConfig symmetricKeyConfig)
+    public Task<byte[]> DecryptAes(byte[] data, SymmetricKeyConfig symmetricKeyConfig)
     {
         if (data.Length == 0)
         {
             throw new ArgumentOutOfRangeException(nameof(data), "Contains nothing to encrypt.");
         }
 
-        return _pkcs11DeviceAdapter.DecryptAes(data, CreatePkcs11Config(symmetricKeyConfig));
-    }
-
-    private Pkcs11Config CreatePkcs11Config(AsymmetricKeyConfig config)
-    {
-        return new Pkcs11Config
-        {
-            LibraryPath = _hsmConfig.LibraryPath,
-            LoginPin = _hsmConfig.LoginPin,
-            SlotId = _hsmConfig.SlotId,
-            PrivateKeyCkaLabel = config.PrivateKeyCkaLabel,
-            PublicKeyCkaLabel = config.PublicKeyCkaLabel,
-        };
-    }
-
-    private Pkcs11Config CreatePkcs11Config(SymmetricKeyConfig config)
-    {
-        return new Pkcs11Config
-        {
-            LibraryPath = _hsmConfig.LibraryPath,
-            LoginPin = _hsmConfig.LoginPin,
-            SlotId = _hsmConfig.SlotId,
-            SecretKeyCkaLabel = config.CkaLabel,
-        };
+        return _pkcs11DeviceAdapter.DecryptAesGcm(data, symmetricKeyConfig.CkaLabel);
     }
 }

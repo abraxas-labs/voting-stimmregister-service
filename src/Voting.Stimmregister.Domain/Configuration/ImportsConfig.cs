@@ -101,6 +101,11 @@ public class ImportsConfig
     }
 
     /// <summary>
+    /// Gets the supported import source systems by canton.
+    /// </summary>
+    public Dictionary<Canton, List<ImportSourceSystem>> SupportedImportSourceSystemByCanton { get; } = [];
+
+    /// <summary>
     /// Gets the allowed person import source system configuration by municipality id.
     /// </summary>
     public IReadOnlyDictionary<int, AllowedPersonImportSourceSystemConfig> AllowedPersonImportSourceSystemByMunicipalityId => _allowedPersonImportSourceSystemByMunicipalityId ??= AllowedPersonImportSourceSystem

@@ -87,4 +87,12 @@ public static class Roles
     /// </list>
     /// </summary>
     public const string EVotingStatisticsReader = "EVotingStatisticsReader";
+
+    /// <summary>
+    /// Is allowed to:
+    /// <list type="bullet">
+    ///     <item>read the e-collecting endpoints for the citizen</item>
+    /// </list>
+    /// </summary>
+    public const string ECollectingCitizenReader = "ECollectingCitizenReader";
 }

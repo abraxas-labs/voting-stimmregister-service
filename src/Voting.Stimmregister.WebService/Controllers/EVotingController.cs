@@ -59,7 +59,7 @@ public class EVotingController : ControllerBase
         var parsedAhvn13 = ValidateAhvn13(request.Ahvn13);
         ValidateBfsCantonNumber(request.BfsCanton);
 
-        await _eVotingService.RegisterForEVoting(parsedAhvn13, request.BfsCanton);
+        await _eVotingService.RegisterForEVoting(parsedAhvn13, request.BfsCanton, request.Email);
     }
 
     [HttpPost("unregister")]

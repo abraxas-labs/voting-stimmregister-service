@@ -2,7 +2,7 @@
 // For license information see LICENSE file
 
 using System.Collections.Generic;
-using Voting.Lib.Iam.ServiceTokenHandling;
+using Voting.Lib.Iam.TokenHandling.ServiceToken;
 
 namespace Voting.Stimmregister.Domain.Configuration;
 

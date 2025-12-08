@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Voting.Stimmregister.Abstractions.Core.Services;
 using Voting.Stimmregister.Domain.Models;
@@ -77,6 +78,13 @@ public class ImportStatisticGrpcService : ImportStatisticService.ImportStatistic
 
         var result = await _importStatisticService.GetHistory(searchParameters);
         return _mapper.Map<GetImportStatisticHistoryResponse>(result);
+    }
+
+    [AuthorizeReaderOrManager]
+    public override async Task<GetSupportedSourceSystemsResponse> GetSupportedSourceSystems(Empty request, ServerCallContext context)
+    {
+        var result = await _importStatisticService.GetSupportedSourceSystems();
+        return _mapper.Map<GetSupportedSourceSystemsResponse>(result);
     }
 
     private bool? MapImportSource(ImportSource importSource)

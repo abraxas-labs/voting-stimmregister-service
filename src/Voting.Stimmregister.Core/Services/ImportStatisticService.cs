@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Voting.Lib.Common;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
+using Voting.Stimmregister.Abstractions.Adapter.VotingBasis;
 using Voting.Stimmregister.Abstractions.Adapter.VotingIam;
 using Voting.Stimmregister.Abstractions.Core.Services;
 using Voting.Stimmregister.Domain.Configuration;
+using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Core.Services;
@@ -22,24 +24,28 @@ public class ImportStatisticService : IImportStatisticService
 
     private readonly IImportStatisticRepository _importStatisticRepository;
     private readonly IPermissionService _permissionService;
+    private readonly IAccessControlListDoiService _aclDoiService;
     private readonly ImportsConfig _importsConfig;
     private readonly IClock _clock;
 
     public ImportStatisticService(
         IImportStatisticRepository importStatisticRepository,
         IPermissionService permissionService,
+        IAccessControlListDoiService aclDoiService,
         ImportsConfig importsConfig,
         IClock clock)
     {
         _importStatisticRepository = importStatisticRepository;
         _permissionService = permissionService;
+        _aclDoiService = aclDoiService;
         _importsConfig = importsConfig;
         _clock = clock;
     }
 
+    /// <inheritdoc/>
     public async Task<IEnumerable<ImportStatisticEntity>> GetHistory(ImportStatisticSearchParametersModel searchParameters)
     {
-        var queryable = BuildQuery(searchParameters);
+        var queryable = await BuildQuery(searchParameters);
         queryable = FilterByStatus(queryable, searchParameters);
 
         var result = await queryable
@@ -49,6 +55,7 @@ public class ImportStatisticService : IImportStatisticService
         return SanatizeResult(result);
     }
 
+    /// <inheritdoc/>
     public async Task<IEnumerable<ImportStatisticEntity>> List(ImportStatisticSearchParametersModel searchParameters)
     {
         if (!searchParameters.ImportType.HasValue)
@@ -61,7 +68,7 @@ public class ImportStatisticService : IImportStatisticService
             throw new InvalidOperationException($"Cannot list {nameof(ImportStatisticEntity)} without {nameof(searchParameters.ImportSourceSystem)}");
         }
 
-        var query = BuildQuery(searchParameters).Where(x => x.IsLatest);
+        var query = (await BuildQuery(searchParameters)).Where(x => x.IsLatest);
         query = FilterByStatus(query, searchParameters);
 
         var result = await query.ToListAsync();
@@ -69,10 +76,34 @@ public class ImportStatisticService : IImportStatisticService
         return SanatizeResult(result);
     }
 
-    private IQueryable<ImportStatisticEntity> BuildQuery(ImportStatisticSearchParametersModel searchParameters)
+    /// <inheritdoc/>
+    public async Task<IEnumerable<ImportSourceSystem>> GetSupportedSourceSystems()
+    {
+        if (_permissionService.IsImportObserver())
+        {
+            return Enum.GetValues<ImportSourceSystem>();
+        }
+        else
+        {
+            var tenantId = _permissionService.TenantId;
+            var acl = await _aclDoiService.GetDoiAccessControlListByTenantId(tenantId);
+            var cantons = acl.Select(a => a.Canton).Distinct();
+            return _importsConfig.SupportedImportSourceSystemByCanton
+                .Where(s => cantons.Contains(s.Key))
+                .SelectMany(s => s.Value)
+                .Distinct();
+        }
+    }
+
+    private async Task<IQueryable<ImportStatisticEntity>> BuildQuery(ImportStatisticSearchParametersModel searchParameters)
     {
         var queryable = _importStatisticRepository.Query();
 
+        // restrict statistic result-set to supported source systems.
+        var supportedSourceSystems = await GetSupportedSourceSystems();
+        queryable = queryable.Where(i => supportedSourceSystems.Contains(i.SourceSystem));
+
+        // apply search parameter filters
         if (searchParameters.ImportType.HasValue)
         {
             queryable = queryable.Where(i => i.ImportType.Equals(searchParameters.ImportType));

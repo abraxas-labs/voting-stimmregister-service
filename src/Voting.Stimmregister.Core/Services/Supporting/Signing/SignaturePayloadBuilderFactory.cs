@@ -24,7 +24,8 @@ public class SignaturePayloadBuilderFactory
         {
             1 => _serviceProvider.GetRequiredService<FilterVersionSignaturePayloadBuilderV1>(),
             2 => _serviceProvider.GetRequiredService<FilterVersionSignaturePayloadBuilderV2>(),
-            LatestVersion => _serviceProvider.GetRequiredService<FilterVersionSignaturePayloadBuilderV2>(),
+            3 => _serviceProvider.GetRequiredService<FilterVersionSignaturePayloadBuilderV3>(),
+            LatestVersion => _serviceProvider.GetRequiredService<FilterVersionSignaturePayloadBuilderV3>(),
             _ => throw new InvalidOperationException($"Unsupported filter version signature version {filterVersion.SignatureVersion}"),
         };
     }
@@ -35,7 +36,8 @@ public class SignaturePayloadBuilderFactory
         {
             1 => _serviceProvider.GetRequiredService<IntegritySignaturePayloadBuilderV1>(),
             2 => _serviceProvider.GetRequiredService<IntegritySignaturePayloadBuilderV2>(),
-            LatestVersion => _serviceProvider.GetRequiredService<IntegritySignaturePayloadBuilderV2>(),
+            3 => _serviceProvider.GetRequiredService<IntegritySignaturePayloadBuilderV3>(),
+            LatestVersion => _serviceProvider.GetRequiredService<IntegritySignaturePayloadBuilderV3>(),
             _ => throw new InvalidOperationException($"Unsupported integrity signature version {integrity.SignatureVersion}"),
         };
     }

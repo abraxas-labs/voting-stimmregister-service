@@ -1,6 +1,8 @@
 // (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using System.Threading.Tasks;
+
 namespace Voting.Stimmregister.Domain.Cryptography;
 
 /// <summary>
@@ -23,5 +25,6 @@ public interface IIncrementalSignatureCreator<in TEntity>
     /// Signs the underlying source entity by calculating the signature,
     /// and storing it and its parameters on the entity which initialized this <see cref="IIncrementalSignatureCreator{TEntity}"/> instance.
     /// </summary>
-    void Sign();
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task Sign();
 }

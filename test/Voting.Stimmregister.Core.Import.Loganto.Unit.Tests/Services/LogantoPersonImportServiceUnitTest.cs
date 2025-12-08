@@ -852,27 +852,27 @@ public class LogantoPersonImportServiceUnitTest : BaseWriteableDbTest
     {
         var mock = new Mock<ICountryHelperService>();
         mock.Setup(x => x.GetLogantoCountryTwoLetterIsoAndShortNameDe(It.IsAny<string?>()))
-            .Returns(new CountryHelperServiceResultModel
+            .Returns(new CountryModel
             {
-                Iso2Id = string.Empty,
+                Iso2 = null,
                 ShortNameDe = CountryUnknown,
             });
         mock.Setup(x => x.GetLogantoCountryTwoLetterIsoAndShortNameDe("CH"))
-            .Returns(new CountryHelperServiceResultModel
+            .Returns(new CountryModel
             {
-                Iso2Id = "CH",
+                Iso2 = "CH",
                 ShortNameDe = "Schweiz",
             });
         mock.Setup(x => x.GetLogantoCountryTwoLetterIsoAndShortNameDe("AND"))
-            .Returns(new CountryHelperServiceResultModel
+            .Returns(new CountryModel
             {
-                Iso2Id = "AD",
+                Iso2 = "AD",
                 ShortNameDe = "Andorra",
             });
         mock.Setup(x => x.GetLogantoCountryTwoLetterIsoAndShortNameDe("D"))
-            .Returns(new CountryHelperServiceResultModel
+            .Returns(new CountryModel
             {
-                Iso2Id = "DE",
+                Iso2 = "DE",
                 ShortNameDe = "Deutschland",
             });
         return mock;

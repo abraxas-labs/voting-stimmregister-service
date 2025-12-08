@@ -1,6 +1,8 @@
 // (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using System.Threading.Tasks;
+
 namespace Voting.Stimmregister.Domain.Cryptography;
 
 /// <summary>
@@ -22,5 +24,6 @@ public interface IIncrementalSignatureVerifier<in T>
     /// <summary>
     /// Ensures the signature of the underlying source entity by is valid.
     /// </summary>
-    void EnsureValid();
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task EnsureValid();
 }

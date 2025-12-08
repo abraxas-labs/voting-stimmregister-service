@@ -1,6 +1,7 @@
 // (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using System.Threading.Tasks;
 using Voting.Stimmregister.Core.Services.Supporting.Signing.PayloadBuilder;
 using Voting.Stimmregister.Domain.Cryptography;
 using Voting.Stimmregister.Domain.Models;
@@ -27,7 +28,7 @@ internal sealed class IncrementalSignatureVerifier<TEntity, TContent> : IIncreme
     public void Append(TContent item)
         => _payloadBuilder.Append(item);
 
-    public void EnsureValid()
+    public Task EnsureValid()
         => _signatureVerifier.EnsureValidSignature(_signedEntity, _payloadBuilder.BuildAndReset());
 
     internal static IIncrementalSignatureVerifier<TContent> InitNew(

@@ -15,9 +15,9 @@ namespace Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 public interface IEVoterRepository : IDbRepository<DbContext, EVoterEntity>
 {
     /// <summary>
-    /// Returns a set of all ahvn13 which have evoting enabled.
+    /// Returns a dictionary of all ahvn13 which have evoting enabled, paired with the optional e-voting email.
     /// </summary>
     /// <param name="cantonBfs">The bfs number of the canton.</param>
-    /// <returns>A set of ahvn13.</returns>
-    Task<HashSet<long>> GetEnabledAhvN13(short cantonBfs);
+    /// <returns>A dictionary of ahvn13 paired with the email address.</returns>
+    Task<Dictionary<long, string?>> GetEnabledAhvN13WithEmail(short cantonBfs);
 }

@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Abstractions.Core.Services;
@@ -25,4 +26,10 @@ public interface IImportStatisticService
     /// <param name="searchParameters">The search parameters.</param>
     /// <returns>A <see cref="ImportStatisticEntity"/> containing a list of resolved import statistics.</returns>
     Task<IEnumerable<ImportStatisticEntity>> GetHistory(ImportStatisticSearchParametersModel searchParameters);
+
+    /// <summary>
+    /// Gets the supported import source systems for the current tenant context based on the DOI access control list.
+    /// </summary>
+    /// <returns>A list of supported import source systems.</returns>
+    Task<IEnumerable<ImportSourceSystem>> GetSupportedSourceSystems();
 }

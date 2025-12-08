@@ -18,12 +18,10 @@ public class EVoterRepository : DbRepository<DataContext, EVoterEntity>, IEVoter
     {
     }
 
-    public async Task<HashSet<long>> GetEnabledAhvN13(short cantonBfs)
+    public async Task<Dictionary<long, string?>> GetEnabledAhvN13WithEmail(short cantonBfs)
     {
-        var enabled = await Set
+        return await Set
             .Where(x => x.BfsCanton == cantonBfs && x.EVoterFlag == true)
-            .Select(x => x.Ahvn13)
-            .ToListAsync();
-        return enabled.ToHashSet();
+            .ToDictionaryAsync(x => x.Ahvn13, x => x.EVotingEmail);
     }
 }

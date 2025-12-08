@@ -46,7 +46,7 @@ public class AppConfig
     /// <summary>
     /// Gets or sets the identity provider configuration.
     /// </summary>
-    public VotingIamConfig SecureConnect { get; set; } = new VotingIamConfig();
+    public VotingIamConfig SecureConnect { get; set; } = new VotingIamConfig { AllowOnBehalfToken = true };
 
     /// <summary>
     /// Gets or sets the identity provider api.

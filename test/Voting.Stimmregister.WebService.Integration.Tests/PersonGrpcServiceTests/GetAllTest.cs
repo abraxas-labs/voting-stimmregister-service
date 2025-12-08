@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Grpc.Core;
+using Voting.Lib.Common;
 using Voting.Lib.Testing.Mocks;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Domain.Authorization;
@@ -299,6 +300,101 @@ public class GetAllTest : BaseWriteableDbGrpcTest<PersonService.PersonServiceCli
         response.People.OrderBy(p => p.Id).MatchSnapshot();
     }
 
+    [Fact]
+    public async Task WhenFilterByStringWithMultipleValues_ShouldResolvePerson()
+    {
+        var filterValues = new Dictionary<FilterReference, string>
+        {
+            [FilterReference.MunicipalityName] = $"{PersonMockedData.Person_3203_StGallen_2.MunicipalityName!}, {PersonMockedData.Person_3213_Goldach_1.MunicipalityName!}",
+            [FilterReference.OfficialName] = $"{PersonMockedData.Person_3203_StGallen_2.OfficialName}, {PersonMockedData.Person_3213_Goldach_1.OfficialName}",
+            [FilterReference.FirstName] = $"{PersonMockedData.Person_3203_StGallen_2.FirstName}, {PersonMockedData.Person_3213_Goldach_1.FirstName}",
+            [FilterReference.OriginalName] = $"{PersonMockedData.Person_3203_StGallen_2.OriginalName!},{PersonMockedData.Person_3213_Goldach_1.OriginalName!}",
+            [FilterReference.AllianceName] = $"{PersonMockedData.Person_3203_StGallen_2.AllianceName!},{PersonMockedData.Person_3213_Goldach_1.AllianceName!}",
+            [FilterReference.AliasName] = $"{PersonMockedData.Person_3203_StGallen_2.AliasName!},{PersonMockedData.Person_3213_Goldach_1.AliasName!}",
+            [FilterReference.OtherName] = $"{PersonMockedData.Person_3203_StGallen_2.OtherName!},{PersonMockedData.Person_3213_Goldach_1.OtherName!}",
+            [FilterReference.CallName] = $"{PersonMockedData.Person_3203_StGallen_2.CallName!},{PersonMockedData.Person_3213_Goldach_1.CallName!}",
+            [FilterReference.ContactAddressExtensionLine1] = $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressExtensionLine1!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressExtensionLine1!}",
+            [FilterReference.ContactAddressExtensionLine2] = $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressExtensionLine2!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressExtensionLine2!}",
+            [FilterReference.ContactAddressStreet] = $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressStreet!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressStreet!}",
+            [FilterReference.ContactAddressHouseNumber] = $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressHouseNumber!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressHouseNumber!}",
+            [FilterReference.ContactAddressPostOfficeBoxText] = $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressPostOfficeBoxText!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressPostOfficeBoxText!}",
+            [FilterReference.ContactAddressTown] = $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressTown!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressTown!}",
+            [FilterReference.ContactAddressLocality] = $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressLocality!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressLocality!}",
+            [FilterReference.ContactAddressZipCode] = $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressZipCode!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressZipCode!}",
+            [FilterReference.ResidenceAddressExtensionLine1] = $"{PersonMockedData.Person_3203_StGallen_2.ResidenceAddressExtensionLine1!}, {PersonMockedData.Person_3213_Goldach_1.ResidenceAddressExtensionLine1!}",
+            [FilterReference.ResidenceAddressExtensionLine2] = $"{PersonMockedData.Person_3203_StGallen_2.ResidenceAddressExtensionLine2!}, {PersonMockedData.Person_3213_Goldach_1.ResidenceAddressExtensionLine2!}",
+            [FilterReference.ResidenceAddressStreet] = $"{PersonMockedData.Person_3203_StGallen_2.ResidenceAddressStreet!}, {PersonMockedData.Person_3213_Goldach_1.ResidenceAddressStreet!}",
+            [FilterReference.ResidenceAddressHouseNumber] = $"{PersonMockedData.Person_3203_StGallen_2.ResidenceAddressHouseNumber!}, {PersonMockedData.Person_3213_Goldach_1.ResidenceAddressHouseNumber!}",
+            [FilterReference.ResidenceAddressPostOfficeBoxText] = $"{PersonMockedData.Person_3203_StGallen_2.ResidenceAddressPostOfficeBoxText!}, {PersonMockedData.Person_3213_Goldach_1.ResidenceAddressPostOfficeBoxText!}",
+            [FilterReference.ResidenceAddressTown] = $"{PersonMockedData.Person_3203_StGallen_2.ResidenceAddressTown!}, {PersonMockedData.Person_3213_Goldach_1.ResidenceAddressTown!}",
+            [FilterReference.ResidenceAddressZipCode] = $"{PersonMockedData.Person_3203_StGallen_2.ResidenceAddressZipCode!}, {PersonMockedData.Person_3213_Goldach_1.ResidenceAddressZipCode!}",
+            [FilterReference.MoveInMunicipalityName] = $"{PersonMockedData.Person_3203_StGallen_2.MoveInMunicipalityName!}, {PersonMockedData.Person_3213_Goldach_1.MoveInMunicipalityName!}",
+            [FilterReference.MoveInCantonAbbreviation] = $"{PersonMockedData.Person_3203_StGallen_2.MoveInCantonAbbreviation!}, {PersonMockedData.Person_3213_Goldach_1.MoveInCantonAbbreviation!}",
+            [FilterReference.MoveInComesFrom] = $"{PersonMockedData.Person_3203_StGallen_2.MoveInComesFrom!}, {PersonMockedData.Person_3213_Goldach_1.MoveInComesFrom!}",
+            [FilterReference.MoveInCountryNameShort] = $"{PersonMockedData.Person_3203_StGallen_2.MoveInCountryNameShort!}, {PersonMockedData.Person_3213_Goldach_1.MoveInCountryNameShort!}",
+            [FilterReference.PoliticalCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_PoliticalCircle_Westen.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_PoliticalCircle_Centrum.Identifier}",
+            [FilterReference.PoliticalCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_PoliticalCircle_Westen.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_PoliticalCircle_Centrum.Name}",
+            [FilterReference.CatholicCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_CatholicCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_CatholicCircle.Identifier}",
+            [FilterReference.CatholicCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_CatholicCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_CatholicCircle.Name}",
+            [FilterReference.EvangelicCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_EvangelicCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_EvangelicCircle.Identifier}",
+            [FilterReference.EvangelicCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_EvangelicCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_EvangelicCircle.Name}",
+            [FilterReference.SchoolCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_SchoolCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_SchoolCircle.Identifier}",
+            [FilterReference.SchoolCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_SchoolCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_SchoolCircle.Name}",
+            [FilterReference.TrafficCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_TrafficCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_TrafficCircle.Identifier}",
+            [FilterReference.TrafficCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_TrafficCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_TrafficCircle.Name}",
+            [FilterReference.ResidentialDistrictCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_ResidentialDistrictCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_ResidentialDistrictCircle.Identifier}",
+            [FilterReference.ResidentialDistrictCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_ResidentialDistrictCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_ResidentialDistrictCircle.Name}",
+            [FilterReference.PeopleCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_PeopleCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_PeopleCircle.Identifier}",
+            [FilterReference.PeopleCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_PeopleCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_PeopleCircle.Name}",
+            [FilterReference.OriginOnCanton17] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_Origin1.Canton}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_Origin1.Canton}",
+        };
+
+        foreach (var item in filterValues)
+        {
+            var response = await GetAllByFilterWithMultipleValues(item.Key, item.Value, FilterOperator.Equals, FilterDataType.String);
+            response.People.OrderBy(p => p.Id).MatchSnapshot();
+
+            response = await GetAllByFilterWithMultipleValues(item.Key, item.Value[1..^1], FilterOperator.Contains, FilterDataType.String);
+            response.People.OrderBy(p => p.Id).MatchSnapshot();
+
+            response = await GetAllByFilterWithMultipleValues(item.Key, item.Value[..^1], FilterOperator.StartsWith, FilterDataType.String);
+            response.People.OrderBy(p => p.Id).MatchSnapshot();
+
+            response = await GetAllByFilterWithMultipleValues(item.Key, item.Value[1..], FilterOperator.EndsWith, FilterDataType.String);
+            response.People.OrderBy(p => p.Id).MatchSnapshot();
+        }
+    }
+
+    [Fact]
+    public async Task WhenFilterByContactAddressLine17WithMultipleValues_ShouldResolvePerson()
+    {
+        var filterValues = new[]
+        {
+            $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressLine1!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressLine1!}",
+            $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressLine2!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressLine2!}",
+            $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressLine3!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressLine3!}",
+            $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressLine4!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressLine4!}",
+            $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressLine5!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressLine5!}",
+            $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressLine6!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressLine6!}",
+            $"{PersonMockedData.Person_3203_StGallen_2.ContactAddressLine7!}, {PersonMockedData.Person_3213_Goldach_1.ContactAddressLine7!}",
+        };
+
+        foreach (var value in filterValues)
+        {
+            var response = await GetAllByFilterWithMultipleValues(FilterReference.ContactAddressLine17, value, FilterOperator.Equals, FilterDataType.String);
+            response.People.OrderBy(p => p.Id).MatchSnapshot();
+
+            response = await GetAllByFilterWithMultipleValues(FilterReference.ContactAddressLine17, value[1..^1], FilterOperator.Contains, FilterDataType.String);
+            response.People.OrderBy(p => p.Id).MatchSnapshot();
+
+            response = await GetAllByFilterWithMultipleValues(FilterReference.ContactAddressLine17, value[..^1], FilterOperator.StartsWith, FilterDataType.String);
+            response.People.OrderBy(p => p.Id).MatchSnapshot();
+
+            response = await GetAllByFilterWithMultipleValues(FilterReference.ContactAddressLine17, value[1..], FilterOperator.EndsWith, FilterDataType.String);
+            response.People.OrderBy(p => p.Id).MatchSnapshot();
+        }
+    }
+
     [Theory]
     [InlineData(FilterReference.DateOfBirth)]
     [InlineData(FilterReference.ResidencePermitValidFrom)]
@@ -565,6 +661,88 @@ public class GetAllTest : BaseWriteableDbGrpcTest<PersonService.PersonServiceCli
     }
 
     [Theory]
+    [InlineData(FilterOperator.Equals, "Goldach", FilterOperator.Equals, "St. Gallen")]
+    [InlineData(FilterOperator.Equals, "Goldach", FilterOperator.Contains, "Gall")]
+    [InlineData(FilterOperator.Equals, "Goldach", FilterOperator.StartsWith, "St. Gall")]
+    [InlineData(FilterOperator.Equals, "Goldach", FilterOperator.EndsWith, "Gallen")]
+    [InlineData(FilterOperator.Contains, "oldac", FilterOperator.Equals, "St. Gallen")]
+    [InlineData(FilterOperator.Contains, "oldac", FilterOperator.Contains, "Gall")]
+    [InlineData(FilterOperator.Contains, "oldac", FilterOperator.StartsWith, "St. Gall")]
+    [InlineData(FilterOperator.Contains, "oldac", FilterOperator.EndsWith, "Gallen")]
+    [InlineData(FilterOperator.StartsWith, "Gold", FilterOperator.Equals, "St. Gallen")]
+    [InlineData(FilterOperator.StartsWith, "Gold", FilterOperator.Contains, "Gall")]
+    [InlineData(FilterOperator.StartsWith, "Gold", FilterOperator.StartsWith, "St. Gall")]
+    [InlineData(FilterOperator.StartsWith, "Gold", FilterOperator.EndsWith, "Gallen")]
+    [InlineData(FilterOperator.EndsWith, "ldach", FilterOperator.Equals, "St. Gallen")]
+    [InlineData(FilterOperator.EndsWith, "ldach", FilterOperator.Contains, "Gall")]
+    [InlineData(FilterOperator.EndsWith, "ldach", FilterOperator.StartsWith, "St. Gall")]
+    [InlineData(FilterOperator.EndsWith, "ldach", FilterOperator.EndsWith, "Gallen")]
+    public async Task WhenBoth_OriginName_And_OriginCanton_ShouldFilterWithAnd(
+        FilterOperator originNameOperator,
+        string originNameValue,
+        FilterOperator originCantonOperator,
+        string originCantonValue)
+    {
+        var request = NewValidGetAllRequest(x =>
+        {
+            x.Criteria.Add(CreateFilter(FilterReference.OriginName17, filterOperator: originNameOperator, value: originNameValue));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginOnCanton17, filterOperator: originCantonOperator, value: originCantonValue));
+        });
+
+        var response = await SgManagerClient.GetAllAsync(request);
+
+        // All should match the same person
+        response.People.OrderBy(p => p.Id).MatchSnapshot();
+    }
+
+    [Fact]
+    public async Task WhenBoth_OriginName_And_OriginCanton_ShouldFilterWithAndCorrectly()
+    {
+        // This person has multiple origins:
+        // - Thurgau TG
+        // - St. Gallen SG
+        var request = NewValidGetAllRequest(x =>
+        {
+            x.Criteria.Add(CreateFilter(FilterReference.FirstName, value: "Peter"));
+            x.Criteria.Add(CreateFilter(FilterReference.OfficialName, value: "Miro"));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginName17, value: "Thurgau"));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginOnCanton17, value: "SG"));
+        });
+        var response = await SgManagerClient.GetAllAsync(request);
+        response.People.Count.Should().Be(0);
+
+        request = NewValidGetAllRequest(x =>
+        {
+            x.Criteria.Add(CreateFilter(FilterReference.FirstName, value: "Peter"));
+            x.Criteria.Add(CreateFilter(FilterReference.OfficialName, value: "Miro"));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginName17, value: "St. Gallen"));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginOnCanton17, value: "TG"));
+        });
+        response = await SgManagerClient.GetAllAsync(request);
+        response.People.Count.Should().Be(0);
+
+        request = NewValidGetAllRequest(x =>
+        {
+            x.Criteria.Add(CreateFilter(FilterReference.FirstName, value: "Peter"));
+            x.Criteria.Add(CreateFilter(FilterReference.OfficialName, value: "Miro"));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginName17, value: "St. Gallen"));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginOnCanton17, value: "SG"));
+        });
+        response = await SgManagerClient.GetAllAsync(request);
+        response.People.Count.Should().Be(1);
+
+        request = NewValidGetAllRequest(x =>
+        {
+            x.Criteria.Add(CreateFilter(FilterReference.FirstName, value: "Peter"));
+            x.Criteria.Add(CreateFilter(FilterReference.OfficialName, value: "Miro"));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginName17, value: "Thurgau"));
+            x.Criteria.Add(CreateFilter(FilterReference.OriginOnCanton17, value: "TG"));
+        });
+        response = await SgManagerClient.GetAllAsync(request);
+        response.People.Count.Should().Be(1);
+    }
+
+    [Theory]
     [InlineData(FilterOperator.Equals, 29)]
     [InlineData(FilterOperator.Less, 18)]
     [InlineData(FilterOperator.LessEqual, 18)]
@@ -672,6 +850,31 @@ public class GetAllTest : BaseWriteableDbGrpcTest<PersonService.PersonServiceCli
             Id = Guid.Empty.ToString(),
             ReferenceId = FilterReference.Vn,
             FilterValue = "756.3521.9874.24",
+            FilterDataType = FilterDataType.String,
+            FilterOperator = FilterOperator.Equals,
+        };
+
+        var request = NewValidGetAllRequest(x => x.Criteria.AddRange(new[] { filter, personFilter }));
+        return await SgManagerClient.GetAllAsync(request);
+    }
+
+    private async Task<PersonServiceGetAllResponse> GetAllByFilterWithMultipleValues(FilterReference filterReference, string filterValue, FilterOperator filterOperator, FilterDataType filterDataType)
+    {
+        var filter = new FilterCriteriaModel
+        {
+            Id = Guid.Empty.ToString(),
+            ReferenceId = filterReference,
+            FilterValue = filterValue,
+            FilterDataType = filterDataType,
+            FilterOperator = filterOperator,
+        };
+
+        // add person filter to reduce search result to two person, this allows to reuse this test since the snapshot should be equal
+        var personFilter = new FilterCriteriaModel
+        {
+            Id = Guid.Empty.ToString(),
+            ReferenceId = FilterReference.Vn,
+            FilterValue = Ahvn13.Parse(PersonMockedData.Ahvn13ForMultiValueFilterTest).ToString(),
             FilterDataType = FilterDataType.String,
             FilterOperator = FilterOperator.Equals,
         };

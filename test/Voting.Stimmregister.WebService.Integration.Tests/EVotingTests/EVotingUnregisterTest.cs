@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Voting.Lib.Common;
 using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.Constants.EVoting;
@@ -166,9 +167,9 @@ public class EVotingUnregisterTest : BaseWriteableDbRestTest
 
         resp.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        await RunOnDb(context =>
+        await RunOnDb(async context =>
         {
-            var eVoter = context.Set<EVoterEntity>().FirstOrDefault(v => v.Ahvn13 == ahvNumber);
+            var eVoter = await context.Set<EVoterEntity>().FirstOrDefaultAsync(v => v.Ahvn13 == ahvNumber);
             var audits = context.Set<EVoterAuditEntity>().Where(v => v.EVoterId == eVoter!.Id);
             eVoter.Should().NotBeNull();
             eVoter!.BfsCanton.Should().Be(EVotingBfsCantonMockedData.BfsCantonValid);
@@ -184,8 +185,38 @@ public class EVotingUnregisterTest : BaseWriteableDbRestTest
             audit.EVoterId.Should().Be(eVoter.Id);
             audit.StatusCode.Should().Be(null);
             audit.EVoterAuditInfo.CreatedById.Should().Be("default-user-id");
+        });
+    }
 
-            return Task.CompletedTask;
+    [Fact]
+    public async Task ShouldRemoveEVotingEmail()
+    {
+        _config.EnableKewrAndLoganto = false;
+
+        await ResetDb();
+        await AclDoiVotingBasisMockedData.Seed(RunScoped);
+        await PersonMockedData.Seed(RunScoped);
+        await BfsIntegrityMockedData.Seed(RunScoped);
+
+        var ahvNumber = PersonMockedData.Person_3213_Goldach_Swiss_Abroad.Vn!.Value;
+
+        await ModifyDbEntities<EVoterEntity>(
+            eVoter => eVoter.Ahvn13 == ahvNumber,
+            eVoter => eVoter.EVotingEmail = "test@example.invalid");
+
+        var resp = await ApiEVotingClient.PostAsJsonAsync(UnregisterApiUrl, new CreateUnregistrationRequest
+        {
+            Ahvn13 = Ahvn13.Parse(ahvNumber).ToString(),
+            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
+        });
+
+        resp.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        await RunOnDb(async context =>
+        {
+            var eVoter = await context.Set<EVoterEntity>().FirstOrDefaultAsync(v => v.Ahvn13 == ahvNumber);
+            eVoter.Should().NotBeNull();
+            eVoter!.EVotingEmail.Should().BeNull();
         });
     }
 

@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;

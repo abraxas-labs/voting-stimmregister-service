@@ -59,6 +59,7 @@ public class MappingProfileUnitTests
             configuration.AddProfile<PersonProfile>();
             configuration.AddProfile<DomainOfInfluenceProfile>();
             configuration.AddProfile<AuditInfoProfile>();
+            configuration.AddProfile<ECollectingProfile>();
         });
 
         mapperConfiguration.AssertConfigurationIsValid();

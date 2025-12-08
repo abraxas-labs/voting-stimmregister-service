@@ -10,7 +10,7 @@ namespace Voting.Stimmregister.Domain.Models.Utils;
 /// The loganto country helper service file model.
 /// </summary>
 [Serializable]
-public class LogantoCountryHelperServiceModel
+public class LogantoCountryModel
 {
     /// <summary>
     /// Gets or sets the id (BFS Number) i.e. '8207'.
@@ -18,7 +18,7 @@ public class LogantoCountryHelperServiceModel
     [XmlElement("id")]
     public string IdString { get; set; } = string.Empty;
 
-    public int? Id => !string.IsNullOrWhiteSpace(IdString) && int.TryParse(IdString, out var retval) ? retval : null;
+    public ushort? Id => !string.IsNullOrWhiteSpace(IdString) && ushort.TryParse(IdString, out var retval) ? retval : null;
 
     /// <summary>
     /// Gets or sets the logaId i.e. 'D'.

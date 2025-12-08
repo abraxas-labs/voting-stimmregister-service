@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Domain.Authorization;
+using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Models;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
@@ -38,6 +39,18 @@ public class ListStatisticsTest : BaseWriteableDbGrpcTest<ImportStatisticService
         Assert.Single(response.ImportStatistics);
         Assert.All(response.ImportStatistics, i => Assert.Equal(3203, i.MunicipalityId));
         response.MatchSnapshot();
+    }
+
+    [Fact]
+    public async Task ShouldReturnEmptyWhenUnsupportedSourceSystemType()
+    {
+        var importConfig = GetService<ImportsConfig>();
+        importConfig.SupportedImportSourceSystemByCanton[Domain.Enums.Canton.SG].Remove(Domain.Enums.ImportSourceSystem.Innosolv);
+
+        var request = NewValidRequest();
+        var response = await SgManagerClient.ListAsync(request);
+
+        Assert.Empty(response.ImportStatistics);
     }
 
     [Fact]

@@ -15,6 +15,7 @@ using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Abstractions.Core.Services;
 using Voting.Stimmregister.Core.Configuration;
 using Voting.Stimmregister.Core.Services;
+using Voting.Stimmregister.Core.Services.Supporting.Voting;
 using Voting.Stimmregister.Domain.Constants;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Exceptions;
@@ -27,7 +28,7 @@ namespace Voting.Stimmregister.Core.Unit.Tests.Services;
 public class PersonServiceTest
 {
     private readonly PersonService _personService;
-    private readonly Mock<ILogger<IPersonService>> _loggerMock = new();
+    private readonly Mock<ILogger<PersonService>> _loggerMock = new();
     private readonly Mock<IMapper> _mapperMock = new();
     private readonly MockedClock _clockMock = new();
     private readonly Mock<IPersonRepository> _personRepositoryMock = new();
@@ -35,6 +36,7 @@ public class PersonServiceTest
     private readonly Mock<IFilterVersionRepository> _filterVersionRepository = new();
     private readonly Mock<IBfsIntegrityRepository> _bfsIntegrityRepositoryMock = new();
     private readonly Mock<ILastSearchParameterService> _lastSearchParameterServiceMock = new();
+    private readonly VotingDerivedInfos _votingDerivedInfos = new();
     private readonly PersonConfig _personConfig = new();
 
     public PersonServiceTest()
@@ -48,7 +50,8 @@ public class PersonServiceTest
             _filterVersionRepository.Object,
             _bfsIntegrityRepositoryMock.Object,
             _personConfig,
-            _lastSearchParameterServiceMock.Object);
+            _lastSearchParameterServiceMock.Object,
+            _votingDerivedInfos);
     }
 
     [Fact]
@@ -66,8 +69,8 @@ public class PersonServiceTest
         var personEntityModel1 = new PersonEntityModel { FirstName = "Carmen", MunicipalityId = 1 };
         var personEntityModel2 = new PersonEntityModel { FirstName = "Marco", MunicipalityId = 2 };
 
-        var personEntityResult = new PersonSearchResultPageModel<PersonEntity>(new Page<PersonEntity>(new[] { personEntity1, personEntity2 }, 2, 1, 2), 0);
-        var personEntityModelResult = new PersonSearchResultPageModel<PersonEntityModel>(new Page<PersonEntityModel>(new[] { personEntityModel1, personEntityModel2 }, 2, 1, 2), 0);
+        var personEntityResult = new PersonSearchResultPageModel<PersonEntity>(new Page<PersonEntity>([personEntity1, personEntity2], 2, 1, 2), 0);
+        var personEntityModelResult = new PersonSearchResultPageModel<PersonEntityModel>(new Page<PersonEntityModel>([personEntityModel1, personEntityModel2], 2, 1, 2), 0);
 
         var integrityEntities = new Dictionary<string, BfsIntegrityEntity>
         {
@@ -115,7 +118,7 @@ public class PersonServiceTest
         };
 
         const bool requiredValidPageSize = true;
-        var repositoryResult = new PersonSearchResultPageModel<PersonEntity>(new Page<PersonEntity>(new[] { new PersonEntity(), new PersonEntity() }, 2, 1, 2), 0);
+        var repositoryResult = new PersonSearchResultPageModel<PersonEntity>(new Page<PersonEntity>([new PersonEntity(), new PersonEntity()], 2, 1, 2), 0);
         _personRepositoryMock
             .Setup(m => m.GetPersonByFilter(new List<FilterCriteriaEntity> { new() }, _clockMock.Today, false, searchParameters.Paging))
             .Returns(Task.FromResult(repositoryResult));

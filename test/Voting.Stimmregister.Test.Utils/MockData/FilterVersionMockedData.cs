@@ -21,10 +21,10 @@ public static class FilterVersionMockedData
 {
     private static readonly IReadOnlyDictionary<Guid, string> _signatures = new Dictionary<Guid, string>
     {
-        [Guid.Parse("2ddf8718-be9e-4730-a3ad-81253a16f5f7")] = "AVCJSSQaT/6GRdInr+bN1mIv+qKhSmzk0j7o0TDVP2qjZuh0sjnEhltwfZr58l5J5b5qnCboxK4yNn1SOJioNRTrABdYQmDRe7ovpvc9mCG4TJU2RZFmK64j0AKjgzK8AlVZLggRKpZcxI0sJONuvKzKiTNAXPUJwUZ8U2DS8x3ZZVyF",
-        [Guid.Parse("3333d8dd-057c-4449-9630-12dacc12ba05")] = "AS6h6tnqaWR4f0Xm6IHobE0jL8awOBAdIPVkkGXxl2RDmtL70Zvej652LtNta3qehOQA2SDVvY6eXi9ONCNAJcKVADhURCtLQtGcqZt9YGYRqudLxr9D5isn3108tI9XgMfyYTysbHE310fpcPATAQVYn6zSh1lvKL7t4daE83GlzUIK",
-        [Guid.Parse("5ee3d8dd-057c-4449-9630-7cdacc12ba04")] = "AH3i7V+Y82g+GbhNpFo0JaB1HYjfNMsSC86IB6jEx1WQvbySzzsH91JmPvC90WdVQv54FTCVMeOyTEoKpzh3/MghAcbkE4M4E70sDJqY9/KVvQ+v4RuBs0JPmNhXR/FoUL/cX/pKDmPZF+/sFl7C6VP8VXfyunnCSVHiwJqHZz4t/By1",
-        [Guid.Parse("82a3d8dd-057c-4449-9630-12dacc12ba05")] = "AbAfO8s7eImxcCPOFbamemx9CIsHL2kUGrdfpsoxnSSFGFVchwfkqYsNA6/4j1bbfwclAUdD5wAhEKP0HDmiwaHPAdT+VC4aCCte9HOJ4gtHg6FaZS7glcyUN8aFjVbQU1Fm8PHwM7m4eZDZjdxfjaIDmYiAup0HT1NPYUOLlXlmPcqs",
+        [Guid.Parse("2ddf8718-be9e-4730-a3ad-81253a16f5f7")] = "NMVGxwTe+gYHAR7llXMdpy9Hkmihq9xEj27zsdMCmiroIQvumgyVY89iuhMD6jQW2jemznlx4JzrsGE6Km+K5g==",
+        [Guid.Parse("3333d8dd-057c-4449-9630-12dacc12ba05")] = "fzGWoUl+sl/ueTY5CS/kYN79683Hi12z6TK9AiRQx1c1hC0pIlnrZXrucsntULNZ8hbQEEffTrRWx7e5fCY9zA==",
+        [Guid.Parse("5ee3d8dd-057c-4449-9630-7cdacc12ba04")] = "5uYvRMF+DV9s4spTE+gB9Nmoc48OoxY9xEC49nwdhrvKFEF2WqJF1d4gJschcsnro8KTVA4YLJ3qIGlI3qLHlA==",
+        [Guid.Parse("82a3d8dd-057c-4449-9630-12dacc12ba05")] = "+5trp58IK4A+6r1OwzrrekYAM41Ly8Z+XakJsBhrX2UrNFO8xll2O1HdbugVl+ngbY8K0O/nYXYNzVU99QeKYg==",
     };
 
     public static int MunicipalityId => FilterMockedData.MunicipalityId;
@@ -124,7 +124,7 @@ public static class FilterVersionMockedData
             }
 
             integrity.Signature = Convert.FromBase64String(signatureB64);
-            integrity.SignatureVersion = 1;
+            integrity.SignatureVersion = 2;
             integrity.SignatureKeyId = "VOSR_ECDSA_PUBLIC_KEY_PRE";
         }
     }
@@ -151,7 +151,7 @@ public static class FilterVersionMockedData
 
         foreach (var filterVersion in toSign)
         {
-            signer.SignFilterVersion(filterVersion, personsByFilterId.GetValueOrDefault(filterVersion.Id) ?? new List<PersonEntity>());
+            await signer.SignFilterVersion(filterVersion, personsByFilterId.GetValueOrDefault(filterVersion.Id) ?? []);
         }
 
         // all integrity entities should have a valid signature
@@ -163,7 +163,7 @@ public static class FilterVersionMockedData
         // and update the _signatures dictionary.
         foreach (var filterVersion in all)
         {
-            signatureVerifier.EnsureFilterVersionSignatureValid(filterVersion, personsByFilterId.GetValueOrDefault(filterVersion.Id) ?? new List<PersonEntity>());
+            await signatureVerifier.EnsureFilterVersionSignatureValid(filterVersion, personsByFilterId.GetValueOrDefault(filterVersion.Id) ?? []);
         }
 
         if (toSign.Count > 0)

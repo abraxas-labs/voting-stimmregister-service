@@ -2,6 +2,7 @@
 // For license information see LICENSE file
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Voting.Stimmregister.Domain.Models;
 
 // TODO: VOTING-2763 Move to Core Signing, after or with Adapter.Loganto is moved to Core.
@@ -17,21 +18,24 @@ public interface ICreateSignatureService
     /// </summary>
     /// <param name="integrity">The integrity entity to sign.</param>
     /// <param name="dois">The domain of influences.</param>
-    void SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<DomainOfInfluenceEntity> dois);
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<DomainOfInfluenceEntity> dois);
 
     /// <summary>
     /// Signing provided integrity entity for persons.
     /// </summary>
     /// <param name="integrity">The integrity entity to sign.</param>
     /// <param name="persons">The persons to be taken into account including the DOIs.</param>
-    void SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons);
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task SignIntegrity(BfsIntegrityEntity integrity, IReadOnlyCollection<PersonEntity> persons);
 
     /// <summary>
     /// Signs a filter version.
     /// </summary>
     /// <param name="filterVersion">The filter version.</param>
     /// <param name="persons">The persons.</param>
-    void SignFilterVersion(FilterVersionEntity filterVersion, IReadOnlyCollection<PersonEntity> persons);
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task SignFilterVersion(FilterVersionEntity filterVersion, IReadOnlyCollection<PersonEntity> persons);
 
     /// <summary>
     /// Creates an incremental signature creator for a filter version.

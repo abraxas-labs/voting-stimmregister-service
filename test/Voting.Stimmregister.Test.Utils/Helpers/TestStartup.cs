@@ -29,8 +29,9 @@ public class TestStartup : Startup
         base.ConfigureServices(services);
         services
             .AddMockedTimeProvider()
+            .AddMockedClock()
             .AddVotingLibIamMocks()
-            .AddVotingLibPkcs11Mock()
+            .AddVotingLibCryptoProviderMock()
             .RemoveHostedServices()
             .RemoveAll<IAccessControlListDoiHostedService>()
             .AddSingleton<IHttpClientFactory, HttpClientFactoryMocked>()

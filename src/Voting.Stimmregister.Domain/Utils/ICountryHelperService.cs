@@ -1,6 +1,7 @@
 // (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using System.Collections.ObjectModel;
 using Voting.Stimmregister.Domain.Models.Utils;
 
 namespace Voting.Stimmregister.Domain.Utils;
@@ -11,19 +12,25 @@ namespace Voting.Stimmregister.Domain.Utils;
 public interface ICountryHelperService
 {
     /// <summary>
+    /// Gets a list of countries and territories based on the BFS publication.
+    /// </summary>
+    ReadOnlyCollection<CountryModel> BfsCountryCollection { get; }
+
+    /// <summary>
     /// Gets a country two letter iso code from a passed official country name.
     /// </summary>
     /// <param name="countryShortName">The country name, i.e. 'Austria'.</param>
     /// <param name="bfsCountryNumber">The country name, i.e. '8229'.</param>
+    /// <param name="iso2">The iso2 code, i.e. 'CH'.</param>
     /// <returns>A two letter iso country code, i.e. 'AT'.</returns>
-    string? GetCountryTwoLetterIsoCode(string? countryShortName, string? bfsCountryNumber);
+    string? GetCountryTwoLetterIsoCode(string? countryShortName, string? bfsCountryNumber = null, string? iso2 = null);
 
     /// <summary>
     /// Gets detailed country information for a given two letter country code.
     /// </summary>
     /// <param name="countryTwoLetterCode">The two-letter code defined in ISO 3166 for the country/region, i.e. 'CH'.</param>
     /// <returns>Detailed country region information.</returns>
-    BfsCountryHelperServiceModel? GetCountryInfo(string countryTwoLetterCode);
+    CountryModel? GetCountryInfo(string countryTwoLetterCode);
 
     /// <summary>
     /// Gets a country two letter iso code from a passed loganto code.
@@ -37,5 +44,5 @@ public interface ICountryHelperService
     /// </summary>
     /// <param name="countryLogaId">The country logid from loganto, i.e. 'IRL'.</param>
     /// <returns>A two letter iso country code and shorte name de, i.e. 'IE', 'Irland'.</returns>
-    CountryHelperServiceResultModel? GetLogantoCountryTwoLetterIsoAndShortNameDe(string? countryLogaId);
+    CountryModel? GetLogantoCountryTwoLetterIsoAndShortNameDe(string? countryLogaId);
 }

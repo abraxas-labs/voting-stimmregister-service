@@ -2,6 +2,7 @@
 // For license information see LICENSE file
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,9 +23,14 @@ public class TestApplicationFactory : TestApplicationFactory<TestStartup>
 public class TestApplicationFactory<TStartup> : BaseTestApplicationFactory<TStartup>
     where TStartup : class
 {
-    public override HttpClient CreateHttpClient(bool authorize, string? tenant, string? userId, string[]? roles)
+    public override HttpClient CreateHttpClient(
+        bool authorize,
+        string? tenant,
+        string? userId,
+        string[]? roles,
+        IEnumerable<(string, string)>? additionalHeaders = null)
     {
-        var httpClient = base.CreateHttpClient(authorize, tenant, userId, roles);
+        var httpClient = base.CreateHttpClient(authorize, tenant, userId, roles, additionalHeaders);
         httpClient.DefaultRequestHeaders.Add("x-language", "de");
         return httpClient;
     }

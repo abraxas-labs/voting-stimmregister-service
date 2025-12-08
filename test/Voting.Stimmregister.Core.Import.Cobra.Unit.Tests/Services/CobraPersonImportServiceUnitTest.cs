@@ -412,12 +412,14 @@ public class CobraPersonImportServiceUnitTest : BaseWriteableDbTest
         var integrity = await RunOnDb(db => db.BfsIntegrities
             .IgnoreQueryFilters()
             .SingleAsync(x => x.Bfs == bfs.ToString() && x.ImportType == ImportType.Person));
+
         var persons = await RunOnDb(db => db.Persons
             .IgnoreQueryFilters()
             .Where(x => x.MunicipalityId == bfs && !x.IsDeleted && x.IsLatest)
             .Include(x => x.PersonDois)
             .OrderBy(x => x.Id)
             .ToListAsync());
-        GetService<IVerifySigningService>().EnsureBfsIntegritySignatureValid(integrity, persons);
+
+        await GetService<IVerifySigningService>().EnsureBfsIntegritySignatureValid(integrity, persons);
     }
 }

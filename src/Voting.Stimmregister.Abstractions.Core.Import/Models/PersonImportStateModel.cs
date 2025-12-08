@@ -12,9 +12,9 @@ namespace Voting.Stimmregister.Abstractions.Core.Import.Models;
 public class PersonImportStateModel : ImportStateModel<PersonEntity>
 {
     /// <summary>
-    /// Gets or sets a set of enabled eVoting vn.
+    /// Gets or sets a dictionary of all e-voters paired with their optional email used for sending e-voting related stuff.
     /// </summary>
-    public HashSet<long> EVotingEnabledVns { get; set; } = new();
+    public Dictionary<long, string?> EVotingEnabledWithEmailByVns { get; set; } = new();
 
     /// <summary>
     /// Gets or sets a list of person DOI entities for a given BFS number from the

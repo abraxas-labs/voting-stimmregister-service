@@ -2,9 +2,9 @@
 // For license information see LICENSE file
 
 using System;
-using System.Globalization;
 using System.Linq;
-using ABX_Voting_1_0;
+using AbxVoting_1_5;
+using Ech0010_8_0;
 using Ech0044_4_1;
 using Voting.Lib.Common;
 using Voting.Stimmregister.Abstractions.Core.Import.Mapping;
@@ -70,7 +70,18 @@ internal class InnosolvPersonMapper : BasePersonMapper<PersonInfoType>
         entity.ResidenceEntryDate = DateOnlyFromNullable(record.ResidencePermit?.EntryDate);
 
         entity.ImportStatisticId = state.ImportStatisticId;
-        entity.EVoting = record.PersonIdentification.Vn.HasValue && state.EVotingEnabledVns.Contains((long)record.PersonIdentification.Vn.Value);
+        entity.IsHouseholder = record.IsHeadOfHousehold != false;
+
+        if (entity.Vn.HasValue && state.EVotingEnabledWithEmailByVns.TryGetValue(entity.Vn.Value, out var email))
+        {
+            entity.EVoting = true;
+            entity.EVotingEmail = email;
+        }
+        else
+        {
+            entity.EVoting = false;
+            entity.EVotingEmail = null;
+        }
 
         MapContactAddress(entity, record);
         MapResidence(entity, record);
@@ -109,7 +120,7 @@ internal class InnosolvPersonMapper : BasePersonMapper<PersonInfoType>
                     "SC" => DomainOfInfluenceType.Sc, // Schulgemeinde
                     "KIKAT" => DomainOfInfluenceType.KiKat, // Katholische Kirchgemeinde
                     "KIEVA" => DomainOfInfluenceType.KiEva, // Evangelische Kirchgemeinde
-                    "OG" => DomainOfInfluenceType.Og, // Ortsbürgergemeinde
+                    "OG" => DomainOfInfluenceType.Og, // Ortsbï¿½rgergemeinde
                     "KO" => DomainOfInfluenceType.Ko, // Korporation
                     "SK" => DomainOfInfluenceType.Sk, // Stadtkreis
                     "ANVEK" => DomainOfInfluenceType.AnVek, // Verkehrskreis
@@ -173,13 +184,15 @@ internal class InnosolvPersonMapper : BasePersonMapper<PersonInfoType>
         entity.ResidenceAddressDwellingNumber = residence.DwellingAddress.Address.DwellingNumber;
         entity.ResidenceAddressTown = residence.DwellingAddress.Address.Town;
         entity.ResidenceCantonAbbreviation = residence.ReportingMunicipality?.CantonAbbreviation.ToString();
-        entity.ResidenceCountry = residence.DwellingAddress.Address.Country;
+        entity.ResidenceCountry = MapCountryIso2(residence.DwellingAddress.Address.Country);
         entity.ResidenceAddressZipCode = residence.DwellingAddress.Address.SwissZipCode.ToString();
         entity.MoveInArrivalDate = DateOnlyFromNullable(residence.ArrivalDate);
         entity.MoveInUnknown = residence.ComesFrom?.UnknownValueSpecified;
         entity.MoveInCantonAbbreviation = residence.ComesFrom?.SwissTown?.CantonAbbreviation?.ToString().ToUpperInvariant();
         entity.MoveInMunicipalityName = residence.ComesFrom?.SwissTown?.MunicipalityName;
         entity.MoveInCountryNameShort = residence.ComesFrom?.ForeignCountry?.Country?.CountryNameShort;
+        entity.ResidenceBuildingId = (int?)residence.DwellingAddress.Egid;
+        entity.ResidenceApartmentId = (int?)residence.DwellingAddress.Ewid;
 
         if (entity.MoveInUnknown == true)
         {
@@ -212,7 +225,7 @@ internal class InnosolvPersonMapper : BasePersonMapper<PersonInfoType>
         entity.ContactAddressTown = contactAddress.Town;
         entity.ContactAddressLocality = contactAddress.Locality;
         entity.ContactAddressZipCode = contactAddress.ForeignZipCode ?? contactAddress.SwissZipCode?.ToString();
-        entity.ContactAddressCountryIdIso2 = contactAddress.Country.ToUpper(CultureInfo.InvariantCulture);
+        entity.ContactAddressCountryIdIso2 = MapCountryIso2(contactAddress.Country);
     }
 
     private void MapContactAddressFromResidence(PersonEntity entity, PersonInfoType record)
@@ -232,7 +245,7 @@ internal class InnosolvPersonMapper : BasePersonMapper<PersonInfoType>
         entity.ContactAddressTown = residenceAddress.Town;
         entity.ContactAddressLocality = residenceAddress.Locality;
         entity.ContactAddressZipCode = residenceAddress.SwissZipCode.ToString();
-        entity.ContactAddressCountryIdIso2 = residenceAddress.Country.ToUpper(CultureInfo.InvariantCulture);
+        entity.ContactAddressCountryIdIso2 = MapCountryIso2(residenceAddress.Country);
     }
 
     private DateOnly? DateOnlyFromNullable(DateTime? dateTime)
@@ -259,5 +272,17 @@ internal class InnosolvPersonMapper : BasePersonMapper<PersonInfoType>
 
         var year = int.Parse(partiallyKnownDate.Year);
         return (new DateOnly(year, 1, 1), true);
+    }
+
+    private string? MapCountryIso2(CountryType? country)
+    {
+        if (!string.IsNullOrEmpty(country?.CountryIdIso2))
+        {
+            return country.CountryIdIso2.ToUpperInvariant();
+        }
+
+        return country?.CountryNameShort?.Length == 2
+            ? country.CountryNameShort.ToUpperInvariant()
+            : null;
     }
 }

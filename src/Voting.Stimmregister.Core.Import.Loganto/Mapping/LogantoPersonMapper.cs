@@ -56,7 +56,7 @@ public class LogantoPersonMapper : BasePersonMapper<LogantoPersonCsvRecord>
         entity.AliasName = record.AliasName;
         entity.OtherName = record.OtherName;
         entity.CallName = record.CallName;
-        entity.Country = country.Iso2Id;
+        entity.Country = country.Iso2;
         entity.CountryNameShort = country.ShortNameDe;
         entity.ContactAddressExtensionLine1 = record.ContactAddressExtensionLine1;
         entity.ContactAddressExtensionLine2 = record.ContactAddressExtensionLine2;
@@ -91,7 +91,6 @@ public class LogantoPersonMapper : BasePersonMapper<LogantoPersonCsvRecord>
         entity.ResidenceAddressZipCode = record.ResidenceAddressSwissZipCode;
         entity.ResidenceCantonAbbreviation = record.ResidenceCantonAbbreviation;
         entity.ResidenceCountry = SwissCountryIdIso2;
-        entity.EVoting = record.Vn.HasValue && state.EVotingEnabledVns.Contains(record.Vn.Value);
         entity.TypeOfResidence =
             LogantoUtil.EvaluateResidenceType(record.HasMainResidence, record.HasSecondaryResidence);
         entity.RestrictedVotingAndElectionRightFederation = LogantoUtil.IsRestrictedToVote(
@@ -109,6 +108,17 @@ public class LogantoPersonMapper : BasePersonMapper<LogantoPersonCsvRecord>
         {
             entity.ResidencePermitValidFrom = LogantoUtil.ConvertLogantoDate(record.ResidencePermitValidFrom);
             entity.ResidencePermitValidTill = LogantoUtil.ConvertLogantoDate(record.ResidencePermitValidTill, false);
+        }
+
+        if (entity.Vn.HasValue && state.EVotingEnabledWithEmailByVns.TryGetValue(entity.Vn.Value, out var email))
+        {
+            entity.EVoting = true;
+            entity.EVotingEmail = email;
+        }
+        else
+        {
+            entity.EVoting = false;
+            entity.EVotingEmail = null;
         }
 
         entity.ImportStatisticId = state.ImportStatisticId;

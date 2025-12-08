@@ -95,7 +95,7 @@ public class ExportEchService : IExportEchService
             var verifier = _verifySigningService.CreateFilterVersionSignatureVerifier(filterVersion);
             var persons = await _personService.StreamAllWithCountsByFilterVersion(filterVersionId);
             persons.Peek(verifier.Append);
-            return BuildEch0045Export(persons, transaction, () => verifier.EnsureValid());
+            return BuildEch0045Export(persons, transaction, verifier.EnsureValid);
         }
         catch (Exception)
         {
@@ -116,12 +116,11 @@ public class ExportEchService : IExportEchService
     private FileModel BuildEch0045Export(
         PersonSearchStreamedResultModel<PersonEntity> persons,
         IDbContextTransaction transaction,
-        Action onComplete)
+        Func<Task> onComplete)
     {
-        return BuildEch0045Export(persons, transaction, _ =>
+        return BuildEch0045Export(persons, transaction, async _ =>
         {
-            onComplete();
-            return Task.CompletedTask;
+            await onComplete();
         });
     }
 

@@ -17,7 +17,7 @@ public interface IStreamDecryptionService
     /// <param name="inputStream">The stream to decrypt.</param>
     /// <param name="aesCipherMetadata">The encrypted cipher to decrypt the stream.</param>
     /// <returns>The stream wrapped with decryption.</returns>
-    Stream CreateAesMacDecryptCryptoStream(Stream inputStream, AesCipherMetadata aesCipherMetadata);
+    Task<Stream> CreateAesMacDecryptCryptoStream(Stream inputStream, AesCipherMetadata aesCipherMetadata);
 
     /// <summary>
     /// Verify whether the computed hash of the input stream matches with the hash stored inside the AES cipher metadata.

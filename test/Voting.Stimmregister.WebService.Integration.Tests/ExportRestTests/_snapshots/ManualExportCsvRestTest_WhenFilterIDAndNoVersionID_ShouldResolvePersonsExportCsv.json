@@ -99,6 +99,7 @@
       "CorporationsCircleId": "",
       "CorporationsCircleName": "",
       "EVoting": "Nein",
+      "EVotingEmail": "",
       "TypeOfResidenceCode": 3,
       "TypeOfResidence": "Unbekannt",
       "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein",
@@ -107,7 +108,7 @@
       "ResidenceApartmentId": 999
     },
     {
-      "Vn": "",
+      "Vn": "756.8093.9059.69",
       "OfficialName": "Lavigne",
       "FirstName": "Natalie",
       "SexCode": 3,
@@ -205,6 +206,7 @@
       "CorporationsCircleId": "",
       "CorporationsCircleName": "",
       "EVoting": "Nein",
+      "EVotingEmail": "",
       "TypeOfResidenceCode": 3,
       "TypeOfResidence": "Unbekannt",
       "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein",

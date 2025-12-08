@@ -131,7 +131,7 @@ public class PersonEntityValidator : AbstractValidator<PersonEntity>
     /// </summary>
     private void RuleForVnType()
     {
-        RuleFor(p => p.Vn).InclusiveBetween(7560000000001, 7569999999999);
+        RuleFor(p => p.Vn).MustBeValidVn();
     }
 
     /// <summary>
@@ -261,8 +261,7 @@ public class PersonEntityValidator : AbstractValidator<PersonEntity>
     private void RuleForMunicipalityIdType()
     {
         RuleFor(p => p.MunicipalityId)
-            .NotEmpty()
-            .InclusiveBetween(1, 9999);
+            .MustBeValidMunicipalityIdType();
     }
 
     /// <summary>

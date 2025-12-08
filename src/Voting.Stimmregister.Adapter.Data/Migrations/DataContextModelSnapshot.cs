@@ -277,6 +277,9 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
                     b.Property<bool?>("EVoterFlag")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("EVotingEmail")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("EVoters");
@@ -678,6 +681,9 @@ namespace Voting.Stimmregister.Adapter.Data.Migrations
 
                     b.Property<bool>("EVoting")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("EVotingEmail")
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

@@ -24,5 +24,7 @@ public class GetRegistrationInformationPerson
 
     public string FirstName { get; set; } = string.Empty;
 
+    public string? Email { get; set; }
+
     public GetRegistrationInformationAddress? Address { get; set; }
 }

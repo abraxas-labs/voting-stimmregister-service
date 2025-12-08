@@ -30,7 +30,7 @@ public abstract class BaseWriteableDbRestTest : BaseRestTest<TestApplicationFact
         return RunOnDb(async db =>
         {
             var set = db.Set<TEntity>();
-            var entities = await set.AsTracking().Where(predicate).ToListAsync();
+            var entities = await set.AsTracking().IgnoreQueryFilters().Where(predicate).ToListAsync();
 
             foreach (var entity in entities)
             {

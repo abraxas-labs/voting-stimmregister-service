@@ -34,6 +34,7 @@ public abstract class BaseGrpcTest<TService, TFactory, TStartup> : GrpcAuthoriza
     private readonly Lazy<TService> _lazyRegistrationStatisticReaderClient;
     private readonly Lazy<TService> _lazyUnknownRegistrationStatisticReaderClient;
     private readonly Lazy<TService> _lazyUnknownClient;
+    private readonly Lazy<TService> _lazyECollectingCitizenReaderClient;
 
     protected BaseGrpcTest(TFactory factory)
         : base(factory)
@@ -75,6 +76,9 @@ public abstract class BaseGrpcTest<TService, TFactory, TStartup> : GrpcAuthoriza
 
         _lazyUnknownRegistrationStatisticReaderClient = new(() =>
             CreateGrpcService(CreateGrpcChannel(true, roles: new[] { Roles.EVotingStatisticsReader }, tenant: VotingIamTenantIds.Unknown)));
+
+        _lazyECollectingCitizenReaderClient = new(() =>
+            CreateGrpcService(CreateGrpcChannel(true, VotingIamTenantIds.Abraxas, roles: new[] { Roles.ECollectingCitizenReader })));
     }
 
     protected TService UnauthorizedClient => _lazyUnauthorizedClient.Value;
@@ -102,6 +106,8 @@ public abstract class BaseGrpcTest<TService, TFactory, TStartup> : GrpcAuthoriza
     protected TService RegistrationStatisticReaderClient => _lazyRegistrationStatisticReaderClient.Value;
 
     protected TService UnknownRegistrationStatisticReaderClient => _lazyUnknownRegistrationStatisticReaderClient.Value;
+
+    protected TService ECollectingCitizenReaderClient => _lazyECollectingCitizenReaderClient.Value;
 
     protected void RunOnDb(Action<DataContext> action)
         => RunScoped(action);

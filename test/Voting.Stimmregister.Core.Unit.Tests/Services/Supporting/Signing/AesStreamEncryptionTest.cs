@@ -35,14 +35,14 @@ public class AesStreamEncryptionTest
 
         _hsmCryptoAdapterMock
             .Setup(m => m.EncryptAes(It.IsAny<byte[]>(), It.IsAny<SymmetricKeyConfig>()))
-            .Returns<byte[], SymmetricKeyConfig>((input, _) => input);
+            .Returns<byte[], SymmetricKeyConfig>((input, _) => Task.FromResult(input));
 
         _hsmCryptoAdapterMock
             .Setup(m => m.DecryptAes(It.IsAny<byte[]>(), It.IsAny<SymmetricKeyConfig>()))
-            .Returns<byte[], SymmetricKeyConfig>((input, _) => input);
+            .Returns<byte[], SymmetricKeyConfig>((input, _) => Task.FromResult(input));
 
         await using var targetStream = new MemoryStream();
-        var (cryptoStream, aesCipherMetadata) = _testee.CreateAesMacEncryptCryptoStream(targetStream);
+        var (cryptoStream, aesCipherMetadata) = await _testee.CreateAesMacEncryptCryptoStream(targetStream);
         await cryptoStream.WriteAsync(stringToEncryptBytes);
         await cryptoStream.DisposeAsync();
 
@@ -52,7 +52,7 @@ public class AesStreamEncryptionTest
 
         var inputStream = new MemoryStream(targetStream.ToArray());
 
-        var decryptionStream = _testee.CreateAesMacDecryptCryptoStream(inputStream, aesCipherMetadata);
+        var decryptionStream = await _testee.CreateAesMacDecryptCryptoStream(inputStream, aesCipherMetadata);
         var plainTextOutputStream = new MemoryStream();
         await decryptionStream.CopyToAsync(plainTextOutputStream);
 

@@ -19,6 +19,7 @@ public abstract class BaseRestTest<TFactory, TStartup> : RestAuthorizationBaseTe
     private readonly Lazy<HttpClient> _lazyUnauthorizedClient;
     private readonly Lazy<HttpClient> _lazyApiImporterClient;
     private readonly Lazy<HttpClient> _lazyManualImporterClient;
+    private readonly Lazy<HttpClient> _lazyTgManualImporterClient;
     private readonly Lazy<HttpClient> _lazyApiEVotingClient;
     private readonly Lazy<HttpClient> _lazySgManualExporterClient;
     private readonly Lazy<HttpClient> _lazySgApiExporterClient;
@@ -38,6 +39,9 @@ public abstract class BaseRestTest<TFactory, TStartup> : RestAuthorizationBaseTe
 
         _lazyManualImporterClient = new Lazy<HttpClient>(() =>
             CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: [Roles.ManualImporter]));
+
+        _lazyTgManualImporterClient = new Lazy<HttpClient>(() =>
+            CreateHttpClient(true, tenant: VotingIamTenantIds.KTTG, roles: [Roles.ManualImporter]));
 
         _lazyApiEVotingClient = new Lazy<HttpClient>(() =>
             CreateHttpClient(true, tenant: VotingIamTenantIds.KTSG, roles: [Roles.EVoting]));
@@ -66,6 +70,8 @@ public abstract class BaseRestTest<TFactory, TStartup> : RestAuthorizationBaseTe
     protected HttpClient ApiImporterClient => _lazyApiImporterClient.Value;
 
     protected HttpClient ManualImporterClient => _lazyManualImporterClient.Value;
+
+    protected HttpClient TgManualImporterClient => _lazyTgManualImporterClient.Value;
 
     protected HttpClient ApiEVotingClient => _lazyApiEVotingClient.Value;
 

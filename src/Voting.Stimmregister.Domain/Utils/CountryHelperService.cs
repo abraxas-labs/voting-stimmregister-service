@@ -3,10 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
+using AutoMapper;
+using Ech0072_1_0;
+using Voting.Lib.Ech;
+using Voting.Lib.Ech.Ech0072_1_0.Schemas;
 using Voting.Stimmregister.Domain.Models.Utils;
 
 namespace Voting.Stimmregister.Domain.Utils;
@@ -18,27 +23,32 @@ public class CountryHelperService : ICountryHelperService
     private const string LogantoCountryListFile = "LogantoCountryList.xml";
     private const string CountryUnknown = "Staat unbekannt";
 
-    private readonly List<BfsCountryHelperServiceModel> _bfsCountryCollection;
-    private readonly List<LogantoCountryHelperServiceModel> _logantoCountryCollection;
-    private readonly Dictionary<int, BfsCountryHelperServiceModel> _bfsCountryByBfsNumber;
+    private readonly IMapper _mapper;
+    private readonly ReadOnlyCollection<CountryModel> _bfsCountryCollection;
+    private readonly ReadOnlyCollection<CountryModel> _logantoCountryCollection;
+    private readonly ReadOnlyDictionary<ushort, CountryModel> _bfsCountryByBfsNumber;
 
-    public CountryHelperService()
+    public CountryHelperService(IMapper mapper)
     {
-        _bfsCountryCollection = GetBfsCountryList();
-        _logantoCountryCollection = GetLogantoCountryList();
-
-        _bfsCountryByBfsNumber = GetBfsCountryByBfsNumber();
+        _mapper = mapper;
+        _bfsCountryCollection = GetBfsCountryList().AsReadOnly();
+        _logantoCountryCollection = GetLogantoCountryList().AsReadOnly();
+        _bfsCountryByBfsNumber = GetBfsCountryByBfsNumber().AsReadOnly();
     }
 
+    public ReadOnlyCollection<CountryModel> BfsCountryCollection => _bfsCountryCollection;
+
     /// <inheritdoc/>
-    public string? GetCountryTwoLetterIsoCode(string? countryShortName, string? bfsCountryNumber)
+    public string? GetCountryTwoLetterIsoCode(string? countryShortName, string? bfsCountryNumber = null, string? iso2 = null)
     {
-        // VOTING-3385: Temporarily fix known invalid mapping until source system has fixed all entries.
+        // VOTING-3385: Re-map states not recognized by Switzerland and missing Iso2 code with invalid source system assignment.
         bfsCountryNumber = bfsCountryNumber == "8551" ? "8532" : bfsCountryNumber;
 
-        if (string.IsNullOrEmpty(bfsCountryNumber) || !int.TryParse(bfsCountryNumber, out var bfsNumber))
+        if (string.IsNullOrEmpty(bfsCountryNumber) || !ushort.TryParse(bfsCountryNumber, out var bfsNumber))
         {
-            return _bfsCountryCollection.Find(c => c.ShortNameEn.Equals(countryShortName, StringComparison.InvariantCultureIgnoreCase))?.Iso2Id;
+            return _bfsCountryCollection.FirstOrDefault(c =>
+                (c.Iso2?.Equals(iso2, StringComparison.InvariantCultureIgnoreCase) == true && iso2 != string.Empty) ||
+                c.ShortNameEn?.Equals(countryShortName, StringComparison.InvariantCultureIgnoreCase) == true)?.Iso2;
         }
 
         if (!_bfsCountryByBfsNumber.TryGetValue(bfsNumber, out var country))
@@ -48,21 +58,21 @@ public class CountryHelperService : ICountryHelperService
                 return null;
             }
 
-            return _bfsCountryCollection.Find(c => c.ShortNameEn.Equals(countryShortName, StringComparison.InvariantCultureIgnoreCase))?.Iso2Id;
+            return _bfsCountryCollection.FirstOrDefault(c => c.ShortNameEn?.Equals(countryShortName, StringComparison.InvariantCultureIgnoreCase) == true)?.Iso2;
         }
 
-        return country.Iso2Id;
+        return country.Iso2;
     }
 
     /// <inheritdoc/>
-    public BfsCountryHelperServiceModel? GetCountryInfo(string countryTwoLetterCode)
+    public CountryModel? GetCountryInfo(string countryTwoLetterCode)
     {
         if (string.IsNullOrEmpty(countryTwoLetterCode))
         {
             return null;
         }
 
-        return _bfsCountryCollection.Find(c => c.Iso2Id.Equals(countryTwoLetterCode, StringComparison.InvariantCultureIgnoreCase));
+        return _bfsCountryCollection.FirstOrDefault(c => c.Iso2?.Equals(countryTwoLetterCode, StringComparison.InvariantCultureIgnoreCase) == true);
     }
 
     /// <inheritdoc/>
@@ -73,37 +83,37 @@ public class CountryHelperService : ICountryHelperService
             return null;
         }
 
-        var country = _logantoCountryCollection.Find(c => c.LogaId.Equals(countryLogaId, StringComparison.InvariantCultureIgnoreCase));
+        var country = _logantoCountryCollection.FirstOrDefault(c => c.SystemId?.Equals(countryLogaId, StringComparison.InvariantCultureIgnoreCase) == true);
 
         if (country == null)
         {
-            return _bfsCountryCollection.Find(c => c.Iso2Id.Equals(countryLogaId, StringComparison.InvariantCultureIgnoreCase))?.Iso2Id;
+            return _bfsCountryCollection.FirstOrDefault(c => c.Iso2?.Equals(countryLogaId, StringComparison.InvariantCultureIgnoreCase) == true)?.Iso2;
         }
 
-        return country.Iso2Id;
+        return country.Iso2;
     }
 
     /// <inheritdoc/>
-    public CountryHelperServiceResultModel? GetLogantoCountryTwoLetterIsoAndShortNameDe(string? countryLogaId)
+    public CountryModel? GetLogantoCountryTwoLetterIsoAndShortNameDe(string? countryLogaId)
     {
         if (string.IsNullOrEmpty(countryLogaId))
         {
-            return new CountryHelperServiceResultModel { Iso2Id = null, ShortNameDe = CountryUnknown, };
+            return new CountryModel { Iso2 = null, ShortNameDe = CountryUnknown, };
         }
 
-        var country = _logantoCountryCollection.Find(c => c.LogaId.Equals(countryLogaId, StringComparison.InvariantCultureIgnoreCase));
+        var country = _logantoCountryCollection.FirstOrDefault(c => c.SystemId?.Equals(countryLogaId, StringComparison.InvariantCultureIgnoreCase) == true);
         if (country != null)
         {
-            return new CountryHelperServiceResultModel { Iso2Id = country.Iso2Id, ShortNameDe = country.ShortNameDe, };
+            return new CountryModel { Iso2 = country.Iso2, ShortNameDe = country.ShortNameDe, };
         }
 
-        var bsfCountry = _bfsCountryCollection.Find(c => c.Iso2Id.Equals(countryLogaId, StringComparison.InvariantCultureIgnoreCase));
+        var bsfCountry = _bfsCountryCollection.FirstOrDefault(c => c.Iso2?.Equals(countryLogaId, StringComparison.InvariantCultureIgnoreCase) == true);
         if (bsfCountry == null)
         {
-            return new CountryHelperServiceResultModel { Iso2Id = null, ShortNameDe = CountryUnknown, };
+            return new CountryModel { Iso2 = null, ShortNameDe = CountryUnknown, };
         }
 
-        return new CountryHelperServiceResultModel { Iso2Id = bsfCountry.Iso2Id, ShortNameDe = bsfCountry.ShortNameDe, };
+        return new CountryModel { Iso2 = bsfCountry.Iso2, ShortNameDe = bsfCountry.ShortNameDe, };
     }
 
     private static List<TElement> GetCountryList<TRoot, TElement>(string fileName)
@@ -128,18 +138,27 @@ public class CountryHelperService : ICountryHelperService
         return countries!.Country.ToList();
     }
 
-    private List<BfsCountryHelperServiceModel> GetBfsCountryList()
+    private List<CountryModel> GetBfsCountryList()
     {
-        return GetCountryList<CountryXmlRootModel<BfsCountryHelperServiceModel>, BfsCountryHelperServiceModel>(BfsCountryListFile);
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourceName = $"Voting.Stimmregister.Domain.Files.Utils.{BfsCountryListFile}";
+        using var stream = assembly.GetManifestResourceStream(resourceName)
+           ?? throw new FileNotFoundException(resourceName);
+
+        var schemaSet = Ech0072Schemas.LoadEch0072Schemas();
+        var countries = new EchDeserializer().DeserializeXml<Countries>(stream, schemaSet).Country;
+
+        return _mapper.Map<List<CountryModel>>(countries);
     }
 
-    private List<LogantoCountryHelperServiceModel> GetLogantoCountryList()
+    private List<CountryModel> GetLogantoCountryList()
     {
-        return GetCountryList<CountryXmlRootModel<LogantoCountryHelperServiceModel>, LogantoCountryHelperServiceModel>(LogantoCountryListFile);
+        var countries = GetCountryList<CountryXmlRootModel<LogantoCountryModel>, LogantoCountryModel>(LogantoCountryListFile);
+        return _mapper.Map<List<CountryModel>>(countries);
     }
 
-    private Dictionary<int, BfsCountryHelperServiceModel> GetBfsCountryByBfsNumber()
+    private Dictionary<ushort, CountryModel> GetBfsCountryByBfsNumber()
     {
-        return _bfsCountryCollection.ToDictionary(bfs => bfs.Id);
+        return _bfsCountryCollection.ToDictionary(bfs => bfs.BfsId);
     }
 }

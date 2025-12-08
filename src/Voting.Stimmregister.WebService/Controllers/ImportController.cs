@@ -39,7 +39,7 @@ public class ImportController : ControllerBase
     }
 
     /// <summary>
-    /// Imports a cobra person csv passed in the request body.
+    /// Imports a Cobra (SG) person csv passed in the request body.
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation resolving to the import result.</returns>
     [AuthorizeApiOrManualImporter]
@@ -50,6 +50,23 @@ public class ImportController : ControllerBase
         var import = await _requestHelper.ReadFile(
             Request,
             f => _personImportQueue.Enqueue(ImportSourceSystem.Cobra, f.FileName ?? "upload-cobra.csv", f.Content),
+            [MediaTypeNames.Text.Csv]);
+
+        return new ImportRestApiResponse(import.Id);
+    }
+
+    /// <summary>
+    /// Imports a Cobra (TG) person csv passed in the request body.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation resolving to the import result.</returns>
+    [AuthorizeApiOrManualImporter]
+    [HttpPost("cobra-tg/persons")]
+    [Consumes("multipart/form-data")]
+    public async Task<ImportRestApiResponse> CobraTgPersons()
+    {
+        var import = await _requestHelper.ReadFile(
+            Request,
+            f => _personImportQueue.Enqueue(ImportSourceSystem.CobraTg, f.FileName ?? "upload-cobra_tg.csv", f.Content),
             [MediaTypeNames.Text.Csv]);
 
         return new ImportRestApiResponse(import.Id);

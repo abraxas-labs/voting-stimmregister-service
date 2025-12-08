@@ -42,7 +42,7 @@ public class ImportFileService
         try
         {
             var file = CreateFile(queuedFileName);
-            var (encryptedStream, aesCipherMetadata) = _streamEncryptionService.CreateAesMacEncryptCryptoStream(file);
+            var (encryptedStream, aesCipherMetadata) = await _streamEncryptionService.CreateAesMacEncryptCryptoStream(file);
             await using var compressionStream = new GZipStream(encryptedStream, CompressionLevel.Fastest);
             await data.CopyToAsync(compressionStream);
             return (queuedFileName, aesCipherMetadata);
@@ -63,7 +63,7 @@ public class ImportFileService
             throw new DecryptionException("HMAC verification failed for file " + queuedFileName);
         }
 
-        var compressedStream = _streamDecryptionService.CreateAesMacDecryptCryptoStream(encryptedFileContent, aesCipherMetadata);
+        var compressedStream = await _streamDecryptionService.CreateAesMacDecryptCryptoStream(encryptedFileContent, aesCipherMetadata);
         return new GZipStream(compressedStream, CompressionMode.Decompress);
     }
 

@@ -2,6 +2,7 @@
 // For license information see LICENSE file
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.Models.Signing;
 
@@ -23,7 +24,7 @@ public interface IHsmCryptoAdapter
     /// <param name="signature">The signature.</param>
     /// <param name="signatureConfig">The config of the signature.</param>
     /// <returns>True if the signature is valid, false otherwise.</returns>
-    bool VerifyEcdsaSha384Signature(byte[] data, byte[] signature, AsymmetricKeyConfig signatureConfig);
+    Task<bool> VerifyEcdsaSha384Signature(byte[] data, byte[] signature, AsymmetricKeyConfig signatureConfig);
 
     /// <summary>
     /// Create a signature hash for the provided data.
@@ -31,7 +32,7 @@ public interface IHsmCryptoAdapter
     /// <param name="data">The data to get a signature for.</param>
     /// <param name="signatureConfig">The config to create the signature.</param>
     /// <returns>The signature hash.</returns>
-    byte[] CreateEcdsaSha384Signature(byte[] data, AsymmetricKeyConfig signatureConfig);
+    Task<byte[]> CreateEcdsaSha384Signature(byte[] data, AsymmetricKeyConfig signatureConfig);
 
     /// <summary>
     /// Create a signature hashes for the provided bulk data.
@@ -39,7 +40,7 @@ public interface IHsmCryptoAdapter
     /// <param name="bulkData">The bulk data to get a signature for.</param>
     /// <param name="signatureConfig">The config to create the signature.</param>
     /// <returns>The signature hashes.</returns>
-    IReadOnlyList<byte[]> BulkCreateEcdsaSha384Signature(ICollection<byte[]> bulkData, AsymmetricKeyConfig signatureConfig);
+    Task<IReadOnlyList<byte[]>> BulkCreateEcdsaSha384Signature(ICollection<byte[]> bulkData, AsymmetricKeyConfig signatureConfig);
 
     /// <summary>
     /// Encrypts the provided data with AES.
@@ -47,7 +48,7 @@ public interface IHsmCryptoAdapter
     /// <param name="data">The data to encrypt.</param>
     /// <param name="symmetricKeyConfig">The config to create the encryption.</param>
     /// <returns>The encrypted data.</returns>
-    byte[] EncryptAes(byte[] data, SymmetricKeyConfig symmetricKeyConfig);
+    Task<byte[]> EncryptAes(byte[] data, SymmetricKeyConfig symmetricKeyConfig);
 
     /// <summary>
     /// Decrypts the encrypted data with AES.
@@ -55,5 +56,5 @@ public interface IHsmCryptoAdapter
     /// <param name="data">The data to decrypt.</param>
     /// <param name="symmetricKeyConfig">The config to create the decryption.</param>
     /// <returns>The decrypted data.</returns>
-    byte[] DecryptAes(byte[] data, SymmetricKeyConfig symmetricKeyConfig);
+    Task<byte[]> DecryptAes(byte[] data, SymmetricKeyConfig symmetricKeyConfig);
 }

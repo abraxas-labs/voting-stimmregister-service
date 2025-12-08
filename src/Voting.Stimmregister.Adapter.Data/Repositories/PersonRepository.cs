@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -121,7 +122,7 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         foreach (var result in searchResult)
         {
             // sort person dois in memory instead of inside the database
-            // since we want to sort by the int representation of the doi type
+            // since we want to sort by the int representation of the doi type,
             // but we store the string representation of the enum
             result.PersonDois = result.PersonDois
                 .OrderBy(x => x.DomainOfInfluenceType)
@@ -145,6 +146,79 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
             .IgnoreQueryFilters()
             .OrderByDescending(p => p.ModifiedDate)
             .FirstOrDefaultAsync(p => p.IsLatest && !p.IsDeleted && !p.RestrictedVotingAndElectionRightFederation && p.Vn == vn && p.CantonBfs == cantonBfs);
+    }
+
+    /// <inheritdoc />
+    public async Task<List<PersonEntity>> GetLatestByVnAndBfsIgnoreAcl(ECollectingPersonSearchByVnParametersModel searchModel)
+    {
+        if (searchModel.CantonBfs == null && searchModel.MunicipalityId == null)
+        {
+            throw new ValidationException(
+                $"Either {nameof(searchModel.CantonBfs)} or {nameof(searchModel.MunicipalityId)} has to be set.");
+        }
+
+        return await Set
+            .IgnoreQueryFilters()
+            .Where(q =>
+                   q.Vn.HasValue && q.Vn.Value == searchModel.Vn &&
+                   q.IsLatest && !q.IsDeleted && q.IsValid &&
+                   (searchModel.CantonBfs == null || q.CantonBfs == searchModel.CantonBfs) &&
+                   (searchModel.MunicipalityId == null || q.MunicipalityId == searchModel.MunicipalityId))
+            .OrderBy(q => q.MunicipalityId)
+            .ToListAsync();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<PersonEntity>> GetByIds(ECollectingPeopleSearchByIdsParametersModel searchModel)
+    {
+        var personQuery = Set
+            .Where(q => q.MunicipalityId == searchModel.MunicipalityId &&
+                        q.IsValid &&
+                        (!q.ModifiedDate.HasValue || searchModel.ActualityDate >= DateOnly.FromDateTime(q.ModifiedDate.Value)) &&
+                        (!q.DeletedDate.HasValue || searchModel.ActualityDate <= DateOnly.FromDateTime(q.DeletedDate.Value)) &&
+                        searchModel.RegisterIds.Contains(q.RegisterId));
+
+        var personVersionQuery = personQuery
+            .GroupBy(q => q.RegisterId)
+            .Select(grouped => new
+            {
+                RegisterId = grouped.Key,
+                LastModifiedDate = grouped.Max(x => x.ModifiedDate),
+            });
+
+        return await personQuery
+            .Join(personVersionQuery, p => new { p.RegisterId, p.ModifiedDate }, pv => new { pv.RegisterId, ModifiedDate = pv.LastModifiedDate }, (p, _) => p)
+            .ToListAsync();
+    }
+
+    /// <inheritdoc />
+    public async Task<Page<PersonEntity>> GetByName(ECollectingPeopleSearchByNameParametersModel searchModel)
+    {
+        var personQuery = Set
+            .Where(q => q.MunicipalityId == searchModel.MunicipalityId &&
+                        q.IsValid &&
+                        (!q.ModifiedDate.HasValue || searchModel.ActualityDate >= DateOnly.FromDateTime(q.ModifiedDate.Value)) &&
+                        (!q.DeletedDate.HasValue || searchModel.ActualityDate <= DateOnly.FromDateTime(q.DeletedDate.Value)) &&
+                        (!searchModel.DateOfBirth.HasValue || q.DateOfBirth == searchModel.DateOfBirth) &&
+                        (string.IsNullOrWhiteSpace(searchModel.OfficialName) || EF.Functions.ILike(q.OfficialName, $"{searchModel.OfficialName}%")) &&
+                        (string.IsNullOrWhiteSpace(searchModel.FirstName) || EF.Functions.ILike(q.FirstName, $"{searchModel.FirstName}%")) &&
+                        (string.IsNullOrWhiteSpace(searchModel.AddressStreet) || EF.Functions.ILike(q.ResidenceAddressStreet ?? string.Empty, $"{searchModel.AddressStreet}%")) &&
+                        (string.IsNullOrWhiteSpace(searchModel.AddressHouseNumber) || EF.Functions.ILike(q.ResidenceAddressHouseNumber ?? string.Empty, $"{searchModel.AddressHouseNumber}%")));
+
+        var personVersionQuery = personQuery
+            .GroupBy(q => q.RegisterId)
+            .Select(grouped => new
+            {
+                RegisterId = grouped.Key,
+                LastModifiedDate = grouped.Max(x => x.ModifiedDate),
+            });
+
+        return await personQuery
+            .Join(personVersionQuery, p => new { p.RegisterId, p.ModifiedDate }, pv => new { pv.RegisterId, ModifiedDate = pv.LastModifiedDate }, (p, _) => p)
+            .OrderBy(x => x.OfficialName)
+            .ThenBy(x => x.FirstName)
+            .ThenBy(x => x.DateOfBirth)
+            .ToPageAsync(searchModel.Pageable ?? new Pageable { PageSize = 10, Page = 1 });
     }
 
     /// <inheritdoc />
@@ -420,6 +494,21 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
     {
         EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
         AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
+        var filterValues = SplitFilterValue(filterCriteria.FilterValue);
+        return filterCriteria.FilterOperator switch
+        {
+            FilterOperatorType.Equals => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Name.ToUpper().Equals(filterValue)))),
+            FilterOperatorType.Contains => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Name.ToUpper().Contains(filterValue)))),
+            FilterOperatorType.StartsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Name.ToUpper().StartsWith(filterValue)))),
+            FilterOperatorType.EndsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Name.ToUpper().EndsWith(filterValue)))),
+            _ => throw new InvalidSearchFilterCriteriaException(),
+        };
+    }
+
+    private static IQueryable<PersonEntity> PersonOriginNameFilter(IQueryable<PersonEntity> q, FilterCriteriaEntity filterCriteria, DomainOfInfluenceType domainOfInfluenceType)
+    {
+        EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
         var filterValue = filterCriteria.FilterValue.ToUpper();
         return filterCriteria.FilterOperator switch
         {
@@ -435,13 +524,81 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
     {
         EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
         AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-        var filterValue = filterCriteria.FilterValue.ToUpper();
+        var filterValues = SplitFilterValue(filterCriteria.FilterValue);
         return filterCriteria.FilterOperator switch
         {
-            FilterOperatorType.Equals => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Canton.ToUpper().Equals(filterValue))),
-            FilterOperatorType.Contains => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Canton.ToUpper().Contains(filterValue))),
-            FilterOperatorType.StartsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Canton.ToUpper().StartsWith(filterValue))),
-            FilterOperatorType.EndsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Canton.ToUpper().EndsWith(filterValue))),
+            FilterOperatorType.Equals => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Canton.ToUpper().Equals(filterValue)))),
+            FilterOperatorType.Contains => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Canton.ToUpper().Contains(filterValue)))),
+            FilterOperatorType.StartsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Canton.ToUpper().StartsWith(filterValue)))),
+            FilterOperatorType.EndsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Canton.ToUpper().EndsWith(filterValue)))),
+            _ => throw new InvalidSearchFilterCriteriaException(),
+        };
+    }
+
+    private static IQueryable<PersonEntity> PersonDoiCantonAndDoiNameFilter(
+        IQueryable<PersonEntity> q,
+        FilterCriteriaEntity filterCriteriaOriginName,
+        FilterCriteriaEntity filterCriteriaCantonName,
+        DomainOfInfluenceType domainOfInfluenceType)
+    {
+        EnsureIsFilterDataType(filterCriteriaOriginName, FilterDataType.String);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteriaOriginName.FilterOperator, filterCriteriaOriginName.FilterType);
+        var filterValueOriginName = filterCriteriaOriginName.FilterValue.ToUpper();
+
+        EnsureIsFilterDataType(filterCriteriaCantonName, FilterDataType.String);
+        AssertFilterOperatorIsValidForFilterDataType(filterCriteriaCantonName.FilterOperator, filterCriteriaCantonName.FilterType);
+        var filterValuesCantonName = SplitFilterValue(filterCriteriaCantonName.FilterValue);
+
+        return (filterCriteriaOriginName.FilterOperator, filterCriteriaCantonName.FilterOperator) switch
+        {
+            (FilterOperatorType.Equals, FilterOperatorType.Equals) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().Equals(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().Equals(filterValue)))),
+            (FilterOperatorType.Equals, FilterOperatorType.Contains) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().Equals(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().Contains(filterValue)))),
+            (FilterOperatorType.Equals, FilterOperatorType.StartsWith) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().Equals(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().StartsWith(filterValue)))),
+            (FilterOperatorType.Equals, FilterOperatorType.EndsWith) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().Equals(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().EndsWith(filterValue)))),
+            (FilterOperatorType.Contains, FilterOperatorType.Equals) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().Contains(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().Equals(filterValue)))),
+            (FilterOperatorType.Contains, FilterOperatorType.Contains) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().Contains(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().Contains(filterValue)))),
+            (FilterOperatorType.Contains, FilterOperatorType.StartsWith) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().Contains(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().StartsWith(filterValue)))),
+            (FilterOperatorType.Contains, FilterOperatorType.EndsWith) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().Contains(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().EndsWith(filterValue)))),
+            (FilterOperatorType.StartsWith, FilterOperatorType.Equals) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().StartsWith(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().Equals(filterValue)))),
+            (FilterOperatorType.StartsWith, FilterOperatorType.Contains) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().StartsWith(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().Contains(filterValue)))),
+            (FilterOperatorType.StartsWith, FilterOperatorType.StartsWith) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().StartsWith(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().StartsWith(filterValue)))),
+            (FilterOperatorType.StartsWith, FilterOperatorType.EndsWith) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().StartsWith(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().EndsWith(filterValue)))),
+            (FilterOperatorType.EndsWith, FilterOperatorType.Equals) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().EndsWith(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().Equals(filterValue)))),
+            (FilterOperatorType.EndsWith, FilterOperatorType.Contains) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().EndsWith(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().Contains(filterValue)))),
+            (FilterOperatorType.EndsWith, FilterOperatorType.StartsWith) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().EndsWith(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().StartsWith(filterValue)))),
+            (FilterOperatorType.EndsWith, FilterOperatorType.EndsWith) => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType
+                && pd.Name.ToUpper().EndsWith(filterValueOriginName)
+                && filterValuesCantonName.Any(filterValue => pd.Canton.ToUpper().EndsWith(filterValue)))),
             _ => throw new InvalidSearchFilterCriteriaException(),
         };
     }
@@ -450,13 +607,13 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
     {
         EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
         AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-        var filterValue = filterCriteria.FilterValue.ToUpper();
+        var filterValues = SplitFilterValue(filterCriteria.FilterValue);
         return filterCriteria.FilterOperator switch
         {
-            FilterOperatorType.Equals => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Identifier.ToUpper().Equals(filterValue))),
-            FilterOperatorType.Contains => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Identifier.ToUpper().Contains(filterValue))),
-            FilterOperatorType.StartsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Identifier.ToUpper().StartsWith(filterValue))),
-            FilterOperatorType.EndsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && pd.Identifier.ToUpper().EndsWith(filterValue))),
+            FilterOperatorType.Equals => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Identifier.ToUpper().Equals(filterValue)))),
+            FilterOperatorType.Contains => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Identifier.ToUpper().Contains(filterValue)))),
+            FilterOperatorType.StartsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Identifier.ToUpper().StartsWith(filterValue)))),
+            FilterOperatorType.EndsWith => q.Where(p => p.PersonDois.Any(pd => pd.DomainOfInfluenceType == domainOfInfluenceType && filterValues.Any(filterValue => pd.Identifier.ToUpper().EndsWith(filterValue)))),
             _ => throw new InvalidSearchFilterCriteriaException(),
         };
     }
@@ -465,41 +622,45 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
     {
         EnsureIsFilterDataType(filterCriteria, FilterDataType.String);
         AssertFilterOperatorIsValidForFilterDataType(filterCriteria.FilterOperator, filterCriteria.FilterType);
-        var filterValue = filterCriteria.FilterValue.ToUpper();
+        var filterValues = SplitFilterValue(filterCriteria.FilterValue);
         return filterCriteria.FilterOperator switch
         {
             FilterOperatorType.Equals => q.Where(p =>
-                (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().Equals(filterValue)) ||
-                (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().Equals(filterValue)) ||
-                (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().Equals(filterValue)) ||
-                (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().Equals(filterValue)) ||
-                (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().Equals(filterValue)) ||
-                (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().Equals(filterValue)) ||
-                (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().Equals(filterValue))),
+                filterValues.Any(filterValue =>
+                    (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().Equals(filterValue)) ||
+                    (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().Equals(filterValue)) ||
+                    (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().Equals(filterValue)) ||
+                    (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().Equals(filterValue)) ||
+                    (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().Equals(filterValue)) ||
+                    (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().Equals(filterValue)) ||
+                    (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().Equals(filterValue)))),
             FilterOperatorType.Contains => q.Where(p =>
-                (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().Contains(filterValue)) ||
-                (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().Contains(filterValue)) ||
-                (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().Contains(filterValue)) ||
-                (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().Contains(filterValue)) ||
-                (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().Contains(filterValue)) ||
-                (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().Contains(filterValue)) ||
-                (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().Contains(filterValue))),
+                filterValues.Any(filterValue =>
+                    (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().Contains(filterValue)) ||
+                    (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().Contains(filterValue)) ||
+                    (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().Contains(filterValue)) ||
+                    (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().Contains(filterValue)) ||
+                    (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().Contains(filterValue)) ||
+                    (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().Contains(filterValue)) ||
+                    (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().Contains(filterValue)))),
             FilterOperatorType.StartsWith => q.Where(p =>
-                (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().StartsWith(filterValue)) ||
-                (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().StartsWith(filterValue)) ||
-                (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().StartsWith(filterValue)) ||
-                (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().StartsWith(filterValue)) ||
-                (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().StartsWith(filterValue)) ||
-                (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().StartsWith(filterValue)) ||
-                (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().StartsWith(filterValue))),
+                filterValues.Any(filterValue =>
+                    (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().StartsWith(filterValue)) ||
+                    (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().StartsWith(filterValue)) ||
+                    (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().StartsWith(filterValue)) ||
+                    (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().StartsWith(filterValue)) ||
+                    (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().StartsWith(filterValue)) ||
+                    (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().StartsWith(filterValue)) ||
+                    (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().StartsWith(filterValue)))),
             FilterOperatorType.EndsWith => q.Where(p =>
-                (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().EndsWith(filterValue)) ||
-                (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().EndsWith(filterValue)) ||
-                (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().EndsWith(filterValue)) ||
-                (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().EndsWith(filterValue)) ||
-                (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().EndsWith(filterValue)) ||
-                (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().EndsWith(filterValue)) ||
-                (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().EndsWith(filterValue))),
+                filterValues.Any(filterValue =>
+                    (p.ContactAddressLine1 != null && p.ContactAddressLine1.ToUpper().EndsWith(filterValue)) ||
+                    (p.ContactAddressLine2 != null && p.ContactAddressLine2.ToUpper().EndsWith(filterValue)) ||
+                    (p.ContactAddressLine3 != null && p.ContactAddressLine3.ToUpper().EndsWith(filterValue)) ||
+                    (p.ContactAddressLine4 != null && p.ContactAddressLine4.ToUpper().EndsWith(filterValue)) ||
+                    (p.ContactAddressLine5 != null && p.ContactAddressLine5.ToUpper().EndsWith(filterValue)) ||
+                    (p.ContactAddressLine6 != null && p.ContactAddressLine6.ToUpper().EndsWith(filterValue)) ||
+                    (p.ContactAddressLine7 != null && p.ContactAddressLine7.ToUpper().EndsWith(filterValue)))),
             _ => throw new InvalidSearchFilterCriteriaException(),
         };
     }
@@ -595,11 +756,23 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
 
         AssertMethodNotNull<string>(filterCriteria, methodInfo);
         Expression expression = memberExpression;
-        var filterValue = filterCriteria.FilterValue;
-        ApplyStringCaseInsensitive(ref expression, ref filterValue); // case insensitive search workaround:
+        var filterValues = SplitFilterValue(filterCriteria.FilterValue);
+        var conditionExpression = filterValues
+            .Aggregate(default(Expression), (exp, value) =>
+            {
+                ApplyStringCaseInsensitive(ref expression, ref value); // case insensitive search workaround:
+                var equalExpression = Expression.Call(expression, methodInfo!, Expression.Constant(value));
+                return exp == null
+                    ? equalExpression
+                    : Expression.Or(exp, equalExpression);
+            });
 
-        var methodCall = Expression.Call(expression, methodInfo!, Expression.Constant(filterValue));
-        return Expression.Lambda<Func<PersonEntity, bool>>(methodCall, parameterExpression);
+        if (conditionExpression == null)
+        {
+            throw new InvalidSearchFilterCriteriaException($"FilterValue '{filterCriteria.FilterValue}' requires at least one value");
+        }
+
+        return Expression.Lambda<Func<PersonEntity, bool>>(conditionExpression, parameterExpression);
     }
 
     /// <summary>
@@ -865,6 +1038,34 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
             : Expression.Lambda<Func<PersonEntity, bool>>(enumExpression, parameterExpression);
     }
 
+    private static Expression<Func<PersonEntity, bool>> BuildFilterExpressionForMultiselectString(
+        ParameterExpression parameterExpression,
+        MemberExpression memberExpression,
+        FilterCriteriaEntity filterCriteria)
+    {
+        if (filterCriteria.FilterOperator is not (FilterOperatorType.Equals or FilterOperatorType.Contains))
+        {
+            throw new InvalidSearchFilterCriteriaException($"FilterOperator '{filterCriteria.FilterOperator}' is not valid for multiselect value");
+        }
+
+        var filterValues = SplitFilterValue(filterCriteria.FilterValue);
+        var conditionExpression = filterValues
+            .Aggregate(default(Expression), (exp, value) =>
+            {
+                var equalExpression = Expression.Equal(memberExpression, Expression.Constant(value));
+                return exp == null
+                    ? equalExpression
+                    : Expression.Or(exp, equalExpression);
+            });
+
+        if (conditionExpression == null)
+        {
+            throw new InvalidSearchFilterCriteriaException($"FilterValue '{filterCriteria.FilterValue}' requires at least one value");
+        }
+
+        return Expression.Lambda<Func<PersonEntity, bool>>(conditionExpression, parameterExpression);
+    }
+
     private static async Task<Page<PersonEntity>> ExecuteSearchQuery(IQueryable<PersonEntity> queryable, Pageable? paging)
     {
         if (paging == null)
@@ -893,14 +1094,65 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         throw new InvalidSearchFilterCriteriaException($"FilterDataType '{filterCriteria.FilterType}' is not valid for filter '{filterCriteria.ReferenceId}'");
     }
 
+    private static IEnumerable<string> SplitFilterValue(string filterValue)
+    {
+        return filterValue
+            .Split(MultipleFilterSeparator)
+            .Select(x => x.Trim().ToUpper())
+            .Where(x => x.Length > 0);
+    }
+
+    private static DomainOfInfluenceType GetDomainOfInfluenceTypeByReferenceId(FilterReference filterReference)
+    {
+        return filterReference switch
+        {
+            FilterReference.CatholicCircleId or FilterReference.CatholicCircleName => DomainOfInfluenceType.KiKat,
+            FilterReference.EvangelicCircleId or FilterReference.EvangelicCircleName => DomainOfInfluenceType.KiEva,
+            FilterReference.PoliticalCircleId or FilterReference.PoliticalCircleName => DomainOfInfluenceType.Sk,
+            FilterReference.SchoolCircleId or FilterReference.SchoolCircleName => DomainOfInfluenceType.Sc,
+            FilterReference.PeopleCircleId or FilterReference.PeopleCircleName => DomainOfInfluenceType.AnVok,
+            FilterReference.ResidentialDistrictCircleId or FilterReference.ResidentialDistrictCircleName => DomainOfInfluenceType.AnWok,
+            FilterReference.TrafficCircleId or FilterReference.TrafficCircleName => DomainOfInfluenceType.AnVek,
+            _ => DomainOfInfluenceType.Unspecified,
+        };
+    }
+
     private IQueryable<PersonEntity> FilterForCriterias(
         IQueryable<PersonEntity> queryable,
         IReadOnlyCollection<FilterCriteriaEntity> criterias,
         DateOnly referenceKeydate)
     {
+        FilterCriteriaEntity? originName17 = null;
+        FilterCriteriaEntity? originOnCanton17 = null;
+        var validCriterias = new List<FilterCriteriaEntity>();
+
         foreach (var criteria in criterias.Where(x => !string.IsNullOrEmpty(x.FilterValue)))
         {
             AssertFilterCriteriaIsValid(criteria);
+            validCriterias.Add(criteria);
+
+            if (criteria.ReferenceId == FilterReference.OriginName17)
+            {
+                originName17 = criteria;
+            }
+
+            if (criteria.ReferenceId == FilterReference.OriginOnCanton17)
+            {
+                originOnCanton17 = criteria;
+            }
+        }
+
+        if (originName17 != null && originOnCanton17 != null)
+        {
+            // Special case for the origin. If both are specified, they need to be searched with an AND condition
+            // Since these are currently the only two fields with this behavior, we just hard-code it.
+            validCriterias.Remove(originName17);
+            validCriterias.Remove(originOnCanton17);
+            queryable = PersonDoiCantonAndDoiNameFilter(queryable, originName17, originOnCanton17, DomainOfInfluenceType.Og);
+        }
+
+        foreach (var criteria in validCriterias)
+        {
             queryable = IsCalculatedFilterField(criteria.ReferenceId) ?
                 FilterByCalculatedField(queryable, criteria, referenceKeydate) :
                 FilterByField(queryable, criteria);
@@ -931,55 +1183,10 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
             FilterReference.Age => AgeFilter(queryable, filterCriteria, referenceKeyDate),
             FilterReference.HasValidationErrors => HasValidationErrorsFilter(queryable, filterCriteria),
             FilterReference.SwissCitizenship => SwissCitizenshipFilter(queryable, filterCriteria, referenceKeyDate),
-            FilterReference.OriginName17 => PersonDoiNameFilter(queryable, filterCriteria, DomainOfInfluenceType.Og),
+            FilterReference.OriginName17 => PersonOriginNameFilter(queryable, filterCriteria, DomainOfInfluenceType.Og),
             FilterReference.OriginOnCanton17 => PersonDoiCantonFilter(queryable, filterCriteria, DomainOfInfluenceType.Og),
             FilterReference.ContactAddressLine17 => ContactAddressFilter(queryable, filterCriteria),
             _ => throw new InvalidSearchFilterCriteriaException($"No filter expression builder available for ReferenceId {filterCriteria.ReferenceId}"),
-        };
-    }
-
-    private Expression<Func<PersonEntity, bool>> BuildFilterExpressionForMultiselectString(
-        ParameterExpression parameterExpression,
-        MemberExpression memberExpression,
-        FilterCriteriaEntity filterCriteria)
-    {
-        if (filterCriteria.FilterOperator is not (FilterOperatorType.Equals or FilterOperatorType.Contains))
-        {
-            throw new InvalidSearchFilterCriteriaException($"FilterOperator '{filterCriteria.FilterOperator}' is not valid for multiselect value");
-        }
-
-        var conditionExpression = filterCriteria.FilterValue
-            .Split(MultipleFilterSeparator)
-            .Select(x => x.Trim())
-            .Where(x => x.Length > 0)
-            .Aggregate(default(Expression), (exp, value) =>
-            {
-                var equalExpression = Expression.Equal(memberExpression, Expression.Constant(value));
-                return exp == null
-                    ? equalExpression
-                    : Expression.Or(exp, equalExpression);
-            });
-
-        if (conditionExpression == null)
-        {
-            throw new InvalidSearchFilterCriteriaException($"FilterValue '{filterCriteria.FilterValue}' requires at least one value");
-        }
-
-        return Expression.Lambda<Func<PersonEntity, bool>>(conditionExpression, parameterExpression);
-    }
-
-    private DomainOfInfluenceType GetDomainOfInfluenceTypeByReferenceId(FilterReference filterReference)
-    {
-        return filterReference switch
-        {
-            FilterReference.CatholicCircleId or FilterReference.CatholicCircleName => DomainOfInfluenceType.KiKat,
-            FilterReference.EvangelicCircleId or FilterReference.EvangelicCircleName => DomainOfInfluenceType.KiEva,
-            FilterReference.PoliticalCircleId or FilterReference.PoliticalCircleName => DomainOfInfluenceType.Sk,
-            FilterReference.SchoolCircleId or FilterReference.SchoolCircleName => DomainOfInfluenceType.Sc,
-            FilterReference.PeopleCircleId or FilterReference.PeopleCircleName => DomainOfInfluenceType.AnVok,
-            FilterReference.ResidentialDistrictCircleId or FilterReference.ResidentialDistrictCircleName => DomainOfInfluenceType.AnWok,
-            FilterReference.TrafficCircleId or FilterReference.TrafficCircleName => DomainOfInfluenceType.AnVek,
-            _ => DomainOfInfluenceType.Unspecified,
         };
     }
 

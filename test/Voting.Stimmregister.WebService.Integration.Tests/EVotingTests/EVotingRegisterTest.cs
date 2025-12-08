@@ -157,7 +157,7 @@ public class EVotingRegisterTest : BaseWriteableDbRestTest
         await PersonMockedData.Seed(RunScoped);
         await BfsIntegrityMockedData.Seed(RunScoped);
 
-        var ahvNumber = PersonMockedData.Person_3213_Goldach_1.Vn!.Value;
+        var ahvNumber = PersonMockedData.Person_3213_Goldach_2.Vn!.Value;
 
         var resp = await ApiEVotingClient.PostAsJsonAsync(RegisterApiUrl, new CreateRegistrationRequest
         {
@@ -173,7 +173,7 @@ public class EVotingRegisterTest : BaseWriteableDbRestTest
             var audits = context.Set<EVoterAuditEntity>().Where(v => v.EVoterId == eVoter!.Id);
             eVoter.Should().NotBeNull();
             eVoter!.BfsCanton.Should().Be(EVotingBfsCantonMockedData.BfsCantonValid);
-            eVoter.BfsMunicipality.Should().Be((short)PersonMockedData.Person_3213_Goldach_1.MunicipalityId);
+            eVoter.BfsMunicipality.Should().Be((short)PersonMockedData.Person_3213_Goldach_2.MunicipalityId);
             eVoter.ContextId.Should().BeNull();
             eVoter.EVoterFlag.Should().BeTrue();
             eVoter.AuditInfo.CreatedById.Should().Be("default-user-id");
@@ -181,11 +181,43 @@ public class EVotingRegisterTest : BaseWriteableDbRestTest
             var audit = audits.First();
             audit.ContextId.Should().BeNull();
             audit.BfsCanton.Should().Be(EVotingBfsCantonMockedData.BfsCantonValid);
-            audit.BfsMunicipality.Should().Be((short)PersonMockedData.Person_3213_Goldach_1.MunicipalityId);
+            audit.BfsMunicipality.Should().Be((short)PersonMockedData.Person_3213_Goldach_2.MunicipalityId);
             audit.EVoterFlag.Should().BeTrue();
             audit.EVoterId.Should().Be(eVoter.Id);
             audit.StatusCode.Should().BeNull();
             audit.EVoterAuditInfo.CreatedById.Should().Be("default-user-id");
+
+            return Task.CompletedTask;
+        });
+    }
+
+    [Fact]
+    public async Task ShouldPersistEVotingEmail()
+    {
+        _config.EnableKewrAndLoganto = false;
+
+        await ResetDb();
+        await AclDoiVotingBasisMockedData.Seed(RunScoped);
+        await PersonMockedData.Seed(RunScoped);
+        await BfsIntegrityMockedData.Seed(RunScoped);
+
+        var ahvNumber = PersonMockedData.Person_3213_Goldach_2.Vn!.Value;
+        var email = "test@example.invalid";
+
+        var resp = await ApiEVotingClient.PostAsJsonAsync(RegisterApiUrl, new CreateRegistrationRequest
+        {
+            Ahvn13 = Ahvn13.Parse(ahvNumber).ToString(),
+            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
+            Email = email,
+        });
+
+        resp.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        await RunOnDb(context =>
+        {
+            var eVoter = context.Set<EVoterEntity>().FirstOrDefault(v => v.Ahvn13 == ahvNumber);
+            eVoter.Should().NotBeNull();
+            eVoter!.EVotingEmail.Should().Be(email);
 
             return Task.CompletedTask;
         });
@@ -204,7 +236,7 @@ public class EVotingRegisterTest : BaseWriteableDbRestTest
         await PersonMockedData.Seed(RunScoped);
         await BfsIntegrityMockedData.Seed(RunScoped);
 
-        var ahvNumber = PersonMockedData.Person_3213_Goldach_1.Vn!.Value;
+        var ahvNumber = PersonMockedData.Person_3213_Goldach_2.Vn!.Value;
 
         var resp = await ApiEVotingClient.PostAsJsonAsync(RegisterApiUrl, new CreateRegistrationRequest
         {

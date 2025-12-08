@@ -131,7 +131,7 @@ public static class PersonDoiMockedData
             Id = Guid.Parse("d96ded43-d340-41aa-a41d-d5e21d3fbbd3"),
             PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
             Canton = "SG",
-            Identifier = "W",
+            Identifier = "We",
             Name = "Westen",
             DomainOfInfluenceType = DomainOfInfluenceType.Sk,
         };
@@ -141,10 +141,76 @@ public static class PersonDoiMockedData
         {
             Id = Guid.Parse("a0b4d914-3e0c-4124-b929-e5f6e6b2f67b"),
             PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
-            Canton = "AR",
+            Canton = "AI",
             Identifier = string.Empty,
-            Name = "Speicher",
+            Name = "Appenzell",
             DomainOfInfluenceType = DomainOfInfluenceType.Og,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_CatholicCircle
+        => new()
+        {
+            Id = Guid.Parse("d94eb15d-dfd6-4bd1-9ba7-ac7da2e2dcf4"),
+            PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
+            Canton = "SG",
+            Identifier = "Lachen",
+            Name = "Katholische-Kirchgemeinde Lachen",
+            DomainOfInfluenceType = DomainOfInfluenceType.KiKat,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_EvangelicCircle
+        => new()
+        {
+            Id = Guid.Parse("65757146-9b1d-41c0-9e22-07fe8a4928bb"),
+            PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
+            Canton = "SG",
+            Identifier = "Rotmonten",
+            Name = "Evangelische-Kirchgemeinde Rotmonten",
+            DomainOfInfluenceType = DomainOfInfluenceType.KiEva,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_SchoolCircle
+        => new()
+        {
+            Id = Guid.Parse("402c6235-375f-4968-a739-472337d86361"),
+            PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
+            Canton = "SG",
+            Identifier = "800",
+            Name = "Schule Notkarsegg",
+            DomainOfInfluenceType = DomainOfInfluenceType.Sc,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_TrafficCircle
+        => new()
+        {
+            Id = Guid.Parse("6b0f4042-7c00-46ab-bac6-a08b6ba46304"),
+            PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
+            Canton = "SG",
+            Identifier = "UH-02",
+            Name = "UH-Verkehr",
+            DomainOfInfluenceType = DomainOfInfluenceType.AnVek,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_ResidentialDistrictCircle
+        => new()
+        {
+            Id = Guid.Parse("ca112e1f-957a-45c6-918c-56d6a8d80b1a"),
+            PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
+            Canton = "SG",
+            Identifier = "K999",
+            Name = "Wohnquartier 999",
+            DomainOfInfluenceType = DomainOfInfluenceType.AnWok,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_PeopleCircle
+        => new()
+        {
+            Id = Guid.Parse("d6d19368-f9cf-4596-9e2c-adc106098f80"),
+            PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
+            Canton = "SG",
+            Identifier = "Q999",
+            Name = "Haus 999",
+            DomainOfInfluenceType = DomainOfInfluenceType.AnVok,
         };
 
     public static PersonDoiEntity PersonDoi_Person_9170_Auslandschweizer_2_Origin1_StGallen
@@ -328,7 +394,7 @@ public static class PersonDoiMockedData
             Id = Guid.Parse("c75e5fa1-e579-422e-b8b4-745b58e57da9"),
             PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
             Canton = "SG",
-            Identifier = "C",
+            Identifier = "Ce",
             Name = "Centrum",
             DomainOfInfluenceType = DomainOfInfluenceType.Sk,
         };
@@ -342,6 +408,72 @@ public static class PersonDoiMockedData
             Identifier = string.Empty,
             Name = "Gais",
             DomainOfInfluenceType = DomainOfInfluenceType.Og,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_CatholicCircle
+        => new()
+        {
+            Id = Guid.Parse("ee7e1e5a-141c-4a33-8c8a-774017449ffd"),
+            PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
+            Canton = "SG",
+            Identifier = "Otmar",
+            Name = "Katholische-Kirchgemeinde Otmar",
+            DomainOfInfluenceType = DomainOfInfluenceType.KiKat,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_EvangelicCircle
+        => new()
+        {
+            Id = Guid.Parse("eb3564d5-3d79-4add-9d54-59543544c6e3"),
+            PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
+            Canton = "SG",
+            Identifier = "Riethüsli",
+            Name = "Evangelische-Kirchgemeinde Riethüsli",
+            DomainOfInfluenceType = DomainOfInfluenceType.KiEva,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_SchoolCircle
+        => new()
+        {
+            Id = Guid.Parse("a2e9ea57-2434-4cab-9fd4-2a249fcc4a3e"),
+            PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
+            Canton = "SG",
+            Identifier = "600",
+            Name = "Schule Schönau",
+            DomainOfInfluenceType = DomainOfInfluenceType.Sc,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_TrafficCircle
+        => new()
+        {
+            Id = Guid.Parse("ba9c4b36-d9af-4f1f-83f2-a9e0d7c28cfa"),
+            PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
+            Canton = "SG",
+            Identifier = "TC-01",
+            Name = "TCS",
+            DomainOfInfluenceType = DomainOfInfluenceType.AnVek,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_ResidentialDistrictCircle
+        => new()
+        {
+            Id = Guid.Parse("3be981a0-7365-4080-84d6-513179d5e539"),
+            PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
+            Canton = "SG",
+            Identifier = "K1",
+            Name = "Kreis 1",
+            DomainOfInfluenceType = DomainOfInfluenceType.AnWok,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_PeopleCircle
+        => new()
+        {
+            Id = Guid.Parse("4924c0f4-5700-4e95-acc2-924f65b5c530"),
+            PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
+            Canton = "SG",
+            Identifier = "Q1",
+            Name = "Quartier 1",
+            DomainOfInfluenceType = DomainOfInfluenceType.AnVok,
         };
 
     public static PersonDoiEntity PersonDoi_Person_3213_Goldach_AT_1_Origin1
@@ -514,6 +646,12 @@ public static class PersonDoiMockedData
             yield return PersonDoi_Person_3203_StGallen_OldVersion_3_PoliticalCircle_Osten;
             yield return PersonDoi_Person_3203_StGallen_2_PoliticalCircle_Westen;
             yield return PersonDoi_Person_3203_StGallen_2_Origin1;
+            yield return PersonDoi_Person_3203_StGallen_2_CatholicCircle;
+            yield return PersonDoi_Person_3203_StGallen_2_EvangelicCircle;
+            yield return PersonDoi_Person_3203_StGallen_2_SchoolCircle;
+            yield return PersonDoi_Person_3203_StGallen_2_TrafficCircle;
+            yield return PersonDoi_Person_3203_StGallen_2_ResidentialDistrictCircle;
+            yield return PersonDoi_Person_3203_StGallen_2_PeopleCircle;
             yield return PersonDoi_Person_9170_Auslandschweizer_2_Origin1_StGallen;
             yield return PersonDoi_Person_9170_Auslandschweizer_2_Origin2_Thurgau;
             yield return PersonDoi_Person_3203_StGallen_Foreigner_With_ResidenceValidDateRestriction_PoliticialCircle_Westen;
@@ -532,6 +670,12 @@ public static class PersonDoiMockedData
             yield return PersonDoi_Person_3203_StGallen_5_PeopleCircle;
             yield return PersonDoi_Person_3213_Goldach_1_PoliticalCircle_Centrum;
             yield return PersonDoi_Person_3213_Goldach_1_Origin1;
+            yield return PersonDoi_Person_3213_Goldach_1_CatholicCircle;
+            yield return PersonDoi_Person_3213_Goldach_1_EvangelicCircle;
+            yield return PersonDoi_Person_3213_Goldach_1_SchoolCircle;
+            yield return PersonDoi_Person_3213_Goldach_1_TrafficCircle;
+            yield return PersonDoi_Person_3213_Goldach_1_ResidentialDistrictCircle;
+            yield return PersonDoi_Person_3213_Goldach_1_PeopleCircle;
             yield return PersonDoi_Person_3213_Goldach_AT_1_Origin1;
             yield return PersonDoi_Person_3213_Goldach_eVoter_PoliticalCircle_Centrum;
             yield return PersonDoi_Person_3213_Goldach_eVoter_Origin1;

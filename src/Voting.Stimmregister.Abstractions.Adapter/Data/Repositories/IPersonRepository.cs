@@ -86,6 +86,27 @@ public interface IPersonRepository : IDbRepository<DbContext, PersonEntity>
     Task<PersonEntity?> GetMostRecentWithVotingRightsByVnAndCantonBfsIgnoreAcl(long vn, short cantonBfs);
 
     /// <summary>
+    /// Gets the most recent person with voting rights based on the vn and municipality bfs.
+    /// </summary>
+    /// <param name="searchModel">The search model.</param>
+    /// <returns>The resolved person.</returns>
+    Task<List<PersonEntity>> GetLatestByVnAndBfsIgnoreAcl(ECollectingPersonSearchByVnParametersModel searchModel);
+
+    /// <summary>
+    /// Gets the most recent person with voting rights based on the vn and municipality bfs.
+    /// </summary>
+    /// <param name="searchModel">The search model.</param>
+    /// <returns>The resolved people.</returns>
+    Task<List<PersonEntity>> GetByIds(ECollectingPeopleSearchByIdsParametersModel searchModel);
+
+    /// <summary>
+    /// Gets the most recent person with voting rights based on the vn and municipality bfs.
+    /// </summary>
+    /// <param name="searchModel">The search model.</param>
+    /// <returns>The resolved people.</returns>
+    Task<Page<PersonEntity>> GetByName(ECollectingPeopleSearchByNameParametersModel searchModel);
+
+    /// <summary>
     /// Returns all persons found by a filter version as an <see cref="IAsyncEnumerable{T}"/>.
     /// </summary>
     /// <param name="filterVersionId">The versionId of the filter.</param>
