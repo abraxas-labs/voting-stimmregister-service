@@ -10,12 +10,9 @@ using Microsoft.Extensions.Logging;
 using Voting.Lib.Common;
 using Voting.Stimmregister.Abstractions.Adapter.Data.DataContexts;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
-using Voting.Stimmregister.Abstractions.Adapter.EVoting.Kewr;
-using Voting.Stimmregister.Abstractions.Adapter.EVoting.Loganto;
 using Voting.Stimmregister.Abstractions.Adapter.VotingIam;
 using Voting.Stimmregister.Abstractions.Core.Import.Services;
 using Voting.Stimmregister.Abstractions.Core.Services;
-using Voting.Stimmregister.Domain.Configuration;
 using Voting.Stimmregister.Domain.Constants.EVoting;
 using Voting.Stimmregister.Domain.Exceptions;
 using Voting.Stimmregister.Domain.Models;
@@ -28,44 +25,35 @@ public class EVotingService : IEVotingService
 {
     private readonly ILogger<EVotingService> _logger;
     private readonly IPermissionService _permissionService;
-    private readonly IKewrAdapter _kewrAdapter;
-    private readonly ILogantoAdapter _logantoAdapter;
     private readonly IMapper _mapper;
     private readonly ITracingService _tracingService;
     private readonly IDataContext _dbContext;
     private readonly IEVoterRepository _voterRepository;
     private readonly IEVoterAuditRepository _voterAuditRepo;
     private readonly IClock _clock;
-    private readonly EVotingConfig _config;
     private readonly IPersonService _personService;
     private readonly IBfsStatisticService _bfsStatisticService;
 
     public EVotingService(
         ILogger<EVotingService> logger,
         IPermissionService permissionService,
-        IKewrAdapter kewrAdapter,
-        ILogantoAdapter logantoAdapter,
         IMapper mapper,
         ITracingService tracingService,
         IDataContext dbContext,
         IEVoterRepository voterRepo,
         IEVoterAuditRepository voterAuditRepo,
         IClock clock,
-        EVotingConfig config,
         IPersonService personService,
         IBfsStatisticService bfsStatisticService)
     {
         _logger = logger;
         _permissionService = permissionService;
-        _kewrAdapter = kewrAdapter;
-        _logantoAdapter = logantoAdapter;
         _mapper = mapper;
         _tracingService = tracingService;
         _dbContext = dbContext;
         _voterRepository = voterRepo;
         _voterAuditRepo = voterAuditRepo;
         _clock = clock;
-        _config = config;
         _personService = personService;
         _bfsStatisticService = bfsStatisticService;
     }
@@ -111,67 +99,14 @@ public class EVotingService : IEVotingService
 
     public async Task RegisterForEVoting(Ahvn13 ahvn13, short bfsCanton, string? email)
     {
-        // Get person details
         var person = await GetEVotingPerson(ahvn13, bfsCanton);
-
-        if (!_config.EnableKewrAndLoganto || _config.SkipForwardingEVoterFlag.Contains(person.BfsMunicipality))
-        {
-            await SaveEVoter(ahvn13, bfsCanton, person.BfsMunicipality, true, email: email);
-            return;
-        }
-
-        var eVotingResponse = await _logantoAdapter.RegisterForEVoting(new EVotingRegisterRequestModel(ahvn13)
-        {
-            MunicipalityId = person.OeidMunicipality,
-            RegisterFrom = _clock.UtcNow.AddHours(1),
-        });
-
-        // Enable eVoting Flag depending on the returned status code
-        bool? eVoterFlag = null;
-        if (eVotingResponse.ReturnCode < EkProcessStatusCodes.Status200)
-        {
-            eVoterFlag = true;
-        }
-
-        await SaveEVoter(ahvn13, bfsCanton, person.BfsMunicipality, eVoterFlag, eVotingResponse.ReturnCode, eVotingResponse.Message, email);
-
-        if (eVotingResponse.ReturnCode >= EkProcessStatusCodes.Status200)
-        {
-            var processStatusCode = GetProcessStatusCodeByEVotingResponse(eVotingResponse.ReturnCode);
-            throw new EVotingRegistrationException($"Registration failed. Subsystem failed with message <{eVotingResponse.Message}> and code <{eVotingResponse.ReturnCode}>.", processStatusCode);
-        }
+        await SaveEVoter(ahvn13, bfsCanton, person.BfsMunicipality, true, email: email);
     }
 
     public async Task UnregisterFromEVoting(Ahvn13 ahvn13, short bfsCanton)
     {
         var person = await GetEVotingPerson(ahvn13, bfsCanton);
-
-        if (!_config.EnableKewrAndLoganto || _config.SkipForwardingEVoterFlag.Contains(person.BfsMunicipality))
-        {
-            await SaveEVoter(person.Ahvn13, bfsCanton, person.BfsMunicipality, false);
-            return;
-        }
-
-        var eVotingResponse = await _logantoAdapter.UnregisterFromEVoting(new EVotingUnregisterRequestModel(ahvn13)
-        {
-            MunicipalityId = person.OeidMunicipality,
-            UnregisterOn = _clock.UtcNow.AddHours(1),
-        });
-
-        // Disable eVoting Flag depending on the returned status code
-        bool? eVoterFlag = null;
-        if (eVotingResponse.ReturnCode < EkProcessStatusCodes.Status200)
-        {
-            eVoterFlag = false;
-        }
-
-        await SaveEVoter(person.Ahvn13, bfsCanton, person.BfsMunicipality, eVoterFlag, eVotingResponse.ReturnCode, eVotingResponse.Message);
-
-        if (eVotingResponse.ReturnCode >= EkProcessStatusCodes.Status200)
-        {
-            var processStatusCode = GetProcessStatusCodeByEVotingResponse(eVotingResponse.ReturnCode);
-            throw new EVotingRegistrationException($"Unregistration failed. Subsystem failed with message <{eVotingResponse.Message}> and code <{eVotingResponse.ReturnCode}>", processStatusCode);
-        }
+        await SaveEVoter(person.Ahvn13, bfsCanton, person.BfsMunicipality, false);
     }
 
     public async Task<EVotingReportModel?> GetEVotingReport(Ahvn13 ahvn13)
@@ -199,11 +134,6 @@ public class EVotingService : IEVotingService
 
     private async Task<EVotingPersonDataModel> GetEVotingPerson(Ahvn13 ahvn13, short bfsCanton)
     {
-        if (_config.EnableKewrAndLoganto)
-        {
-            return await _kewrAdapter.GetPersonWithMainResidenceByAhvn13(ahvn13, bfsCanton);
-        }
-
         var person = await _personService.GetMostRecentWithVotingRightsByVnAndCantonBfs(ahvn13.ToNumber(), bfsCanton);
         if (person == null)
         {
@@ -224,17 +154,6 @@ public class EVotingService : IEVotingService
             Sex = person.Sex,
             Email = person.EVotingEmail,
             Address = MapAddress(person),
-        };
-    }
-
-    private ProcessStatusCode GetProcessStatusCodeByEVotingResponse(short returnCode)
-    {
-        return returnCode switch
-        {
-            >= 0 and < EkProcessStatusCodes.Status200 => ProcessStatusCode.Success,
-            >= EkProcessStatusCodes.Status200 and < EkProcessStatusCodes.Status900 => ProcessStatusCode.LogantoServiceBusinessError,
-            >= EkProcessStatusCodes.Status900 => ProcessStatusCode.LogantoServiceRequestError,
-            _ => ProcessStatusCode.Unknown,
         };
     }
 

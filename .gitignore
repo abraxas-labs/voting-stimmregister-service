@@ -26,8 +26,7 @@ coverage.info
 junit-test-reports.xml
 
 # Import Client Files
-tools/Voting.Stimmregister.ImportClient/Files/DomainOfInfluence
-tools/Voting.Stimmregister.ImportClient/Files/People
+tools/Voting.Stimmregister.ImportClient/Files/**
 
 # Anonymizer Files
 tools/Voting.Stimmregister.Anonymizer/Files/Source/**
@@ -38,3 +37,4 @@ logs/
 
 # import data queue
 src/Voting.Stimmregister.WebService/import-queue-data
+/tools/Voting.Stimmregister.ImportClient/Files/People_Innosolv

@@ -18,8 +18,6 @@ public class PlantUmlTests
                 typeof(Abstractions.Core.Import.Markers.ArchMarker).Assembly,
                 typeof(Abstractions.Adapter.Markers.ArchMarker).Assembly,
                 typeof(Adapter.Ech.Markers.ArchMarker).Assembly,
-                typeof(Adapter.EVoting.Kewr.Markers.ArchMarker).Assembly,
-                typeof(Adapter.EVoting.Loganto.Markers.ArchMarker).Assembly,
                 typeof(Adapter.Hsm.Markers.ArchMarker).Assembly,
                 typeof(Adapter.VotingBasis.Markers.ArchMarker).Assembly,
                 typeof(Adapter.VotingIam.Markers.ArchMarker).Assembly,

@@ -40,7 +40,6 @@ public static class ServiceCollectionExtensions
     /// Adds the core services to DI container.
     /// </summary>
     /// <param name="services">The services collection.</param>
-    /// <param name="eVotingConfig">The eVoting configuration.</param>
     /// <param name="memoryCacheConfig">The memory cache configuration.</param>
     /// <param name="filterConfig">The filter configuration.</param>
     /// <param name="personConfig">The person configuration.</param>
@@ -49,7 +48,6 @@ public static class ServiceCollectionExtensions
     /// <returns>The updated service collection.</returns>
     public static IServiceCollection AddCoreServices(
         this IServiceCollection services,
-        EVotingConfig eVotingConfig,
         MemoryCacheConfig memoryCacheConfig,
         FilterConfig filterConfig,
         PersonConfig personConfig,
@@ -61,7 +59,6 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IMunicipalityIdCantonCache, MunicipalityIdCantonCache>()
             .AddSingleton<IEVotersCache, EVotersCache>()
             .AddTransient(typeof(ActivityFactory<>))
-            .AddSingleton(eVotingConfig)
             .AddSingleton(memoryCacheConfig)
             .AddSingleton(filterConfig)
             .AddSingleton(personConfig)

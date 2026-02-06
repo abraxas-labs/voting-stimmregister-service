@@ -1,7 +1,6 @@
 // (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
-using System.Net.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +10,6 @@ using Voting.Lib.Ech;
 using Voting.Lib.Testing.Mocks;
 using Voting.Stimmregister.Adapter.VotingBasis.HostedServices;
 using Voting.Stimmregister.Core.Services;
-using Voting.Stimmregister.Test.Utils.MockData;
 using Voting.Stimmregister.Test.Utils.Mocks;
 using Voting.Stimmregister.WebService;
 
@@ -34,7 +32,6 @@ public class TestStartup : Startup
             .AddVotingLibCryptoProviderMock()
             .RemoveHostedServices()
             .RemoveAll<IAccessControlListDoiHostedService>()
-            .AddSingleton<IHttpClientFactory, HttpClientFactoryMocked>()
             .AddMock<IEchMessageIdProvider, MockEchMessageIdProvider>()
             .AddMock<ImportFileService, MockImportFileService>()
             .AddMock<ImportWorkerTrigger, MockImportWorkerTrigger>();

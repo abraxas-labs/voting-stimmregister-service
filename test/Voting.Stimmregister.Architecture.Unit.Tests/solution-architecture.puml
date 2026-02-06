@@ -6,8 +6,6 @@
 
 [Adapter-Data] <<Voting.Stimmregister.Adapter.Data.*>>
 [Adapter-Ech] <<Voting.Stimmregister.Adapter.Ech.*>>
-[Adapter-EVotingKewr] <<Voting.Stimmregister.Adapter.EVoting.Kewr.*>>
-[Adapter-EVotingLoganto] <<Voting.Stimmregister.Adapter.EVoting.Loganto.*>>
 [Adapter-Hsm] <<Voting.Stimmregister.Adapter.Hsm.*>>
 [Adapter-VotingBasis] <<Voting.Stimmregister.Adapter.VotingBasis.*>>
 [Adapter-VotingIam] <<Voting.Stimmregister.Adapter.VotingIam.*>>
@@ -20,8 +18,6 @@
 [WebService] --> [Core]
 [WebService] --> [Adapter-Data]
 [WebService] --> [Adapter-Ech]
-[WebService] --> [Adapter-EVotingKewr]
-[WebService] --> [Adapter-EVotingLoganto]
 [WebService] --> [Adapter-Hsm]
 [WebService] --> [Adapter-VotingBasis]
 [WebService] --> [Adapter-VotingIam]
@@ -38,11 +34,6 @@
 
 [Adapter-Ech] --> [Abstractions-Adapter]
 [Adapter-Ech] --> [Domain]
-
-[Adapter-EVotingKewr] --> [Abstractions-Adapter]
-[Adapter-EVotingKewr] --> [Domain]
-[Adapter-EVotingLoganto] --> [Abstractions-Adapter]
-[Adapter-EVotingLoganto] --> [Domain]
 
 [Adapter-Hsm] --> [Abstractions-Adapter]
 [Adapter-Hsm] --> [Domain]

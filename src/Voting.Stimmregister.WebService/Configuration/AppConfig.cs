@@ -105,11 +105,6 @@ public class AppConfig
     public ImportsConfig Imports { get; set; } = new();
 
     /// <summary>
-    /// Gets or sets the E-Voting settings.
-    /// </summary>
-    public EVotingConfig EVoting { get; set; } = new();
-
-    /// <summary>
     /// Gets or sets a value indicating whether the Pkcs11 signing should be mocked. Then HSM config isn't used.
     /// </summary>
     public bool EnablePkcs11Mock { get; set; }

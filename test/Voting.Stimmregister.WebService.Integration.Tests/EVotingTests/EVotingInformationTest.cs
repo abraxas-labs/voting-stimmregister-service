@@ -9,8 +9,6 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Voting.Lib.Testing.Utils;
-using Voting.Stimmregister.Domain.Configuration;
-using Voting.Stimmregister.Domain.Constants.EVoting;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Test.Utils.Helpers;
 using Voting.Stimmregister.Test.Utils.MockData;
@@ -29,7 +27,6 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
 {
     private const string InformationApiUrl = "v2/evoting/information";
 
-    private readonly EVotingConfig _config;
     private readonly JsonSerializerOptions _jsonOptions = new()
     {
         Converters = { new JsonStringEnumConverter() },
@@ -39,7 +36,6 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
     public EVotingInformationTest(TestApplicationFactory factory)
         : base(factory)
     {
-        _config = GetService<EVotingConfig>();
     }
 
     public override async Task InitializeAsync()
@@ -48,14 +44,11 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
         await PersonMockedData.Seed(RunScoped);
         await EVotingUserMockedData.Seed(RunScoped);
         await BfsStatisticMockedData.Seed(RunScoped);
-        _config.EnableKewrAndLoganto = true;
     }
 
     [Fact]
     public async Task ShouldReturnValidInformationWhenPersonIsEVoter()
     {
-        _config.EnableKewrAndLoganto = false;
-
         var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
         {
             Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid4Formatted,
@@ -71,8 +64,6 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
     [Fact]
     public async Task ShouldReturnEmailWhenPersonHasEVotingEmail()
     {
-        _config.EnableKewrAndLoganto = false;
-
         await ModifyDbEntities<PersonEntity>(
             p => p.Vn == EVotingAhvn13MockedData.Ahvn13Valid4,
             p => p.EVotingEmail = "test@example.invalid");
@@ -95,8 +86,6 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
     [Fact]
     public async Task ShouldReturnEmailWhenPersonHasLocalEVotingData()
     {
-        _config.EnableKewrAndLoganto = false;
-
         await ModifyDbEntities<EVoterEntity>(
             p => p.Ahvn13 == EVotingAhvn13MockedData.Ahvn13Valid4,
             p => p.EVotingEmail = "test@example.invalid");
@@ -116,8 +105,6 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
     [Fact]
     public async Task ShouldNotReturnEmailWhenPersonIsLocallyUnregistered()
     {
-        _config.EnableKewrAndLoganto = false;
-
         // Has email on person (not yet synced)
         await ModifyDbEntities<PersonEntity>(
             p => p.Vn == EVotingAhvn13MockedData.Ahvn13Valid4,
@@ -143,8 +130,6 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
     [Fact]
     public async Task ShouldReturnValidInformationWhenPersonIsNotEVoter()
     {
-        _config.EnableKewrAndLoganto = false;
-
         var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
         {
             Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid3Formatted,
@@ -155,132 +140,6 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
 
         content.Should().NotBeNull();
         content.MatchSnapshot();
-    }
-
-    [Fact]
-    public async Task ShouldReturnErrorResponseWhenPassingUnsupportedOrganisationUnit()
-    {
-        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
-        {
-            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
-            BfsCanton = EVotingBfsCantonMockedData.BfsCantonMissing,
-        });
-
-        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
-
-        resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        content.Should().NotBeNull();
-        content!.ProcessStatusCode.Should().Be(ProcessStatusCode.LogantoOrganisationUnitNotFound);
-    }
-
-    [Fact]
-    public async Task ShouldReturnErrorResponseWhenKewrSearchReturnsHttpStatusErrorCode()
-    {
-        HttpClientFactoryMocked.KewrSearchResponse = HttpClientFactoryMocked.KewrSearchWithHttpStatusErrorCode;
-
-        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
-        {
-            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
-            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
-        });
-
-        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
-
-        resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        content.Should().NotBeNull();
-        content!.ProcessStatusCode.Should().Be(ProcessStatusCode.KewrServiceRequestError);
-    }
-
-    [Fact]
-    public async Task ShouldReturnErrorResponseWhenKewrSearchResultHasNoActivePersons()
-    {
-        HttpClientFactoryMocked.KewrSearchResponse = HttpClientFactoryMocked.KewrSearchWithoutActivePerson;
-
-        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
-        {
-            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
-            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
-        });
-
-        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
-
-        resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        content.Should().NotBeNull();
-        content!.ProcessStatusCode.Should().Be(ProcessStatusCode.KewrServicePersonError);
-    }
-
-    [Fact]
-    public async Task ShouldReturnErrorResponseWhenKewrSearchResultHasNoMainResidence()
-    {
-        HttpClientFactoryMocked.KewrSearchResponse = HttpClientFactoryMocked.KewrSearchWithoutMainResidence;
-
-        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
-        {
-            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
-            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
-        });
-
-        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
-
-        resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        content.Should().NotBeNull();
-        content!.ProcessStatusCode.Should().Be(ProcessStatusCode.KewrServicePersonError);
-    }
-
-    [Fact]
-    public async Task ShouldReturnErrorResponseWhenKewrSearchResultHasMultipleMatches()
-    {
-        HttpClientFactoryMocked.KewrSearchResponse = HttpClientFactoryMocked.KewrSearchWithMultipleMatches;
-
-        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
-        {
-            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
-            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
-        });
-
-        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
-
-        resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        content.Should().NotBeNull();
-        content!.ProcessStatusCode.Should().Be(ProcessStatusCode.KewrServicePersonError);
-    }
-
-    [Fact]
-    public async Task ShouldReturnErrorResponseWhenKewrGetReturnsHttpStatusErrorCode()
-    {
-        HttpClientFactoryMocked.KewrSearchResponse = HttpClientFactoryMocked.KewrSearchValidResult;
-        HttpClientFactoryMocked.KewrGetResponse = HttpClientFactoryMocked.KewrGetWithHttpStatusErrorCode;
-
-        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
-        {
-            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
-            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
-        });
-
-        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
-
-        resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        content.Should().NotBeNull();
-        content!.ProcessStatusCode.Should().Be(ProcessStatusCode.KewrServiceRequestError);
-    }
-
-    [Fact]
-    public async Task ShouldReturnErrorResponseWhenKewrGetReturnsNoAhvn13()
-    {
-        HttpClientFactoryMocked.KewrSearchResponse = HttpClientFactoryMocked.KewrSearchValidResult;
-        HttpClientFactoryMocked.KewrGetResponse = HttpClientFactoryMocked.KewrGetWithoutAhvn13;
-
-        var resp = await ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
-        {
-            Ahvn13 = EVotingAhvn13MockedData.Ahvn13Valid1Formatted,
-            BfsCanton = EVotingBfsCantonMockedData.BfsCantonValid,
-        });
-
-        var content = await resp.Content.ReadFromJsonAsync<GetRegistrationInformationResponse>(_jsonOptions);
-
-        resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        content.Should().NotBeNull();
-        content!.ProcessStatusCode.Should().Be(ProcessStatusCode.KewrServiceDataError);
     }
 
     [Fact]
@@ -321,8 +180,6 @@ public class EVotingInformationTest : BaseWriteableDbRestTest
     [Fact]
     public async Task ShouldReturnBadRequestWhenPersonNotFound()
     {
-        _config.EnableKewrAndLoganto = false;
-
         await AssertStatus(
             () => ApiEVotingClient.PostAsJsonAsync(InformationApiUrl, new RegistrationStatusRequest
             {

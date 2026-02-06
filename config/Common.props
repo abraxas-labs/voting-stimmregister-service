@@ -12,8 +12,8 @@
     <FileVersion>0.0.0.1</FileVersion>
     <Version>0.0.0.1</Version>
 
-    <VotingStimmregisterProtoVersion>3.6.0</VotingStimmregisterProtoVersion>
-    <VotingBasisServiceProtoVersion>1.86.1</VotingBasisServiceProtoVersion>
+    <VotingStimmregisterProtoVersion>3.6.2</VotingStimmregisterProtoVersion>
+    <VotingBasisServiceProtoVersion>1.135.0</VotingBasisServiceProtoVersion>
     <VotingLibVersion>20.8.1</VotingLibVersion>
     <EfCoreVersion>8.0.2</EfCoreVersion>
     <FluentValidationVersion>11.9.0</FluentValidationVersion>

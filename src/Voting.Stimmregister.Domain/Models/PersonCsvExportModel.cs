@@ -677,4 +677,10 @@ public class PersonCsvExportModel
     /// </summary>
     [Name("Wohnung (Id)")]
     public int? ResidenceApartmentId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the person's unique identifier within the VOTING Stimmregister register.
+    /// </summary>
+    [Name("RegisterId")]
+    public Guid RegisterId { get; set; }
 }

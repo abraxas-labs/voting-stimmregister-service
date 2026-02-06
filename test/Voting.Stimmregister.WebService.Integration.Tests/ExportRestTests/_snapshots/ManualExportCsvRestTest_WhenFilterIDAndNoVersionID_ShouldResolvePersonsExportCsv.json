@@ -105,7 +105,8 @@
       "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein",
       "IsHouseholder": "Ja",
       "ResidenceBuildingId": 999999999,
-      "ResidenceApartmentId": 999
+      "ResidenceApartmentId": 999,
+      "RegisterId": "d13ea9e8-ce71-4d8f-9121-05bba13033a8"
     },
     {
       "Vn": "756.8093.9059.69",
@@ -212,7 +213,8 @@
       "SendVotingCardsToDomainOfInfluenceReturnAddress": "Nein",
       "IsHouseholder": "Nein",
       "ResidenceBuildingId": null,
-      "ResidenceApartmentId": null
+      "ResidenceApartmentId": null,
+      "RegisterId": "fdc6cdb4-58b0-4e07-97cd-c52437d2eeff"
     }
   ]
 }
