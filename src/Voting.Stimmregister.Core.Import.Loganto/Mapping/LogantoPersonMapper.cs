@@ -173,17 +173,41 @@ public class LogantoPersonMapper : BasePersonMapper<LogantoPersonCsvRecord>
         }
     }
 
+    /// <summary>
+    /// Maps circles from a person csv record to the person entity.
+    /// </summary>
+    /// <param name="record">The person csv record from the source system delivery to map circles from.</param>
+    /// <param name="personEntity">The person entity to map circles to.</param>
+    /// <remarks>
+    /// Elementary and upper school circles replace deprecated school circle and are assigned with the same value
+    /// since Loganto source system does not differentiate between these two circle types.
+    /// Loganto only supports generic school circle information.
+    /// Filtering should have the same results, either for <see cref="DomainOfInfluenceType.ScPs"/> or <see cref="DomainOfInfluenceType.ScOs"/>.
+    /// </remarks>
     private static void MapCirclesFromPersonRecord(LogantoPersonCsvRecord record, PersonEntity personEntity)
     {
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.PoliticalCircleId, record.PoliticalCircleName, DomainOfInfluenceType.Sk);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.CatholicCircleId, record.CatholicCircleName, DomainOfInfluenceType.KiKat);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.EvangelicCircleId, record.EvangelicCircleName, DomainOfInfluenceType.KiEva);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.SchoolCircleId, record.SchoolCircleName, DomainOfInfluenceType.Sc);
+        AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.SchoolCircleId, record.SchoolCircleName, DomainOfInfluenceType.ScPs);
+        AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.SchoolCircleId, record.SchoolCircleName, DomainOfInfluenceType.ScOs);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.TrafficCircleId, record.TrafficCircleName, DomainOfInfluenceType.AnVek);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.ResidentialDistrictCircleId, record.ResidentialDistrictCircleName, DomainOfInfluenceType.AnWok);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, record.PeopleCircleId, record.PeopleCircleName, DomainOfInfluenceType.AnVok);
     }
 
+    /// <summary>
+    /// Maps circles from a domain of influence reference entity to the person entity.
+    /// </summary>
+    /// <param name="personEntity">The person entity to map circles to.</param>
+    /// <param name="domainOfInfluenceEntity">The domain of influence entity to map circles from.</param>
+    /// <remarks>
+    /// Elementary and upper school circles replace deprecated school circle and are assigned with the same value
+    /// since Loganto source system does not differentiate between these two circle types.
+    /// Loganto only supports generic school circle information.
+    /// Filtering should have the same results, either for <see cref="DomainOfInfluenceType.ScPs"/> or <see cref="DomainOfInfluenceType.ScOs"/>.
+    /// </remarks>
     private static void MapCirclesFromDomainOfInfluenceReference(
         PersonEntity personEntity,
         DomainOfInfluenceEntity domainOfInfluenceEntity)
@@ -192,6 +216,8 @@ public class LogantoPersonMapper : BasePersonMapper<LogantoPersonCsvRecord>
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, domainOfInfluenceEntity.CatholicChurchCircleId, domainOfInfluenceEntity.CatholicChurchCircleName, DomainOfInfluenceType.KiKat);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, domainOfInfluenceEntity.EvangelicChurchCircleId, domainOfInfluenceEntity.EvangelicChurchCircleName, DomainOfInfluenceType.KiEva);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, domainOfInfluenceEntity.SchoolCircleId, domainOfInfluenceEntity.SchoolCircleName, DomainOfInfluenceType.Sc);
+        AddPersonDoiEntityByCircleIdAndCircleName(personEntity, domainOfInfluenceEntity.SchoolCircleId, domainOfInfluenceEntity.SchoolCircleName, DomainOfInfluenceType.ScPs);
+        AddPersonDoiEntityByCircleIdAndCircleName(personEntity, domainOfInfluenceEntity.SchoolCircleId, domainOfInfluenceEntity.SchoolCircleName, DomainOfInfluenceType.ScOs);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, domainOfInfluenceEntity.TrafficCircleId, domainOfInfluenceEntity.TrafficCircleName, DomainOfInfluenceType.AnVek);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, domainOfInfluenceEntity.ResidentialDistrictCircleId, domainOfInfluenceEntity.ResidentialDistrictCircleName, DomainOfInfluenceType.AnWok);
         AddPersonDoiEntityByCircleIdAndCircleName(personEntity, domainOfInfluenceEntity.PeopleCouncilCircleId, domainOfInfluenceEntity.PeopleCouncilCircleName, DomainOfInfluenceType.AnVok);

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Voting.Lib.Testing.Mocks;
 using Voting.Stimmregister.Abstractions.Adapter.Data.DataContexts;
+using Voting.Stimmregister.Core.Services.Supporting.Signing;
 using Voting.Stimmregister.Domain.Cryptography;
 using Voting.Stimmregister.Domain.Models;
 
@@ -21,10 +22,11 @@ public static class FilterVersionMockedData
 {
     private static readonly IReadOnlyDictionary<Guid, string> _signatures = new Dictionary<Guid, string>
     {
-        [Guid.Parse("2ddf8718-be9e-4730-a3ad-81253a16f5f7")] = "NMVGxwTe+gYHAR7llXMdpy9Hkmihq9xEj27zsdMCmiroIQvumgyVY89iuhMD6jQW2jemznlx4JzrsGE6Km+K5g==",
-        [Guid.Parse("3333d8dd-057c-4449-9630-12dacc12ba05")] = "fzGWoUl+sl/ueTY5CS/kYN79683Hi12z6TK9AiRQx1c1hC0pIlnrZXrucsntULNZ8hbQEEffTrRWx7e5fCY9zA==",
-        [Guid.Parse("5ee3d8dd-057c-4449-9630-7cdacc12ba04")] = "5uYvRMF+DV9s4spTE+gB9Nmoc48OoxY9xEC49nwdhrvKFEF2WqJF1d4gJschcsnro8KTVA4YLJ3qIGlI3qLHlA==",
-        [Guid.Parse("82a3d8dd-057c-4449-9630-12dacc12ba05")] = "+5trp58IK4A+6r1OwzrrekYAM41Ly8Z+XakJsBhrX2UrNFO8xll2O1HdbugVl+ngbY8K0O/nYXYNzVU99QeKYg==",
+        [Guid.Parse("2ddf8718-be9e-4730-a3ad-81253a16f5f7")] = "BABlHiiBDcgz7MCmw55ptzoiB4ZgFBBIwmftl7ceHpwv0B8YOrvN3wJbfJrecsdlerZiXzli3B0FWSoyiG8azw==",
+        [Guid.Parse("3333d8dd-057c-4449-9630-12dacc12ba05")] = "9QDuGRvmaZl5xtojWp/SvpgIiHHF1wA139SNnL+soKhq9HjF1xUAkNgkGiFfQ2wp3zMtEGN/ntsYa+plsD+Rdg==",
+        [Guid.Parse("5ee3d8dd-057c-4449-9630-7cdacc12ba04")] = "7LWLgkvk4EhS3PYZ90lCqWYBgmXhqyiVtBamz0h3kdkgYdu2/qF/sGx0YFMWZDscfJ+CnF1YF8J/sSzNrJ5QgQ==",
+        [Guid.Parse("82a3d8dd-057c-4449-9630-12dacc12ba05")] = "436odKSy6bZ3q536sMXO/VaXwT/AhjLgqeqi8xJjyMf92iJyIGTgO/kK6u5SVIu+pTl4Ro/IcsUBw40OBbdJeQ==",
+        [Guid.Parse("bfc2c754-4867-460a-96c3-0c1a1f8b01b9")] = "vcsw3vG5cskwXjsjdf5odvcCJrGS6K3GglOactZROn+gIb5GCPIzkPLvKPEXLgLzYyGg1xFarkAUB6QPMdBcBg==",
     };
 
     public static int MunicipalityId => FilterMockedData.MunicipalityId;
@@ -65,6 +67,17 @@ public static class FilterVersionMockedData
             Count = 30,
         };
 
+    public static FilterVersionEntity SomeFilterVersion_MunicipalityIdOther3
+    => new()
+    {
+        Id = Guid.Parse("bfc2c754-4867-460a-96c3-0c1a1f8b01b9"),
+        AuditInfo = MockedAuditInfo.Get(-2),
+        Name = "Other Filter Version 3",
+        FilterId = FilterMockedData.SomeFilter_MunicipalityIdOther4.Id,
+        Deadline = MockedClock.GetDate().Date,
+        Count = 30,
+    };
+
     public static FilterVersionEntity SomeFilterVersion_WithFilterVersionPersons
         => new()
         {
@@ -83,6 +96,7 @@ public static class FilterVersionMockedData
             yield return SomeFilterVersion_MunicipalityId;
             yield return SomeFilterVersion_MunicipalityIdOther;
             yield return SomeFilterVersion_MunicipalityIdOther2;
+            yield return SomeFilterVersion_MunicipalityIdOther3;
             yield return SomeFilterVersion_WithFilterVersionPersons;
         }
     }
@@ -104,7 +118,7 @@ public static class FilterVersionMockedData
 
             var db = sp.GetRequiredService<IDataContext>();
             var all = All.ToList();
-            ApplyStoredSignatures(all);
+            ApplyStoredSignatures(sp, all);
             db.FilterVersions.AddRange(all);
             await db.SaveChangesAsync();
         });
@@ -113,8 +127,10 @@ public static class FilterVersionMockedData
         await runScoped(EnsureValidSignaturesAndApplyMissing);
     }
 
-    private static void ApplyStoredSignatures(IEnumerable<FilterVersionEntity> all)
+    private static void ApplyStoredSignatures(IServiceProvider sp, IEnumerable<FilterVersionEntity> all)
     {
+        var payloadBuilderFactory = sp.GetRequiredService<SignaturePayloadBuilderFactory>();
+
         // apply stored signatures
         foreach (var integrity in all)
         {
@@ -123,8 +139,9 @@ public static class FilterVersionMockedData
                 continue;
             }
 
+            var payloadBuilder = payloadBuilderFactory.Get(integrity);
             integrity.Signature = Convert.FromBase64String(signatureB64);
-            integrity.SignatureVersion = 2;
+            integrity.SignatureVersion = payloadBuilder.Version;
             integrity.SignatureKeyId = "VOSR_ECDSA_PUBLIC_KEY_PRE";
         }
     }

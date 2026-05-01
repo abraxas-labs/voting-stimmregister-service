@@ -31,7 +31,7 @@ public class GetMetadataTest : BaseReadOnlyGrpcTest<FilterService.FilterServiceC
             Deadline = MockedClock.UtcNowTimestamp,
         });
 
-        response.CountOfPersons.Should().Be(20);
+        response.CountOfPersons.Should().Be(21);
         response.CountOfInvalidPersons.Should().Be(3);
         response.IsActual.Should().BeFalse();
     }

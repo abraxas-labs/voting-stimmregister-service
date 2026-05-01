@@ -93,4 +93,14 @@ public enum DomainOfInfluenceType
     /// Represents a specific type for a district.
     /// </summary>
     AnVok = 15,
+
+    /// <summary>
+    /// The elementary school circle (Primarschulkreis).
+    /// </summary>
+    ScPs = 16,
+
+    /// <summary>
+    /// The upper school circle (Oberstufenschulkreis).
+    /// </summary>
+    ScOs = 17,
 }

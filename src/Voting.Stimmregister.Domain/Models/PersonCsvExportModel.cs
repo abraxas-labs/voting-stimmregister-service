@@ -683,4 +683,28 @@ public class PersonCsvExportModel
     /// </summary>
     [Name("RegisterId")]
     public Guid RegisterId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the elementary school circle id, i.e. '24'.
+    /// </summary>
+    [Name("Primarschulkreis (Id)")]
+    public string? ElementarySchoolCircleId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the elementary school circle name, i.e. 'Primarschulgemeinde St. Gallen'.
+    /// </summary>
+    [Name("Primarschulkreis (Name)")]
+    public string? ElementarySchoolCircleName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the upper school circle id, i.e. '25'.
+    /// </summary>
+    [Name("Oberstufenschulkreis (Id)")]
+    public string? UpperSchoolCircleId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the upper school circle name, i.e. 'Oberstufenschulgemeinde St. Gallen'.
+    /// </summary>
+    [Name("Oberstufenschulkreis (Name)")]
+    public string? UpperSchoolCircleName { get; set; }
 }

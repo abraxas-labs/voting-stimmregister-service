@@ -66,6 +66,18 @@ public static class FilterCriteriaMockedData
             FilterValue = FilterMockedData.SomeFilter_MunicipalityIdOther2.MunicipalityId.ToString(),
         };
 
+    public static FilterCriteriaEntity SomeFilterCriteria_MunicipalityIdOther4
+    => new()
+    {
+        Id = Guid.Parse("5bbbe4e1-b4f2-4dbf-b5b9-d51c441aee94"),
+        ReferenceId = FilterReference.OfficialName,
+        AuditInfo = MockedAuditInfo.Get(),
+        FilterId = FilterMockedData.SomeFilter_MunicipalityIdOther4.Id,
+        FilterOperator = FilterOperatorType.Contains,
+        FilterType = FilterDataType.String,
+        FilterValue = "Staatenlos",
+    };
+
     public static FilterCriteriaEntity SomeFilterCriteria_MunicipalityId9170_SwissAbroad
         => new()
         {
@@ -124,6 +136,7 @@ public static class FilterCriteriaMockedData
             yield return SomeFilterCriteria_MunicipalityId_FilterVersion;
             yield return SomeFilterCriteria_MunicipalityIdOther_FilterVersion;
             yield return SomeFilterCriteria_MunicipalityIdOther2_FilterVersion;
+            yield return SomeFilterCriteria_MunicipalityIdOther4;
         }
     }
 

@@ -106,7 +106,11 @@
       "IsHouseholder": "Nein",
       "ResidenceBuildingId": null,
       "ResidenceApartmentId": null,
-      "RegisterId": "e3db1f51-1115-45f9-9005-f89bbf14a5c8"
+      "RegisterId": "e3db1f51-1115-45f9-9005-f89bbf14a5c8",
+      "ElementarySchoolCircleId": "",
+      "ElementarySchoolCircleName": "",
+      "UpperSchoolCircleId": "",
+      "UpperSchoolCircleName": ""
     },
     {
       "Vn": "",
@@ -214,7 +218,11 @@
       "IsHouseholder": "Ja",
       "ResidenceBuildingId": 999999999,
       "ResidenceApartmentId": 999,
-      "RegisterId": "d13ea9e8-ce71-4d8f-9121-05bba13033a8"
+      "RegisterId": "d13ea9e8-ce71-4d8f-9121-05bba13033a8",
+      "ElementarySchoolCircleId": "",
+      "ElementarySchoolCircleName": "",
+      "UpperSchoolCircleId": "",
+      "UpperSchoolCircleName": ""
     },
     {
       "Vn": "",
@@ -322,7 +330,11 @@
       "IsHouseholder": "Nein",
       "ResidenceBuildingId": null,
       "ResidenceApartmentId": null,
-      "RegisterId": "faa6cdb4-58b0-4e07-97cd-c52227d26a33"
+      "RegisterId": "faa6cdb4-58b0-4e07-97cd-c52227d26a33",
+      "ElementarySchoolCircleId": "",
+      "ElementarySchoolCircleName": "",
+      "UpperSchoolCircleId": "",
+      "UpperSchoolCircleName": ""
     }
   ]
 }

@@ -1,4 +1,4 @@
-<voterDelivery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+<voterDelivery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
   <deliveryHeader>
     <senderId xmlns="http://www.ech.ch/xmlns/eCH-0058/5">ABX-VOTING</senderId>
     <messageId xmlns="http://www.ech.ch/xmlns/eCH-0058/5">mock-id</messageId>
@@ -21,7 +21,7 @@
       </cantonalRegister>
     </reportingAuthority>
     <numberOfVoters>5</numberOfVoters>
-    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
       <person>
         <swiss>
           <swissDomesticPerson>
@@ -47,7 +47,7 @@
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
             <religionData>
-              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/9">000</religion>
             </religionData>
             <extension>
               <isHouseholder xmlns="">false</isHouseholder>
@@ -55,8 +55,8 @@
               <residenceApartmentId xsi:nil="true" xmlns="" />
             </extension>
             <placeOfOrigin>
-              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Zürich</originName>
-              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">ZH</canton>
+              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/9">Zürich</originName>
+              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/9">ZH</canton>
             </placeOfOrigin>
           </swissDomesticPerson>
           <municipality>
@@ -67,17 +67,17 @@
       </person>
       <dataLock>0</dataLock>
       <electoralAddress>
-        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <mrMrs>2</mrMrs>
-          <firstName>Pierre</firstName>
-          <lastName>Klein</lastName>
+        <person>
+          <mrMrs xmlns="http://www.ech.ch/xmlns/eCH-0010/6">2</mrMrs>
+          <firstName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Pierre</firstName>
+          <lastName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Klein</lastName>
         </person>
-        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <street>Big Ben Avenue</street>
-          <houseNumber>5</houseNumber>
-          <town>London</town>
-          <foreignZipCode>3317</foreignZipCode>
-          <country>
+        <addressInformation>
+          <street xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Big Ben Avenue</street>
+          <houseNumber xmlns="http://www.ech.ch/xmlns/eCH-0010/6">5</houseNumber>
+          <town xmlns="http://www.ech.ch/xmlns/eCH-0010/6">London</town>
+          <foreignZipCode xmlns="http://www.ech.ch/xmlns/eCH-0010/6">3317</foreignZipCode>
+          <country xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
             <countryIdISO2>GB</countryIdISO2>
             <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
@@ -103,13 +103,17 @@
       <isEvoter>true</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Zürich</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">OG</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">unknown</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Zürich</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
     </voter>
-    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
       <person>
         <foreigner>
           <foreignerPerson>
@@ -135,7 +139,7 @@
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
             <religionData>
-              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/9">000</religion>
             </religionData>
           </foreignerPerson>
           <municipality>
@@ -146,17 +150,17 @@
       </person>
       <dataLock>0</dataLock>
       <electoralAddress>
-        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <mrMrs>2</mrMrs>
-          <firstName>Pierre</firstName>
-          <lastName>Miro</lastName>
+        <person>
+          <mrMrs xmlns="http://www.ech.ch/xmlns/eCH-0010/6">2</mrMrs>
+          <firstName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Pierre</firstName>
+          <lastName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Miro</lastName>
         </person>
-        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <street>Big Ben Avenue</street>
-          <houseNumber>5</houseNumber>
-          <town>London</town>
-          <foreignZipCode>9017</foreignZipCode>
-          <country>
+        <addressInformation>
+          <street xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Big Ben Avenue</street>
+          <houseNumber xmlns="http://www.ech.ch/xmlns/eCH-0010/6">5</houseNumber>
+          <town xmlns="http://www.ech.ch/xmlns/eCH-0010/6">London</town>
+          <foreignZipCode xmlns="http://www.ech.ch/xmlns/eCH-0010/6">9017</foreignZipCode>
+          <country xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
             <countryIdISO2>GB</countryIdISO2>
             <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
@@ -182,20 +186,28 @@
       <isEvoter>false</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">SK</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">W</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Westen</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">SK</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">W</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Westen</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">TG</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Thurgau</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">OG</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">TG</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Thurgau</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
     </voter>
-    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
       <person>
         <swiss>
           <swissDomesticPerson>
@@ -221,7 +233,7 @@
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
             <religionData>
-              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/9">000</religion>
             </religionData>
             <extension>
               <isHouseholder xmlns="">false</isHouseholder>
@@ -229,12 +241,12 @@
               <residenceApartmentId xsi:nil="true" xmlns="" />
             </extension>
             <placeOfOrigin>
-              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">St. Gallen</originName>
-              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">SG</canton>
+              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/9">St. Gallen</originName>
+              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/9">SG</canton>
             </placeOfOrigin>
             <placeOfOrigin>
-              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Thurgau</originName>
-              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">TG</canton>
+              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/9">Thurgau</originName>
+              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/9">TG</canton>
             </placeOfOrigin>
           </swissDomesticPerson>
           <municipality>
@@ -245,17 +257,17 @@
       </person>
       <dataLock>0</dataLock>
       <electoralAddress>
-        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <mrMrs>2</mrMrs>
-          <firstName>Peter</firstName>
-          <lastName>Miro</lastName>
+        <person>
+          <mrMrs xmlns="http://www.ech.ch/xmlns/eCH-0010/6">2</mrMrs>
+          <firstName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Peter</firstName>
+          <lastName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Miro</lastName>
         </person>
-        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <street>Big Ben Avenue</street>
-          <houseNumber>5</houseNumber>
-          <town>London</town>
-          <foreignZipCode>9031</foreignZipCode>
-          <country>
+        <addressInformation>
+          <street xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Big Ben Avenue</street>
+          <houseNumber xmlns="http://www.ech.ch/xmlns/eCH-0010/6">5</houseNumber>
+          <town xmlns="http://www.ech.ch/xmlns/eCH-0010/6">London</town>
+          <foreignZipCode xmlns="http://www.ech.ch/xmlns/eCH-0010/6">9031</foreignZipCode>
+          <country xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
             <countryIdISO2>GB</countryIdISO2>
             <countryNameShort>Vereinigtes Königreich</countryNameShort>
           </country>
@@ -281,20 +293,28 @@
       <isEvoter>true</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">SG</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">St. Gallen</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">OG</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">SG</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">St. Gallen</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">TG</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Thurgau</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">OG</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">TG</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Thurgau</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
     </voter>
-    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
       <person>
         <swissAbroad>
           <swissAbroadPerson>
@@ -320,7 +340,7 @@
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
             <religionData>
-              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/9">000</religion>
             </religionData>
             <extension>
               <postageCode xmlns="">90316</postageCode>
@@ -355,8 +375,8 @@
               <residenceApartmentId xsi:nil="true" xmlns="" />
             </extension>
             <placeOfOrigin>
-              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Basel Landschaft</originName>
-              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">BL</canton>
+              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/9">Basel Landschaft</originName>
+              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/9">BL</canton>
             </placeOfOrigin>
           </swissAbroadPerson>
           <dateOfRegistration>2020-01-10</dateOfRegistration>
@@ -373,19 +393,19 @@
       </person>
       <dataLock>0</dataLock>
       <electoralAddress>
-        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <mrMrs>1</mrMrs>
-          <firstName>Natasha</firstName>
-          <lastName>Berweger</lastName>
+        <person>
+          <mrMrs xmlns="http://www.ech.ch/xmlns/eCH-0010/6">1</mrMrs>
+          <firstName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Natasha</firstName>
+          <lastName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Berweger</lastName>
         </person>
-        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <addressLine1>Appartement 2</addressLine1>
-          <addressLine2>Stockwerk 10</addressLine2>
-          <street>Petrusstr.</street>
-          <houseNumber>3</houseNumber>
-          <town>Berlin</town>
-          <foreignZipCode>90316</foreignZipCode>
-          <country>
+        <addressInformation>
+          <addressLine1 xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Appartement 2</addressLine1>
+          <addressLine2 xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Stockwerk 10</addressLine2>
+          <street xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Petrusstr.</street>
+          <houseNumber xmlns="http://www.ech.ch/xmlns/eCH-0010/6">3</houseNumber>
+          <town xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Berlin</town>
+          <foreignZipCode xmlns="http://www.ech.ch/xmlns/eCH-0010/6">90316</foreignZipCode>
+          <country xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
             <countryIdISO2>DE</countryIdISO2>
             <countryNameShort>Deutschland</countryNameShort>
           </country>
@@ -413,13 +433,17 @@
       <isEvoter>true</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">BL</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Basel Landschaft</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">OG</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">BL</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Basel Landschaft</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
     </voter>
-    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
       <person>
         <swiss>
           <swissDomesticPerson>
@@ -445,7 +469,7 @@
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
             <religionData>
-              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">121</religion>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/9">121</religion>
             </religionData>
             <extension>
               <isHouseholder xmlns="">false</isHouseholder>
@@ -453,8 +477,8 @@
               <residenceApartmentId xsi:nil="true" xmlns="" />
             </extension>
             <placeOfOrigin>
-              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Mörschwil</originName>
-              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">SG</canton>
+              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/9">Mörschwil</originName>
+              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/9">SG</canton>
             </placeOfOrigin>
           </swissDomesticPerson>
           <municipality>
@@ -465,17 +489,17 @@
       </person>
       <dataLock>0</dataLock>
       <electoralAddress>
-        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <mrMrs>2</mrMrs>
-          <firstName>Restricted</firstName>
-          <lastName>Voting</lastName>
+        <person>
+          <mrMrs xmlns="http://www.ech.ch/xmlns/eCH-0010/6">2</mrMrs>
+          <firstName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Restricted</firstName>
+          <lastName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Voting</lastName>
         </person>
-        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <street>Champs Elisee</street>
-          <houseNumber>5</houseNumber>
-          <town>Paris</town>
-          <foreignZipCode>9031</foreignZipCode>
-          <country>
+        <addressInformation>
+          <street xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Champs Elisee</street>
+          <houseNumber xmlns="http://www.ech.ch/xmlns/eCH-0010/6">5</houseNumber>
+          <town xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Paris</town>
+          <foreignZipCode xmlns="http://www.ech.ch/xmlns/eCH-0010/6">9031</foreignZipCode>
+          <country xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
             <countryIdISO2>FR</countryIdISO2>
             <countryNameShort>Frankreich</countryNameShort>
           </country>
@@ -501,17 +525,25 @@
       <isEvoter>true</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">SK</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">W</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Westen</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">SK</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">W</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Westen</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Mörschwil</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">OG</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">unknown</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Mörschwil</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
     </voter>
   </voterList>

@@ -60,6 +60,8 @@ public class PersonCsvExportProfile : Profile
         MapCircleDoi(srcPersonDois, DomainOfInfluenceType.KiKat, id => dest.CatholicCircleId = id, name => dest.CatholicCircleName = name);
         MapCircleDoi(srcPersonDois, DomainOfInfluenceType.KiEva, id => dest.EvangelicCircleId = id, name => dest.EvangelicCircleName = name);
         MapCircleDoi(srcPersonDois, DomainOfInfluenceType.Sc, id => dest.SchoolCircleId = id, name => dest.SchoolCircleName = name);
+        MapCircleDoi(srcPersonDois, DomainOfInfluenceType.ScPs, id => dest.ElementarySchoolCircleId = id, name => dest.ElementarySchoolCircleName = name);
+        MapCircleDoi(srcPersonDois, DomainOfInfluenceType.ScOs, id => dest.UpperSchoolCircleId = id, name => dest.UpperSchoolCircleName = name);
         MapCircleDoi(srcPersonDois, DomainOfInfluenceType.AnVek, id => dest.TrafficCircleId = id, name => dest.TrafficCircleName = name);
         MapCircleDoi(srcPersonDois, DomainOfInfluenceType.AnWok, id => dest.ResidentialDistrictCircleId = id, name => dest.ResidentialDistrictCircleName = name);
         MapCircleDoi(srcPersonDois, DomainOfInfluenceType.AnVok, id => dest.PeopleCircleId = id, name => dest.PeopleCircleName = name);

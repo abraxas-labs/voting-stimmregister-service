@@ -31,6 +31,21 @@
       "Id": "00000000-0000-0000-0000-000000000000"
     },
     {
+      "FilterVersionId": "bfc2c754-4867-460a-96c3-0c1a1f8b01b9",
+      "FilterVersion": null,
+      "PersonId": "5edf65b6-96e1-4db8-b64b-78f9dfcc4659",
+      "Person": null,
+      "AuditInfo": {
+        "CreatedById": "default-user-id",
+        "CreatedByName": "MockDataSeeder",
+        "CreatedAt": "2020-01-10T13:12:10.2Z",
+        "ModifiedById": "default-user-id",
+        "ModifiedByName": "MockDataSeeder",
+        "ModifiedAt": "2020-01-10T13:12:10.2Z"
+      },
+      "Id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
       "FilterVersionId": "82a3d8dd-057c-4449-9630-12dacc12ba05",
       "FilterVersion": null,
       "PersonId": "1bcf78fc-66df-42eb-9adf-157f884eb360",

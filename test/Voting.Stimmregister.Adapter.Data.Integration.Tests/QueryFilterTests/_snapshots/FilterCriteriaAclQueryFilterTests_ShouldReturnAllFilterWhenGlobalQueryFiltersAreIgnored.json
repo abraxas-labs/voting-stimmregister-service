@@ -67,6 +67,28 @@
       "Id": "00000000-0000-0000-0000-000000000000"
     },
     {
+      "ReferenceId": 7,
+      "FilterValue": "Staatenlos",
+      "FilterType": 1,
+      "FilterOperator": 1,
+      "SortIndex": 0,
+      "FilterId": "935fb872-2eb4-455a-842c-e15c5133daf6",
+      "FilterVersionId": null,
+      "LastSearchParameterId": null,
+      "Filter": null,
+      "FilterVersion": null,
+      "LastSearchParameter": null,
+      "AuditInfo": {
+        "CreatedById": "default-user-id",
+        "CreatedByName": "MockDataSeeder",
+        "CreatedAt": "2020-01-10T13:12:10.2Z",
+        "ModifiedById": "default-user-id",
+        "ModifiedByName": "MockDataSeeder",
+        "ModifiedAt": "2020-01-10T13:12:10.2Z"
+      },
+      "Id": "00000000-0000-0000-0000-000000000000"
+    },
+    {
       "ReferenceId": 0,
       "FilterValue": "Wert",
       "FilterType": 1,

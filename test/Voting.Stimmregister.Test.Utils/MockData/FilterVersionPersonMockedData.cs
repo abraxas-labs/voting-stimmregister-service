@@ -47,6 +47,15 @@ public static class FilterVersionPersonMockedData
             FilterVersionId = FilterVersionMockedData.SomeFilterVersion_MunicipalityIdOther2.Id,
         };
 
+    public static FilterVersionPersonEntity SomeFilterVersionPerson2_3203_SG
+    => new()
+    {
+        Id = Guid.Parse("18ec307c-baa7-4995-8375-3a386c3bf8dc"),
+        PersonId = PersonMockedData.Person_3203_StGallen_Auslaender_Staatenlos.Id,
+        AuditInfo = MockedAuditInfo.Get(),
+        FilterVersionId = FilterVersionMockedData.SomeFilterVersion_MunicipalityIdOther3.Id,
+    };
+
     public static FilterVersionPersonEntity SomeFilterVersionPerson3_3203_SG
         => new()
         {
@@ -84,6 +93,7 @@ public static class FilterVersionPersonMockedData
             yield return SomeFilterVersionPerson3_3203_SG;
             yield return SomeFilterVersionAuslandschweizer1_9170_SG;
             yield return SomeFilterVersionPerson_WithFilterVersionPersons;
+            yield return SomeFilterVersionPerson2_3203_SG;
         }
     }
 

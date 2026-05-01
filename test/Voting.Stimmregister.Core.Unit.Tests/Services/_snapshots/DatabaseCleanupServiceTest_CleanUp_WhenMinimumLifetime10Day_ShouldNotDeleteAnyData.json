@@ -18,9 +18,9 @@
         "FilterCriterias": [],
         "FilterId": "241be10b-b4aa-4f36-b67d-e137d183906c",
         "Filter": null,
-        "SignatureVersion": 2,
+        "SignatureVersion": 3,
         "SignatureKeyId": "VOSR_ECDSA_PUBLIC_KEY_PRE",
-        "Signature": "NMVGxwTe+gYHAR7llXMdpy9Hkmihq9xEj27zsdMCmiroIQvumgyVY89iuhMD6jQW2jemznlx4JzrsGE6Km+K5g==",
+        "Signature": "BABlHiiBDcgz7MCmw55ptzoiB4ZgFBBIwmftl7ceHpwv0B8YOrvN3wJbfJrecsdlerZiXzli3B0FWSoyiG8azw==",
         "Id": "2ddf8718-be9e-4730-a3ad-81253a16f5f7"
       },
       {
@@ -40,9 +40,9 @@
         "FilterCriterias": [],
         "FilterId": "c8c056c5-620e-44e8-a9c1-d9f42535e077",
         "Filter": null,
-        "SignatureVersion": 2,
+        "SignatureVersion": 3,
         "SignatureKeyId": "VOSR_ECDSA_PUBLIC_KEY_PRE",
-        "Signature": "fzGWoUl+sl/ueTY5CS/kYN79683Hi12z6TK9AiRQx1c1hC0pIlnrZXrucsntULNZ8hbQEEffTrRWx7e5fCY9zA==",
+        "Signature": "9QDuGRvmaZl5xtojWp/SvpgIiHHF1wA139SNnL+soKhq9HjF1xUAkNgkGiFfQ2wp3zMtEGN/ntsYa+plsD+Rdg==",
         "Id": "3333d8dd-057c-4449-9630-12dacc12ba05"
       },
       {
@@ -62,9 +62,9 @@
         "FilterCriterias": [],
         "FilterId": "c8c056c5-620e-44e8-a9c1-d9f42535e085",
         "Filter": null,
-        "SignatureVersion": 2,
+        "SignatureVersion": 3,
         "SignatureKeyId": "VOSR_ECDSA_PUBLIC_KEY_PRE",
-        "Signature": "5uYvRMF+DV9s4spTE+gB9Nmoc48OoxY9xEC49nwdhrvKFEF2WqJF1d4gJschcsnro8KTVA4YLJ3qIGlI3qLHlA==",
+        "Signature": "7LWLgkvk4EhS3PYZ90lCqWYBgmXhqyiVtBamz0h3kdkgYdu2/qF/sGx0YFMWZDscfJ+CnF1YF8J/sSzNrJ5QgQ==",
         "Id": "5ee3d8dd-057c-4449-9630-7cdacc12ba04"
       },
       {
@@ -84,10 +84,32 @@
         "FilterCriterias": [],
         "FilterId": "c8c056c5-620e-44e8-a9c1-d9f42535e077",
         "Filter": null,
-        "SignatureVersion": 2,
+        "SignatureVersion": 3,
         "SignatureKeyId": "VOSR_ECDSA_PUBLIC_KEY_PRE",
-        "Signature": "+5trp58IK4A+6r1OwzrrekYAM41Ly8Z+XakJsBhrX2UrNFO8xll2O1HdbugVl+ngbY8K0O/nYXYNzVU99QeKYg==",
+        "Signature": "436odKSy6bZ3q536sMXO/VaXwT/AhjLgqeqi8xJjyMf92iJyIGTgO/kK6u5SVIu+pTl4Ro/IcsUBw40OBbdJeQ==",
         "Id": "82a3d8dd-057c-4449-9630-12dacc12ba05"
+      },
+      {
+        "AuditInfo": {
+          "CreatedById": "default-user-id",
+          "CreatedByName": "MockDataSeeder",
+          "CreatedAt": "2020-01-08T13:12:10.2Z",
+          "ModifiedById": "default-user-id",
+          "ModifiedByName": "MockDataSeeder",
+          "ModifiedAt": "2020-01-10T13:12:10.2Z"
+        },
+        "Name": "Other Filter Version 3",
+        "Deadline": "2020-01-10T00:00:00Z",
+        "Count": 30,
+        "CountOfInvalidPersons": 0,
+        "FilterVersionPersons": [],
+        "FilterCriterias": [],
+        "FilterId": "935fb872-2eb4-455a-842c-e15c5133daf6",
+        "Filter": null,
+        "SignatureVersion": 3,
+        "SignatureKeyId": "VOSR_ECDSA_PUBLIC_KEY_PRE",
+        "Signature": "vcsw3vG5cskwXjsjdf5odvcCJrGS6K3GglOactZROn+gIb5GCPIzkPLvKPEXLgLzYyGg1xFarkAUB6QPMdBcBg==",
+        "Id": "bfc2c754-4867-460a-96c3-0c1a1f8b01b9"
       }
     ]
   },
@@ -158,6 +180,28 @@
           "ModifiedAt": "2020-01-10T13:12:10.2Z"
         },
         "Id": "39eb3023-41cc-4f0d-a96e-81dc501c5528"
+      },
+      {
+        "ReferenceId": 7,
+        "FilterValue": "Staatenlos",
+        "FilterType": 1,
+        "FilterOperator": 1,
+        "SortIndex": 0,
+        "FilterId": "935fb872-2eb4-455a-842c-e15c5133daf6",
+        "FilterVersionId": null,
+        "LastSearchParameterId": null,
+        "Filter": null,
+        "FilterVersion": null,
+        "LastSearchParameter": null,
+        "AuditInfo": {
+          "CreatedById": "default-user-id",
+          "CreatedByName": "MockDataSeeder",
+          "CreatedAt": "2020-01-10T13:12:10.2Z",
+          "ModifiedById": "default-user-id",
+          "ModifiedByName": "MockDataSeeder",
+          "ModifiedAt": "2020-01-10T13:12:10.2Z"
+        },
+        "Id": "5bbbe4e1-b4f2-4dbf-b5b9-d51c441aee94"
       },
       {
         "ReferenceId": 0,
@@ -1131,7 +1175,7 @@
         "OfficialName": "Berter2",
         "FirstName": "Mustafa2",
         "Sex": 3,
-        "DateOfBirth": "1990-11-15",
+        "DateOfBirth": "1991-11-15",
         "DateOfBirthAdjusted": false,
         "OriginalName": null,
         "AllianceName": null,
@@ -1379,6 +1423,91 @@
         "Id": "589a05e8-9548-4f64-96b2-8cce5fb55c2d"
       },
       {
+        "RegisterId": "03fbb23e-e1ca-4eea-9b86-d48668e88980",
+        "SourceSystemId": "93769260",
+        "SourceSystemName": 2,
+        "Vn": null,
+        "OfficialName": "Staatenlos",
+        "FirstName": "Sam",
+        "Sex": 1,
+        "DateOfBirth": "1994-06-07",
+        "DateOfBirthAdjusted": true,
+        "OriginalName": null,
+        "AllianceName": null,
+        "AliasName": null,
+        "OtherName": null,
+        "CallName": null,
+        "Country": null,
+        "CountryNameShort": "Staat unbekannt",
+        "ContactAddressExtensionLine1": null,
+        "ContactAddressExtensionLine2": null,
+        "ContactAddressStreet": "Achslenstr.",
+        "ContactAddressHouseNumber": "3",
+        "ContactAddressDwellingNumber": null,
+        "ContactAddressPostOfficeBoxText": null,
+        "ContactAddressPostOfficeBoxNumber": null,
+        "ContactAddressTown": "St. Gallen",
+        "ContactAddressZipCode": "9016",
+        "ContactAddressLocality": null,
+        "ContactAddressLine1": null,
+        "ContactAddressLine2": null,
+        "ContactAddressLine3": null,
+        "ContactAddressLine4": null,
+        "ContactAddressLine5": null,
+        "ContactAddressLine6": null,
+        "ContactAddressLine7": null,
+        "ContactCantonAbbreviation": "SG",
+        "ContactAddressCountryIdIso2": "CH",
+        "LanguageOfCorrespondence": null,
+        "Religion": 121,
+        "ResidencePermit": null,
+        "ResidencePermitValidFrom": null,
+        "ResidencePermitValidTill": null,
+        "ResidenceEntryDate": null,
+        "ResidenceCantonAbbreviation": "SG",
+        "MunicipalityName": "St. Gallen",
+        "DomainOfInfluenceId": 54468,
+        "MoveInArrivalDate": "2021-01-10",
+        "MoveInMunicipalityName": null,
+        "MoveInCantonAbbreviation": null,
+        "MoveInComesFrom": "Wittenbach",
+        "MoveInCountryNameShort": null,
+        "MoveInUnknown": null,
+        "ResidenceAddressExtensionLine1": null,
+        "ResidenceAddressExtensionLine2": null,
+        "ResidenceAddressStreet": "Achslenstr.",
+        "ResidenceAddressHouseNumber": "3",
+        "ResidenceAddressDwellingNumber": null,
+        "ResidenceAddressPostOfficeBoxText": null,
+        "ResidenceAddressTown": "St. Gallen",
+        "ResidenceCountry": "CH",
+        "ResidenceAddressZipCode": "9016",
+        "TypeOfResidence": 1,
+        "RestrictedVotingAndElectionRightFederation": false,
+        "EVoting": false,
+        "EVotingEmail": null,
+        "IsSwissAbroad": false,
+        "SendVotingCardsToDomainOfInfluenceReturnAddress": false,
+        "CreatedDate": "2020-01-10T13:12:10.2Z",
+        "ModifiedDate": "2020-01-10T13:12:10.2Z",
+        "DeletedDate": null,
+        "IsDeleted": false,
+        "IsLatest": true,
+        "VersionCount": 0,
+        "ImportStatisticId": null,
+        "ImportStatistic": null,
+        "FilterVersionPersons": [],
+        "PersonDois": [],
+        "CantonBfs": 17,
+        "IsHouseholder": false,
+        "ResidenceBuildingId": null,
+        "ResidenceApartmentId": null,
+        "MunicipalityId": 3203,
+        "IsValid": true,
+        "ValidationErrors": null,
+        "Id": "5edf65b6-96e1-4db8-b64b-78f9dfcc4659"
+      },
+      {
         "RegisterId": "ea041b02-57cb-431b-bf82-9c1619bb9522",
         "SourceSystemId": "04795632489",
         "SourceSystemName": 1,
@@ -1471,7 +1600,7 @@
         "OfficialName": "Ross",
         "FirstName": "Mikael",
         "Sex": 3,
-        "DateOfBirth": "1959-02-01",
+        "DateOfBirth": "1960-02-01",
         "DateOfBirthAdjusted": false,
         "OriginalName": null,
         "AllianceName": null,
@@ -2603,6 +2732,21 @@
         "Id": "163ec470-797e-4304-8bcf-c9aed55f41ef"
       },
       {
+        "FilterVersionId": "bfc2c754-4867-460a-96c3-0c1a1f8b01b9",
+        "FilterVersion": null,
+        "PersonId": "5edf65b6-96e1-4db8-b64b-78f9dfcc4659",
+        "Person": null,
+        "AuditInfo": {
+          "CreatedById": "default-user-id",
+          "CreatedByName": "MockDataSeeder",
+          "CreatedAt": "2020-01-10T13:12:10.2Z",
+          "ModifiedById": "default-user-id",
+          "ModifiedByName": "MockDataSeeder",
+          "ModifiedAt": "2020-01-10T13:12:10.2Z"
+        },
+        "Id": "18ec307c-baa7-4995-8375-3a386c3bf8dc"
+      },
+      {
         "FilterVersionId": "82a3d8dd-057c-4449-9630-12dacc12ba05",
         "FilterVersion": null,
         "PersonId": "1bcf78fc-66df-42eb-9adf-157f884eb360",
@@ -2685,6 +2829,15 @@
         "Id": "03d5789d-17bd-48f8-9ab0-4865343afe69"
       },
       {
+        "Name": "Primarschulkreis Goldach",
+        "Identifier": "30",
+        "Canton": "SG",
+        "DomainOfInfluenceType": 16,
+        "PersonId": "118f61a6-7e85-49d4-ba10-237dcb6fa221",
+        "Person": null,
+        "Id": "0b42c8ab-c472-44a4-a7a1-ec9e3d482ecd"
+      },
+      {
         "Name": "Schule",
         "Identifier": "School",
         "Canton": "SG",
@@ -2757,6 +2910,15 @@
         "Id": "2c966417-ea2e-4da1-a280-ac6ddf6b286a"
       },
       {
+        "Name": "Neudorf",
+        "Identifier": "ND",
+        "Canton": "",
+        "DomainOfInfluenceType": 11,
+        "PersonId": "5edf65b6-96e1-4db8-b64b-78f9dfcc4659",
+        "Person": null,
+        "Id": "2d348d59-e75c-41cf-93bf-7f10b9e96c6f"
+      },
+      {
         "Name": "Mörschwil",
         "Identifier": "",
         "Canton": "SG",
@@ -2809,6 +2971,15 @@
         "PersonId": "118f61a6-7e85-49d4-ba10-237dcb6fa221",
         "Person": null,
         "Id": "4924c0f4-5700-4e95-acc2-924f65b5c530"
+      },
+      {
+        "Name": "Oberstufenschulkreis Riethüsli",
+        "Identifier": "41",
+        "Canton": "SG",
+        "DomainOfInfluenceType": 17,
+        "PersonId": "93735eae-92a2-47e3-846d-fc50350b1c16",
+        "Person": null,
+        "Id": "4d4c4e3d-6e4f-4aa1-905c-4cae8f97e0b2"
       },
       {
         "Name": "Kanton St.Gallen eidgenössisch",
@@ -2883,6 +3054,15 @@
         "Id": "55d5119d-17bd-48f8-9ab0-4865343afe69"
       },
       {
+        "Name": "Oberstufenschulkreis Goldach",
+        "Identifier": "31",
+        "Canton": "SG",
+        "DomainOfInfluenceType": 17,
+        "PersonId": "118f61a6-7e85-49d4-ba10-237dcb6fa221",
+        "Person": null,
+        "Id": "5b11ac79-4eb3-4c2b-a3b2-8d418aed2a10"
+      },
+      {
         "Name": "Kanton St.Gallen kantonal",
         "Identifier": "17",
         "Canton": "SG",
@@ -2899,6 +3079,15 @@
         "PersonId": "079d124d-7085-4967-ae47-747aa1eca6b1",
         "Person": null,
         "Id": "65757146-9b1d-41c0-9e22-07fe8a4928bb"
+      },
+      {
+        "Name": "St.Gallen",
+        "Identifier": "",
+        "Canton": "SG",
+        "DomainOfInfluenceType": 8,
+        "PersonId": "5edf65b6-96e1-4db8-b64b-78f9dfcc4659",
+        "Person": null,
+        "Id": "67657876-e229-463e-ad18-da87209d1fa5"
       },
       {
         "Name": "UH-Verkehr",
@@ -3063,6 +3252,15 @@
         "Id": "ca112e1f-957a-45c6-918c-56d6a8d80b1a"
       },
       {
+        "Name": "Primarschulkreis Riethüsli",
+        "Identifier": "40",
+        "Canton": "SG",
+        "DomainOfInfluenceType": 16,
+        "PersonId": "93735eae-92a2-47e3-846d-fc50350b1c16",
+        "Person": null,
+        "Id": "cb12916d-6261-4bf8-ade6-bd579c731197"
+      },
+      {
         "Name": "Kanton St.Gallen eidgenössisch",
         "Identifier": "1",
         "Canton": "SG",
@@ -3135,6 +3333,24 @@
         "Id": "e05a4ab9-bf19-47bd-8d21-45231c66a9d4"
       },
       {
+        "Name": "Oberstufenschulkreis St. Gallen",
+        "Identifier": "21",
+        "Canton": "SG",
+        "DomainOfInfluenceType": 17,
+        "PersonId": "079d124d-7085-4967-ae47-747aa1eca6b1",
+        "Person": null,
+        "Id": "e38ffd8b-dd80-47f1-ab9e-e3a416ba2ccc"
+      },
+      {
+        "Name": "Centrum",
+        "Identifier": "C",
+        "Canton": "SG",
+        "DomainOfInfluenceType": 5,
+        "PersonId": "5edf65b6-96e1-4db8-b64b-78f9dfcc4659",
+        "Person": null,
+        "Id": "e7325a82-c145-4ce3-95a3-350d17417b67"
+      },
+      {
         "Name": "Osten",
         "Identifier": "O",
         "Canton": "SG",
@@ -3142,6 +3358,15 @@
         "PersonId": "5457877c-b57b-46d8-926c-9d8b6d13705b",
         "Person": null,
         "Id": "e7cc3ada-ec2d-42cd-be2b-639decd6082b"
+      },
+      {
+        "Name": "Primarschulkreis St. Gallen",
+        "Identifier": "20",
+        "Canton": "SG",
+        "DomainOfInfluenceType": 16,
+        "PersonId": "079d124d-7085-4967-ae47-747aa1eca6b1",
+        "Person": null,
+        "Id": "eae9ea29-560f-4454-a655-61de0ab310d3"
       },
       {
         "Name": "Evangelische-Kirchgemeinde Riethüsli",

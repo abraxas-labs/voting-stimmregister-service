@@ -69,11 +69,17 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         {
             queryable = queryable.Include(x => x.PersonDois);
         }
+        else
+        {
+            // origin dois are always needed for the origins field
+            queryable = queryable.Include(x =>
+                x.PersonDois.Where(y => y.DomainOfInfluenceType == DomainOfInfluenceType.Og));
+        }
 
         // if the order is adjusted,
         // the index probably needs adjustments too
         queryable = FilterForCriterias(queryable, criteria, referenceKeyDate)
-            .OrderBy(i => i.OfficialName).ThenBy(p => p.FirstName);
+            .OrderBy(i => i.OfficialName).ThenBy(p => p.FirstName).ThenBy(p => p.DateOfBirth);
         return await ExecuteSearchQueryWithInvalidCount(queryable, paging);
     }
 
@@ -105,9 +111,10 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
         var queryable = Context.FilterVersionPersons
             .Where(version => version.FilterVersionId == filterVersionId)
             .Include(version => version.Person)
+            .ThenInclude(person => person!.PersonDois.Where(doi => doi.DomainOfInfluenceType == DomainOfInfluenceType.Og))
             .Select(version => version.Person!);
 
-        queryable = queryable.OrderBy(i => i.OfficialName).ThenBy(p => p.FirstName);
+        queryable = queryable.OrderBy(i => i.OfficialName).ThenBy(p => p.FirstName).ThenBy(p => p.DateOfBirth);
         return await ExecuteSearchQueryWithInvalidCount(queryable, paging);
     }
 
@@ -340,7 +347,9 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
             || filterReference == FilterReference.EvangelicCircleName
             || filterReference == FilterReference.PeopleCircleName
             || filterReference == FilterReference.ResidentialDistrictCircleName
-            || filterReference == FilterReference.SchoolCircleName;
+            || filterReference == FilterReference.SchoolCircleName
+            || filterReference == FilterReference.ElementarySchoolCircleName
+            || filterReference == FilterReference.UpperSchoolCircleName;
     }
 
     private static bool IsCircleIdProperty(FilterReference filterReference)
@@ -351,7 +360,9 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
             || filterReference == FilterReference.EvangelicCircleId
             || filterReference == FilterReference.PeopleCircleId
             || filterReference == FilterReference.ResidentialDistrictCircleId
-            || filterReference == FilterReference.SchoolCircleId;
+            || filterReference == FilterReference.SchoolCircleId
+            || filterReference == FilterReference.ElementarySchoolCircleId
+            || filterReference == FilterReference.UpperSchoolCircleId;
     }
 
     private static Type GetMemberType<T>(string propertyName)
@@ -1110,6 +1121,8 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
             FilterReference.EvangelicCircleId or FilterReference.EvangelicCircleName => DomainOfInfluenceType.KiEva,
             FilterReference.PoliticalCircleId or FilterReference.PoliticalCircleName => DomainOfInfluenceType.Sk,
             FilterReference.SchoolCircleId or FilterReference.SchoolCircleName => DomainOfInfluenceType.Sc,
+            FilterReference.ElementarySchoolCircleId or FilterReference.ElementarySchoolCircleName => DomainOfInfluenceType.ScPs,
+            FilterReference.UpperSchoolCircleId or FilterReference.UpperSchoolCircleName => DomainOfInfluenceType.ScOs,
             FilterReference.PeopleCircleId or FilterReference.PeopleCircleName => DomainOfInfluenceType.AnVok,
             FilterReference.ResidentialDistrictCircleId or FilterReference.ResidentialDistrictCircleName => DomainOfInfluenceType.AnWok,
             FilterReference.TrafficCircleId or FilterReference.TrafficCircleName => DomainOfInfluenceType.AnVek,

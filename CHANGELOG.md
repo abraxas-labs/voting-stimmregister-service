@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.28.2`)
+# ✨ Changelog (`v2.31.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.28.2
-Previous version ---- v2.14.0
+This version -------- v2.31.0
+Previous version ---- v2.28.2
 Initial version ----- v1.121.5
-Total commits ------- 32
+Total commits ------- 10
 ```
+
+## [v2.31.0] - 2026-04-28
+
+### 🆕 Added
+
+- add elementary and upper school circle filter
+
+## [v2.30.4] - 2026-04-28
+
+### 🔄 Changed
+
+- extend persons sort order
+
+## [v2.30.3] - 2026-04-28
+
+### 🆕 Added
+
+- add origins to person
+
+## [v2.30.2] - 2026-02-18
+
+### 🔄 Changed
+
+- reorder metrics middleware calls in Startup configuration to catch final response status.
+
+## [v2.30.1] - 2026-02-16
+
+### :new: Added
+
+- Test for foreigner without country
+
+### :arrows_counterclockwise: Changed
+
+- PersonVoterMapping in Ech adapter to handle foreigner without country
+
+## [v2.30.0] - 2026-02-13
+
+### 🔄 Changed
+
+- feat(VOTING-6891): anonymizer improvements
+
+## [v2.29.1] - 2026-02-12
+
+### 🔄 Changed
+
+- fix: use latest payload builder versions in mocked data
+
+## [v2.29.0] - 2026-02-06
+
+### 🆕 Added
+
+- add eCH-0045 v6 export
 
 ## [v2.28.2] - 2026-02-06
 

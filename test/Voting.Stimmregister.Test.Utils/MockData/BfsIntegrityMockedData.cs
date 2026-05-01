@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Voting.Lib.Testing.Mocks;
 using Voting.Stimmregister.Abstractions.Adapter.Data.DataContexts;
+using Voting.Stimmregister.Core.Services.Supporting.Signing;
+using Voting.Stimmregister.Core.Services.Supporting.Signing.PayloadBuilder;
 using Voting.Stimmregister.Domain.Cryptography;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
@@ -23,8 +25,8 @@ public static class BfsIntegrityMockedData
 {
     private static readonly IReadOnlyDictionary<Guid, string> _signatures = new Dictionary<Guid, string>
     {
-        [Guid.Parse("28da12c1-6e19-4e94-9f68-751014ffbae1")] = "ouaZYfDUiRSz8aS5HXLV/kjkuFpxqcktLMj/hB2llC+y/iMsJTkcEQRmLjB3bhNGSA6hgaPWxHFv0qrkBabmpw==",
-        [Guid.Parse("f04d2243-d71a-4dea-931d-871e4f6fa4eb")] = "ExacLBeMBVMVUe4CoqlYyUdNGeTs+o4r2aC3Wj5gH+4Ly1dvlvg5b/atSf3K7jJx3ZPvdbvEYNWQaVzAleEgOQ==",
+        [Guid.Parse("28da12c1-6e19-4e94-9f68-751014ffbae1")] = "osH5lZJyzTOt/yAb+rv5sLMuzm0Ehz5WoRS6x5OJKUe0cdq5IIMjGbM8t4/iT6yjMhWas54dvyL0GuBqwHAdSQ==",
+        [Guid.Parse("f04d2243-d71a-4dea-931d-871e4f6fa4eb")] = "yxpiQrNRIuj2aXmEEN8xRWQiEJuGKyFF54eOIFxSIouIrRN0KKEOfdq1jkaMYgMSU115/wJs+C/kGlAh4QpL8g==",
     };
 
     public static BfsIntegrityEntity Person_3203_UpToDate
@@ -76,6 +78,8 @@ public static class BfsIntegrityMockedData
 
     private static async Task ApplySignatures(IServiceProvider sp, IReadOnlyCollection<BfsIntegrityEntity> all)
     {
+        var payloadBuilderFactory = sp.GetRequiredService<SignaturePayloadBuilderFactory>();
+
         // apply stored signatures
         foreach (var integrity in all)
         {
@@ -84,8 +88,9 @@ public static class BfsIntegrityMockedData
                 continue;
             }
 
+            IIncrementalSignaturePayloadBuilder<BfsIntegrityEntity, PersonEntity> payloadBuilder = payloadBuilderFactory.Get(integrity);
             integrity.Signature = Convert.FromBase64String(signatureB64);
-            integrity.SignatureVersion = 2;
+            integrity.SignatureVersion = payloadBuilder.Version;
             integrity.SignatureKeyId = "VOSR_ECDSA_PUBLIC_KEY_PRE";
         }
 

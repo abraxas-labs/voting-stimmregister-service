@@ -1,7 +1,7 @@
 ﻿// (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
-using Ech0155_4_0;
+using Ech0155_5_1;
 
 namespace Voting.Stimmregister.Adapter.Ech.Mapping;
 
@@ -17,6 +17,8 @@ internal static class DomainOfInfluenceMapping
             Domain.Enums.DomainOfInfluenceType.Mu => DomainOfInfluenceTypeType.Mu,
             Domain.Enums.DomainOfInfluenceType.Sk => DomainOfInfluenceTypeType.Sk,
             Domain.Enums.DomainOfInfluenceType.Sc => DomainOfInfluenceTypeType.Sc,
+            Domain.Enums.DomainOfInfluenceType.ScPs => DomainOfInfluenceTypeType.Sc,
+            Domain.Enums.DomainOfInfluenceType.ScOs => DomainOfInfluenceTypeType.Sc,
             Domain.Enums.DomainOfInfluenceType.Ki => DomainOfInfluenceTypeType.Ki,
             Domain.Enums.DomainOfInfluenceType.KiKat => DomainOfInfluenceTypeType.Ki,
             Domain.Enums.DomainOfInfluenceType.KiEva => DomainOfInfluenceTypeType.Ki,

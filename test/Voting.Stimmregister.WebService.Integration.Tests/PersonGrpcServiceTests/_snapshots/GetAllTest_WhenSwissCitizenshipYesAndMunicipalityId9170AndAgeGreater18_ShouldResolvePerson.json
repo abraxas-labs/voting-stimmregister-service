@@ -82,7 +82,11 @@
       "IsHouseholder": false,
       "ResidenceBuildingId": 0,
       "ResidenceApartmentId": 0,
-      "EVotingEmail": ""
+      "EVotingEmail": "",
+      "Origins": [
+        "St. Gallen (SG)",
+        "Thurgau (TG)"
+      ]
     },
     {
       "Id": "ef3fd8ad-b603-44a8-a7cc-e994e1df4222",
@@ -166,7 +170,10 @@
       "IsHouseholder": false,
       "ResidenceBuildingId": 0,
       "ResidenceApartmentId": 0,
-      "EVotingEmail": ""
+      "EVotingEmail": "",
+      "Origins": [
+        "Basel Landschaft (BL)"
+      ]
     }
   ]
 }

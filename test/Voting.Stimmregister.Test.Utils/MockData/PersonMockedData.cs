@@ -316,7 +316,7 @@ public static class PersonMockedData
             DomainOfInfluenceId = 330789,
             FirstName = "Mustafa2",
             OfficialName = "Berter2",
-            DateOfBirth = new DateOnly(1990, 11, 15),
+            DateOfBirth = new DateOnly(1991, 11, 15),
             RestrictedVotingAndElectionRightFederation = false,
             ResidenceAddressStreet = "Weststr.",
             ResidenceAddressHouseNumber = "12",
@@ -489,7 +489,7 @@ public static class PersonMockedData
             DomainOfInfluenceId = 54468,
             FirstName = "Mikael",
             OfficialName = "Ross",
-            DateOfBirth = new DateOnly(1959, 02, 01),
+            DateOfBirth = new DateOnly(1960, 02, 01),
             ResidenceAddressStreet = "Bahnhofstrasse",
             ResidenceAddressHouseNumber = "20a",
             ResidenceAddressZipCode = "9000",
@@ -507,6 +507,47 @@ public static class PersonMockedData
             SourceSystemName = ImportSourceSystem.Loganto,
             CantonBfs = CantonBfsStGallen,
         };
+
+    public static PersonEntity Person_3203_StGallen_Auslaender_Staatenlos
+    => new()
+    {
+        Id = Guid.Parse("5edf65b6-96e1-4db8-b64b-78f9dfcc4659"),
+        RegisterId = Guid.Parse("03fbb23e-e1ca-4eea-9b86-d48668e88980"),
+        SourceSystemId = "93769260",
+        CreatedDate = MockedClock.GetDate(),
+        ModifiedDate = MockedClock.GetDate(),
+        MunicipalityId = MunicipalityIdStGallen,
+        MunicipalityName = MunicipalityNameStGallen,
+        DomainOfInfluenceId = 54468,
+        FirstName = "Sam",
+        OfficialName = "Staatenlos",
+        DateOfBirth = new DateOnly(1994, 6, 7),
+        ResidenceAddressStreet = "Achslenstr.",
+        ResidenceAddressHouseNumber = "3",
+        ResidenceAddressZipCode = "9016",
+        ResidenceAddressTown = "St. Gallen",
+        ResidenceCountry = "CH",
+        RestrictedVotingAndElectionRightFederation = false,
+        IsValid = true,
+        IsLatest = true,
+        Country = null,
+        CountryNameShort = "Staat unbekannt",
+        Sex = SexType.Male,
+        DateOfBirthAdjusted = true,
+        ContactAddressStreet = "Achslenstr.",
+        ContactAddressHouseNumber = "3",
+        ContactAddressZipCode = "9016",
+        ContactAddressTown = "St. Gallen",
+        ContactCantonAbbreviation = "SG",
+        ContactAddressCountryIdIso2 = "CH",
+        Religion = ReligionType.Catholic,
+        MoveInArrivalDate = DateOnly.Parse("2021-01-10"),
+        MoveInComesFrom = "Wittenbach",
+        TypeOfResidence = ResidenceType.HWS,
+        ResidenceCantonAbbreviation = "SG",
+        SourceSystemName = ImportSourceSystem.Cobra,
+        CantonBfs = CantonBfsStGallen,
+    };
 
     public static PersonEntity Person_3213_Goldach_1
         => new()
@@ -1118,6 +1159,7 @@ public static class PersonMockedData
             yield return Person_9170_Auslandschweizer_Under18;
             yield return Person_9170_Auslaender;
             yield return Person_9170_RestrictedVoting;
+            yield return Person_3203_StGallen_Auslaender_Staatenlos;
         }
     }
 

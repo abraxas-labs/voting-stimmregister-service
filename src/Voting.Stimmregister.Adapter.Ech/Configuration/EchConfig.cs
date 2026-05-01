@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Ech0007_6_0;
-using Voting.Lib.Ech.Ech0045_4_0.Models;
+using Voting.Lib.Ech.Ech0045_6_0.Models;
 
 namespace Voting.Stimmregister.Adapter.Ech.Configuration;
 

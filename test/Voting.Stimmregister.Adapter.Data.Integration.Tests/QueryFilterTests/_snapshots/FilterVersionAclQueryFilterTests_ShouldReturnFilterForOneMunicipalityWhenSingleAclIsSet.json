@@ -17,9 +17,9 @@
       "FilterCriterias": [],
       "FilterId": "241be10b-b4aa-4f36-b67d-e137d183906c",
       "Filter": null,
-      "SignatureVersion": 2,
+      "SignatureVersion": 3,
       "SignatureKeyId": "VOSR_ECDSA_PUBLIC_KEY_PRE",
-      "Signature": "NMVGxwTe+gYHAR7llXMdpy9Hkmihq9xEj27zsdMCmiroIQvumgyVY89iuhMD6jQW2jemznlx4JzrsGE6Km+K5g==",
+      "Signature": "BABlHiiBDcgz7MCmw55ptzoiB4ZgFBBIwmftl7ceHpwv0B8YOrvN3wJbfJrecsdlerZiXzli3B0FWSoyiG8azw==",
       "Id": "00000000-0000-0000-0000-000000000000"
     }
   ]

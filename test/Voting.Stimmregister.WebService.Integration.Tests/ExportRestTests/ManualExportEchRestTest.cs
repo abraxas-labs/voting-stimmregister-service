@@ -8,7 +8,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Voting.Lib.Ech.Ech0045_4_0.Schemas;
+using Voting.Lib.Ech.Ech0045_6_0.Schemas;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
@@ -104,6 +104,18 @@ public class ManualExportEchRestTest : BaseWriteableDbRestTest
         var request = new PersonSearchParametersExportModel
         {
             FilterId = FilterMockedData.SomeFilter_MunicipalityIdOther2.Id,
+        };
+
+        var xmlContent = await Export(request);
+        xmlContent.MatchFormattedXmlSnapshot();
+    }
+
+    [Fact]
+    public async Task WhenFilterIdAndNoVersionId_ShouldResolvePersonsExportEch_ForForeignerWithoutCountry()
+    {
+        var request = new PersonSearchParametersExportModel
+        {
+            FilterId = FilterMockedData.SomeFilter_MunicipalityIdOther4.Id,
         };
 
         var xmlContent = await Export(request);

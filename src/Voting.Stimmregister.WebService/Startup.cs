@@ -123,10 +123,9 @@ public class Startup
     public void Configure(IApplicationBuilder app)
     {
         app.UseMetricServer(AppConfig.MetricPort);
+        app.UseRouting();
         app.UseHttpMetrics();
         app.UseGrpcMetrics();
-
-        app.UseRouting();
 
         if (AppConfig.EnableGrpcWeb)
         {

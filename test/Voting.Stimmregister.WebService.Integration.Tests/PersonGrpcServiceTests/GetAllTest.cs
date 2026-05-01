@@ -42,6 +42,15 @@ public class GetAllTest : BaseWriteableDbGrpcTest<PersonService.PersonServiceCli
     }
 
     [Fact]
+    public async Task ShouldGetPersonsInCorrectOrder()
+    {
+        var response = await SgManagerClient.GetAllAsync(NewValidGetAllRequest());
+
+        // this should ensure that all persons are sorted correctly (official name then first name then date of birth)
+        response.People.MatchSnapshot();
+    }
+
+    [Fact]
     public async Task WhenFilterByString_ShouldResolvePerson()
     {
         var filterValues = new Dictionary<FilterReference, string>
@@ -81,6 +90,10 @@ public class GetAllTest : BaseWriteableDbGrpcTest<PersonService.PersonServiceCli
             [FilterReference.EvangelicCircleName] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_EvangelicCircle.Name,
             [FilterReference.SchoolCircleId] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_SchoolCircle.Identifier,
             [FilterReference.SchoolCircleName] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_SchoolCircle.Name,
+            [FilterReference.ElementarySchoolCircleId] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_ElementarySchoolCircle.Identifier,
+            [FilterReference.ElementarySchoolCircleName] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_ElementarySchoolCircle.Name,
+            [FilterReference.UpperSchoolCircleId] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_UpperSchoolCircle.Identifier,
+            [FilterReference.UpperSchoolCircleName] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_UpperSchoolCircle.Name,
             [FilterReference.TrafficCircleId] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_TrafficCircle.Identifier,
             [FilterReference.TrafficCircleName] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_TrafficCircle.Name,
             [FilterReference.ResidentialDistrictCircleId] = PersonDoiMockedData.PersonDoi_Person_3203_StGallen_5_ResidentialDistrictCircle.Identifier,
@@ -340,6 +353,10 @@ public class GetAllTest : BaseWriteableDbGrpcTest<PersonService.PersonServiceCli
             [FilterReference.EvangelicCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_EvangelicCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_EvangelicCircle.Name}",
             [FilterReference.SchoolCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_SchoolCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_SchoolCircle.Identifier}",
             [FilterReference.SchoolCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_SchoolCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_SchoolCircle.Name}",
+            [FilterReference.ElementarySchoolCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_ElementarySchoolCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_ElementarySchoolCircle.Identifier}",
+            [FilterReference.ElementarySchoolCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_ElementarySchoolCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_ElementarySchoolCircle.Name}",
+            [FilterReference.UpperSchoolCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_UpperSchoolCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_UpperSchoolCircle.Identifier}",
+            [FilterReference.UpperSchoolCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_UpperSchoolCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_UpperSchoolCircle.Name}",
             [FilterReference.TrafficCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_TrafficCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_TrafficCircle.Identifier}",
             [FilterReference.TrafficCircleName] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_TrafficCircle.Name}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_TrafficCircle.Name}",
             [FilterReference.ResidentialDistrictCircleId] = $"{PersonDoiMockedData.PersonDoi_Person_3203_StGallen_2_ResidentialDistrictCircle.Identifier}, {PersonDoiMockedData.PersonDoi_Person_3213_Goldach_1_ResidentialDistrictCircle.Identifier}",

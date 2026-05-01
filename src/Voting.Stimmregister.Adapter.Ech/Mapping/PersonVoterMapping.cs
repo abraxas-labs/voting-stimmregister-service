@@ -6,16 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Ech0007_6_0;
 using Ech0010_6_0;
-using Ech0011_8_1;
+using Ech0011_9_0;
 using Ech0044_4_1;
-using Ech0045_4_0;
-using Ech0155_4_0;
+using Ech0045_6_0;
+using Ech0155_5_1;
 using Microsoft.Extensions.Logging;
-using Voting.Lib.Ech.Ech0045_4_0.Models;
+using Voting.Lib.Ech.Ech0045_6_0.Models;
 using Voting.Stimmregister.Adapter.Ech.Configuration;
 using Voting.Stimmregister.Domain.Models;
 using Voting.Stimmregister.Domain.Utils;
-using CantonAbbreviation = Ech0007_5_0.CantonAbbreviationType;
+using CantonAbbreviation = Ech0007_6_0.CantonAbbreviationType;
 
 namespace Voting.Stimmregister.Adapter.Ech.Mapping;
 
@@ -26,6 +26,13 @@ public class PersonVoterMapping : IPersonVoterMapping
     private const string PersonIdCategoryLocalRevisionId = "LOC.REV";
     private const string SwissCountryIdIso2 = "CH";
     private const string AddressCountryUnknown = "Unbekannt";
+
+    // Ech0045 v6 domain of influence info requires one counting circle. Since Stimmregister has no counting circle infos, we add a default one.
+    private static readonly CountingCircleType DefaultCountingCircle = new()
+    {
+        CountingCircleId = "undefined",
+        CountingCircleName = "undefined",
+    };
 
     private readonly ICountryHelperService _countryHelperService;
     private readonly ILogger<PersonVoterMapping> _logger;
@@ -43,11 +50,14 @@ public class PersonVoterMapping : IPersonVoterMapping
         var hasResidence = PersonUtil.HasValidResidenceAddressComponent(person);
         var hasContact = PersonUtil.HasValidContactAddressComponent(person);
 
+        var electoralAddress = BuildElectoralAddress(person);
+        var deliveryAddress = BuildDeliveryAddress(person);
+
         var votingPersonType = new VotingPersonType
         {
             Person = BuildPerson(person),
-            ElectoralAddress = hasResidence || !hasContact ? BuildElectoralAddress(person) : BuildDeliveryAddress(person),
-            DeliveryAddress = hasContact || !hasResidence ? BuildDeliveryAddress(person) : BuildElectoralAddress(person),
+            ElectoralAddress = hasResidence || !hasContact ? electoralAddress : MapToElectoralAddress(deliveryAddress),
+            DeliveryAddress = hasContact || !hasResidence ? deliveryAddress! : MapToPersonMailAddress(electoralAddress),
             IsEvoter = person.EVoting,
         };
 
@@ -67,9 +77,10 @@ public class PersonVoterMapping : IPersonVoterMapping
                     DomainOfInfluence = new DomainOfInfluenceType
                     {
                         DomainOfInfluenceTypeProperty = pd.DomainOfInfluenceType.ToEchDomainOfInfluence(),
-                        LocalDomainOfInfluenceIdentification = DoiIdentifierMapping.ToEchIdentifier(pd),
+                        DomainOfInfluenceIdentification = DoiIdentifierMapping.ToEchIdentifier(pd),
                         DomainOfInfluenceName = pd.Name,
                     },
+                    CountingCircle = DefaultCountingCircle,
                 })
             .ToList();
 
@@ -118,9 +129,9 @@ public class PersonVoterMapping : IPersonVoterMapping
             ? person.OfficialName
             : person.AllianceName;
 
-    private PersonMailAddressType BuildElectoralAddress(PersonEntity person)
+    private ElectoralAddressType BuildElectoralAddress(PersonEntity person)
     {
-        var personAddress = new PersonMailAddressType
+        return new ElectoralAddressType
         {
             Person = new()
             {
@@ -130,8 +141,6 @@ public class PersonVoterMapping : IPersonVoterMapping
             },
             AddressInformation = BuildElectoralAddressInformation(person),
         };
-
-        return personAddress;
     }
 
     private AddressInformationType BuildDeliveryAddressInformation(PersonEntity person)
@@ -272,7 +281,7 @@ public class PersonVoterMapping : IPersonVoterMapping
         };
 
         // Process foreigner person (Ausländische Person mit aktivem Stimm- und Wahlrecht)
-        if (person.Country?.Equals(SwissCountryIdIso2, StringComparison.OrdinalIgnoreCase) == false)
+        if (person.Country == null || !person.Country.Equals(SwissCountryIdIso2, StringComparison.OrdinalIgnoreCase))
         {
             return new VotingPersonTypePerson
             {
@@ -346,13 +355,41 @@ public class PersonVoterMapping : IPersonVoterMapping
                     person.MoveInArrivalDate?.ToDateTime(TimeOnly.MinValue) ?? person.CreatedDate,
                 ResidenceCountry = new Ech0008_3_0.CountryType
                 {
-                    CountryId = (ushort?)residenceCountryInfo?.BfsId,
+                    CountryId = residenceCountryInfo?.BfsId,
                     CountryIdIso2 = residenceCountryInfo?.Iso2,
                     CountryNameShort = residenceCountryInfo?.ShortNameEn ??
                                        person.ResidenceCountry ?? AddressCountryUnknown,
                 },
                 Municipality = swissMunicipality,
             },
+        };
+    }
+
+    private PersonMailAddressType? MapToPersonMailAddress(ElectoralAddressType? address)
+    {
+        if (address == null)
+        {
+            return null;
+        }
+
+        return new()
+        {
+            Person = address.Person,
+            AddressInformation = address.AddressInformation,
+        };
+    }
+
+    private ElectoralAddressType? MapToElectoralAddress(PersonMailAddressType? address)
+    {
+        if (address == null)
+        {
+            return null;
+        }
+
+        return new()
+        {
+            Person = address.Person,
+            AddressInformation = address.AddressInformation,
         };
     }
 

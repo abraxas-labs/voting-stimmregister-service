@@ -11,6 +11,40 @@
       "TenantId": ""
     },
     {
+      "Id": "935fb872-2eb4-455a-842c-e15c5133daf6",
+      "Name": "Filter_3203",
+      "Description": "",
+      "LatestVersion": {
+        "Id": "bfc2c754-4867-460a-96c3-0c1a1f8b01b9",
+        "Name": "Other Filter Version 3",
+        "AuditInfo": {
+          "CreatedById": "default-user-id",
+          "CreatedByName": "MockDataSeeder",
+          "CreatedAt": {
+            "Seconds": 1578489130,
+            "Nanos": 200000000
+          },
+          "ModifiedById": "default-user-id",
+          "ModifiedByName": "MockDataSeeder",
+          "ModifiedAt": {
+            "Seconds": 1578661930,
+            "Nanos": 200000000
+          }
+        },
+        "Deadline": {
+          "Seconds": 1578614400,
+          "Nanos": 0
+        },
+        "Count": 30,
+        "CountOfInvalidPersons": 0,
+        "Criteria": []
+      },
+      "Criteria": [],
+      "Versions": [],
+      "TenantName": "",
+      "TenantId": ""
+    },
+    {
       "Id": "a287456a-9007-418f-9eea-72f943119396",
       "Name": "Filter_3203",
       "Description": "",

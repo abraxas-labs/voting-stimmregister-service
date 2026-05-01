@@ -57,6 +57,15 @@ public static class FilterMockedData
             MunicipalityId = MunicipalityId3203,
         };
 
+    public static FilterEntity SomeFilter_MunicipalityIdOther4
+    => new()
+    {
+        Id = Guid.Parse("935fb872-2eb4-455a-842c-e15c5133daf6"),
+        AuditInfo = MockedAuditInfo.Get(),
+        Name = "Filter_3203",
+        MunicipalityId = MunicipalityId3203,
+    };
+
     public static FilterEntity SomeFilter_MunicipalityId9170_SwissAbroad
         => new()
         {
@@ -74,6 +83,7 @@ public static class FilterMockedData
             yield return SomeFilter_MunicipalityIdOther;
             yield return SomeFilter_MunicipalityIdOther2;
             yield return SomeFilter_MunicipalityIdOther3;
+            yield return SomeFilter_MunicipalityIdOther4;
             yield return SomeFilter_MunicipalityId9170_SwissAbroad;
         }
     }

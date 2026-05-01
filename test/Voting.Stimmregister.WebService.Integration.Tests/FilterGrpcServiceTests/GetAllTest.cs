@@ -39,7 +39,7 @@ public class GetAllTest : BaseWriteableDbGrpcTest<FilterService.FilterServiceCli
     [Fact]
     public async Task GetAll_SgManager()
     {
-        var filters = await GetAll_Test(SgManagerClient, 3, "Filter_9170");
+        var filters = await GetAll_Test(SgManagerClient, 4, "Filter_9170");
         filters.MatchSnapshot();
     }
 

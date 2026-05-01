@@ -4,6 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using Grpc.Core;
+using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Proto.V1.Services;
 using Voting.Stimmregister.Proto.V1.Services.Requests;
@@ -18,6 +19,24 @@ public class GetByFilterIdTest : BaseWriteableDbGrpcTest<PersonService.PersonSer
     public GetByFilterIdTest(TestApplicationFactory factory)
         : base(factory)
     {
+    }
+
+    public override async Task InitializeAsync()
+    {
+        await ResetDb();
+        await AclDoiVotingBasisMockedData.Seed(RunScoped);
+        await PersonMockedData.Seed(RunScoped);
+        await BfsIntegrityMockedData.Seed(RunScoped);
+        await FilterMockedData.Seed(RunScoped);
+    }
+
+    [Fact]
+    public async Task ShouldGetPersonsInCorrectOrder()
+    {
+        var response = await SgManagerClient.GetByFilterIdAsync(NewValidGetByFilterIdRequest(x => x.FilterId = FilterMockedData.SomeFilter_MunicipalityIdOther2.Id.ToString()));
+
+        // this should ensure that all persons are sorted correctly (official name then first name then date of birth)
+        response.People.MatchSnapshot();
     }
 
     [Fact]

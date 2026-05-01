@@ -1,4 +1,4 @@
-<voterDelivery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+<voterDelivery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
   <deliveryHeader>
     <senderId xmlns="http://www.ech.ch/xmlns/eCH-0058/5">ABX-VOTING</senderId>
     <messageId xmlns="http://www.ech.ch/xmlns/eCH-0058/5">mock-id</messageId>
@@ -21,7 +21,7 @@
       </cantonalRegister>
     </reportingAuthority>
     <numberOfVoters>1</numberOfVoters>
-    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/4">
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
       <person>
         <swiss>
           <swissDomesticPerson>
@@ -47,7 +47,7 @@
             </personIdentification>
             <languageOfCorrespondance>de</languageOfCorrespondance>
             <religionData>
-              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/8">000</religion>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/9">000</religion>
             </religionData>
             <extension>
               <isHouseholder xmlns="">true</isHouseholder>
@@ -55,8 +55,8 @@
               <residenceApartmentId xmlns="">999</residenceApartmentId>
             </extension>
             <placeOfOrigin>
-              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/8">Teufen</originName>
-              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/8">AR</canton>
+              <originName xmlns="http://www.ech.ch/xmlns/eCH-0011/9">Teufen</originName>
+              <canton xmlns="http://www.ech.ch/xmlns/eCH-0011/9">AR</canton>
             </placeOfOrigin>
           </swissDomesticPerson>
           <municipality>
@@ -67,17 +67,17 @@
       </person>
       <dataLock>0</dataLock>
       <electoralAddress>
-        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <firstName>Nati</firstName>
-          <lastName>Lavigne-Meyerhans</lastName>
+        <person>
+          <firstName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Nati</firstName>
+          <lastName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Lavigne-Meyerhans</lastName>
         </person>
-        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
-          <street>Achslenstr.</street>
-          <houseNumber>3</houseNumber>
-          <dwellingNumber>4</dwellingNumber>
-          <town>St. Gallen</town>
-          <swissZipCode>9016</swissZipCode>
-          <country>
+        <addressInformation>
+          <street xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Achslenstr.</street>
+          <houseNumber xmlns="http://www.ech.ch/xmlns/eCH-0010/6">3</houseNumber>
+          <dwellingNumber xmlns="http://www.ech.ch/xmlns/eCH-0010/6">4</dwellingNumber>
+          <town xmlns="http://www.ech.ch/xmlns/eCH-0010/6">St. Gallen</town>
+          <swissZipCode xmlns="http://www.ech.ch/xmlns/eCH-0010/6">9016</swissZipCode>
+          <country xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
             <countryIdISO2>CH</countryIdISO2>
             <countryNameShort>Schweiz</countryNameShort>
           </country>
@@ -103,52 +103,80 @@
       <isEvoter>false</isEvoter>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">CH</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">1</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Kanton St.Gallen eidgenössisch</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">CH</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">1</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Kanton St.Gallen eidgenössisch</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">CT</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">17</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Kanton St.Gallen kantonal</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">CT</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">17</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Kanton St.Gallen kantonal</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">BZ</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Gerichtskreis St.Gallen</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">BZ</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">unknown</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Gerichtskreis St.Gallen</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">BZ</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Wahlkreis St.Gallen</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">BZ</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">unknown</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Wahlkreis St.Gallen</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">MU</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">3203</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">St.Gallen</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">MU</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">3203</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">St.Gallen</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">SK</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">O</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Osten</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">SK</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">O</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Osten</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
       <domainOfInfluenceInfo>
         <domainOfInfluence>
-          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/4">OG</domainOfInfluenceType>
-          <localDomainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/4">unknown</localDomainOfInfluenceIdentification>
-          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/4">Teufen</domainOfInfluenceName>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">OG</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">unknown</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Teufen</domainOfInfluenceName>
         </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
       </domainOfInfluenceInfo>
     </voter>
   </voterList>

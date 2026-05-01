@@ -1,0 +1,130 @@
+<voterDelivery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
+  <deliveryHeader>
+    <senderId xmlns="http://www.ech.ch/xmlns/eCH-0058/5">ABX-VOTING</senderId>
+    <messageId xmlns="http://www.ech.ch/xmlns/eCH-0058/5">mock-id</messageId>
+    <messageType xmlns="http://www.ech.ch/xmlns/eCH-0058/5">1710967</messageType>
+    <sendingApplication xmlns="http://www.ech.ch/xmlns/eCH-0058/5">
+      <manufacturer>Abraxas Informatik AG</manufacturer>
+      <product>Voting.Stimmregister</product>
+      <productVersion>0.0.0.1</productVersion>
+    </sendingApplication>
+    <messageDate xmlns="http://www.ech.ch/xmlns/eCH-0058/5">2020-01-10T13:12:10.2Z</messageDate>
+    <action xmlns="http://www.ech.ch/xmlns/eCH-0058/5">1</action>
+    <testDeliveryFlag xmlns="http://www.ech.ch/xmlns/eCH-0058/5">true</testDeliveryFlag>
+  </deliveryHeader>
+  <voterList>
+    <reportingAuthority>
+      <cantonalRegister>
+        <registerIdentification>SG</registerIdentification>
+        <cantonAbbreviation>SG</cantonAbbreviation>
+        <registerName>Stehendes Stimmregister</registerName>
+      </cantonalRegister>
+    </reportingAuthority>
+    <numberOfVoters>1</numberOfVoters>
+    <voter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ech.ch/xmlns/eCH-0045/6">
+      <person>
+        <foreigner>
+          <foreignerPerson>
+            <personIdentification>
+              <localPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC.EW</personIdCategory>
+                <personId>93769260</personId>
+              </localPersonId>
+              <otherPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC</personIdCategory>
+                <personId>03fbb23e-e1ca-4eea-9b86-d48668e88980</personId>
+              </otherPersonId>
+              <otherPersonId xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <personIdCategory>LOC.REV</personIdCategory>
+                <personId>5edf65b6-96e1-4db8-b64b-78f9dfcc4659</personId>
+              </otherPersonId>
+              <officialName xmlns="http://www.ech.ch/xmlns/eCH-0044/4">Staatenlos</officialName>
+              <firstName xmlns="http://www.ech.ch/xmlns/eCH-0044/4">Sam</firstName>
+              <sex xmlns="http://www.ech.ch/xmlns/eCH-0044/4">1</sex>
+              <dateOfBirth xmlns="http://www.ech.ch/xmlns/eCH-0044/4">
+                <yearMonthDay>1994-06-07</yearMonthDay>
+              </dateOfBirth>
+            </personIdentification>
+            <languageOfCorrespondance>de</languageOfCorrespondance>
+            <religionData>
+              <religion xmlns="http://www.ech.ch/xmlns/eCH-0011/9">121</religion>
+            </religionData>
+          </foreignerPerson>
+          <municipality>
+            <municipalityId xmlns="http://www.ech.ch/xmlns/eCH-0007/6">3203</municipalityId>
+            <municipalityName xmlns="http://www.ech.ch/xmlns/eCH-0007/6">St. Gallen</municipalityName>
+          </municipality>
+        </foreigner>
+      </person>
+      <dataLock>0</dataLock>
+      <electoralAddress>
+        <person>
+          <mrMrs xmlns="http://www.ech.ch/xmlns/eCH-0010/6">2</mrMrs>
+          <firstName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Sam</firstName>
+          <lastName xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Staatenlos</lastName>
+        </person>
+        <addressInformation>
+          <street xmlns="http://www.ech.ch/xmlns/eCH-0010/6">Achslenstr.</street>
+          <houseNumber xmlns="http://www.ech.ch/xmlns/eCH-0010/6">3</houseNumber>
+          <town xmlns="http://www.ech.ch/xmlns/eCH-0010/6">St. Gallen</town>
+          <swissZipCode xmlns="http://www.ech.ch/xmlns/eCH-0010/6">9016</swissZipCode>
+          <country xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+            <countryIdISO2>CH</countryIdISO2>
+            <countryNameShort>Schweiz</countryNameShort>
+          </country>
+        </addressInformation>
+      </electoralAddress>
+      <deliveryAddress>
+        <person xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <mrMrs>2</mrMrs>
+          <firstName>Sam</firstName>
+          <lastName>Staatenlos</lastName>
+        </person>
+        <addressInformation xmlns="http://www.ech.ch/xmlns/eCH-0010/6">
+          <street>Achslenstr.</street>
+          <houseNumber>3</houseNumber>
+          <town>St. Gallen</town>
+          <swissZipCode>9016</swissZipCode>
+          <country>
+            <countryIdISO2>CH</countryIdISO2>
+            <countryNameShort>Schweiz</countryNameShort>
+          </country>
+        </addressInformation>
+      </deliveryAddress>
+      <isEvoter>false</isEvoter>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">SK</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">C</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Centrum</domainOfInfluenceName>
+        </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
+      </domainOfInfluenceInfo>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">OG</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">unknown</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">St.Gallen</domainOfInfluenceName>
+        </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
+      </domainOfInfluenceInfo>
+      <domainOfInfluenceInfo>
+        <domainOfInfluence>
+          <domainOfInfluenceType xmlns="http://www.ech.ch/xmlns/eCH-0155/5">KI</domainOfInfluenceType>
+          <domainOfInfluenceIdentification xmlns="http://www.ech.ch/xmlns/eCH-0155/5">ND</domainOfInfluenceIdentification>
+          <domainOfInfluenceName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">Neudorf</domainOfInfluenceName>
+        </domainOfInfluence>
+        <countingCircle>
+          <countingCircleId xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleId>
+          <countingCircleName xmlns="http://www.ech.ch/xmlns/eCH-0155/5">undefined</countingCircleName>
+        </countingCircle>
+      </domainOfInfluenceInfo>
+    </voter>
+  </voterList>
+</voterDelivery>

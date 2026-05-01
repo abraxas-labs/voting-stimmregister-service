@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Voting.Lib.Ech.Ech0045_4_0.Schemas;
+using Voting.Lib.Ech.Ech0045_6_0.Schemas;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Domain.Authorization;
 using Voting.Stimmregister.Domain.Enums;

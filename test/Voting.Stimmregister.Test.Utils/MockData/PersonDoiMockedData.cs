@@ -180,6 +180,28 @@ public static class PersonDoiMockedData
             DomainOfInfluenceType = DomainOfInfluenceType.Sc,
         };
 
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_ElementarySchoolCircle
+        => new()
+        {
+            Id = Guid.Parse("eae9ea29-560f-4454-a655-61de0ab310d3"),
+            PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
+            Canton = "SG",
+            Identifier = "20",
+            Name = "Primarschulkreis St. Gallen",
+            DomainOfInfluenceType = DomainOfInfluenceType.ScPs,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_UpperSchoolCircle
+        => new()
+        {
+            Id = Guid.Parse("e38ffd8b-dd80-47f1-ab9e-e3a416ba2ccc"),
+            PersonId = PersonMockedData.Person_3203_StGallen_2.Id,
+            Canton = "SG",
+            Identifier = "21",
+            Name = "Oberstufenschulkreis St. Gallen",
+            DomainOfInfluenceType = DomainOfInfluenceType.ScOs,
+        };
+
     public static PersonDoiEntity PersonDoi_Person_3203_StGallen_2_TrafficCircle
         => new()
         {
@@ -300,6 +322,38 @@ public static class PersonDoiMockedData
             DomainOfInfluenceType = DomainOfInfluenceType.Og,
         };
 
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_Auslaender_Staatenlos_PoliticalCircle_Centrum
+    => new()
+    {
+        Id = Guid.Parse("e7325a82-c145-4ce3-95a3-350d17417b67"),
+        PersonId = PersonMockedData.Person_3203_StGallen_Auslaender_Staatenlos.Id,
+        Canton = "SG",
+        Identifier = "C",
+        Name = "Centrum",
+        DomainOfInfluenceType = DomainOfInfluenceType.Sk,
+    };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_Auslaender_Staatenlos_CatholicCircle_Neudorf
+        => new()
+        {
+            Id = Guid.Parse("2d348d59-e75c-41cf-93bf-7f10b9e96c6f"),
+            PersonId = PersonMockedData.Person_3203_StGallen_Auslaender_Staatenlos.Id,
+            Identifier = "ND",
+            Name = "Neudorf",
+            DomainOfInfluenceType = DomainOfInfluenceType.KiKat,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_Auslaender_Staatenlos_Origin1
+        => new()
+        {
+            Id = Guid.Parse("67657876-e229-463e-ad18-da87209d1fa5"),
+            PersonId = PersonMockedData.Person_3203_StGallen_Auslaender_Staatenlos.Id,
+            Canton = "SG",
+            Identifier = string.Empty,
+            Name = "St.Gallen",
+            DomainOfInfluenceType = DomainOfInfluenceType.Og,
+        };
+
     public static PersonDoiEntity PersonDoi_Person_3203_StGallen_5_Origin
         => new()
         {
@@ -353,6 +407,28 @@ public static class PersonDoiMockedData
             Canton = "SG",
             Name = "Schule",
             DomainOfInfluenceType = DomainOfInfluenceType.Sc,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_5_ElementarySchoolCircle
+        => new()
+        {
+            Id = Guid.Parse("cb12916d-6261-4bf8-ade6-bd579c731197"),
+            PersonId = PersonMockedData.Person_3203_StGallen_5.Id,
+            Identifier = "40",
+            Canton = "SG",
+            Name = "Primarschulkreis Riethüsli",
+            DomainOfInfluenceType = DomainOfInfluenceType.ScPs,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3203_StGallen_5_UpperSchoolCircle
+        => new()
+        {
+            Id = Guid.Parse("4d4c4e3d-6e4f-4aa1-905c-4cae8f97e0b2"),
+            PersonId = PersonMockedData.Person_3203_StGallen_5.Id,
+            Identifier = "41",
+            Canton = "SG",
+            Name = "Oberstufenschulkreis Riethüsli",
+            DomainOfInfluenceType = DomainOfInfluenceType.ScOs,
         };
 
     public static PersonDoiEntity PersonDoi_Person_3203_StGallen_5_PeopleCircle
@@ -441,6 +517,28 @@ public static class PersonDoiMockedData
             Identifier = "600",
             Name = "Schule Schönau",
             DomainOfInfluenceType = DomainOfInfluenceType.Sc,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_ElementarySchoolCircle
+        => new()
+        {
+            Id = Guid.Parse("0b42c8ab-c472-44a4-a7a1-ec9e3d482ecd"),
+            PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
+            Canton = "SG",
+            Identifier = "30",
+            Name = "Primarschulkreis Goldach",
+            DomainOfInfluenceType = DomainOfInfluenceType.ScPs,
+        };
+
+    public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_UpperSchoolCircle
+        => new()
+        {
+            Id = Guid.Parse("5b11ac79-4eb3-4c2b-a3b2-8d418aed2a10"),
+            PersonId = PersonMockedData.Person_3213_Goldach_1.Id,
+            Canton = "SG",
+            Identifier = "31",
+            Name = "Oberstufenschulkreis Goldach",
+            DomainOfInfluenceType = DomainOfInfluenceType.ScOs,
         };
 
     public static PersonDoiEntity PersonDoi_Person_3213_Goldach_1_TrafficCircle
@@ -649,6 +747,8 @@ public static class PersonDoiMockedData
             yield return PersonDoi_Person_3203_StGallen_2_CatholicCircle;
             yield return PersonDoi_Person_3203_StGallen_2_EvangelicCircle;
             yield return PersonDoi_Person_3203_StGallen_2_SchoolCircle;
+            yield return PersonDoi_Person_3203_StGallen_2_ElementarySchoolCircle;
+            yield return PersonDoi_Person_3203_StGallen_2_UpperSchoolCircle;
             yield return PersonDoi_Person_3203_StGallen_2_TrafficCircle;
             yield return PersonDoi_Person_3203_StGallen_2_ResidentialDistrictCircle;
             yield return PersonDoi_Person_3203_StGallen_2_PeopleCircle;
@@ -665,6 +765,8 @@ public static class PersonDoiMockedData
             yield return PersonDoi_Person_3203_StGallen_5_CatholicCircle;
             yield return PersonDoi_Person_3203_StGallen_5_EvangelicCircle;
             yield return PersonDoi_Person_3203_StGallen_5_SchoolCircle;
+            yield return PersonDoi_Person_3203_StGallen_5_ElementarySchoolCircle;
+            yield return PersonDoi_Person_3203_StGallen_5_UpperSchoolCircle;
             yield return PersonDoi_Person_3203_StGallen_5_TrafficCircle;
             yield return PersonDoi_Person_3203_StGallen_5_ResidentialDistrictCircle;
             yield return PersonDoi_Person_3203_StGallen_5_PeopleCircle;
@@ -673,6 +775,8 @@ public static class PersonDoiMockedData
             yield return PersonDoi_Person_3213_Goldach_1_CatholicCircle;
             yield return PersonDoi_Person_3213_Goldach_1_EvangelicCircle;
             yield return PersonDoi_Person_3213_Goldach_1_SchoolCircle;
+            yield return PersonDoi_Person_3213_Goldach_1_ElementarySchoolCircle;
+            yield return PersonDoi_Person_3213_Goldach_1_UpperSchoolCircle;
             yield return PersonDoi_Person_3213_Goldach_1_TrafficCircle;
             yield return PersonDoi_Person_3213_Goldach_1_ResidentialDistrictCircle;
             yield return PersonDoi_Person_3213_Goldach_1_PeopleCircle;
@@ -690,6 +794,9 @@ public static class PersonDoiMockedData
             yield return PersonDoi_Person_9170_Auslaender_OriginNameWithOnCantonTG;
             yield return PersonDoi_Person_9170_RestrictedVoting_PoliticalCircle_Westen;
             yield return PersonDoi_Person_9170_RestrictedVoting_Origin1;
+            yield return PersonDoi_Person_3203_StGallen_Auslaender_Staatenlos_PoliticalCircle_Centrum;
+            yield return PersonDoi_Person_3203_StGallen_Auslaender_Staatenlos_CatholicCircle_Neudorf;
+            yield return PersonDoi_Person_3203_StGallen_Auslaender_Staatenlos_Origin1;
         }
     }
 }

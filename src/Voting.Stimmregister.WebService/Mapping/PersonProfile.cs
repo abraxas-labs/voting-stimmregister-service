@@ -33,7 +33,8 @@ public class PersonProfile : Profile
             .ForMember(dest => dest.IsBirthDateValidForVotingRights, opt => opt.Ignore())
             .ForMember(dest => dest.IsNationalityValidForVotingRights, opt => opt.Ignore())
             .ForMember(dest => dest.Actuality, opt => opt.Ignore())
-            .ForMember(dest => dest.ActualityDate, opt => opt.Ignore());
+            .ForMember(dest => dest.ActualityDate, opt => opt.Ignore())
+            .ForMember(dest => dest.Origins, opt => opt.Ignore());
 
         CreateMap<PersonEntity, ECollectingPersonEntityModel>()
             .ForMember(dest => dest.IsVotingAllowed, opt => opt.Ignore())
@@ -41,7 +42,8 @@ public class PersonProfile : Profile
             .ForMember(dest => dest.IsNationalityValidForVotingRights, opt => opt.Ignore())
             .ForMember(dest => dest.Actuality, opt => opt.Ignore())
             .ForMember(dest => dest.ActualityDate, opt => opt.Ignore())
-            .ForMember(dest => dest.Age, opt => opt.Ignore());
+            .ForMember(dest => dest.Age, opt => opt.Ignore())
+            .ForMember(dest => dest.Origins, opt => opt.Ignore());
 
         CreateMap<IEnumerable<string>, Proto.V1.Services.Models.ValidationResultModel>()
             .ForMember(dest => dest.Messages, opt => opt.MapFrom(src => src));

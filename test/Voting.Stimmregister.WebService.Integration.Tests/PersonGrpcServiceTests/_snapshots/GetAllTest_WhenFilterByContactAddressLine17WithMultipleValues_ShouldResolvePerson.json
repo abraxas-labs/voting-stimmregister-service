@@ -79,7 +79,10 @@
       "IsHouseholder": false,
       "ResidenceBuildingId": 0,
       "ResidenceApartmentId": 0,
-      "EVotingEmail": ""
+      "EVotingEmail": "",
+      "Origins": [
+        "Appenzell (AI)"
+      ]
     },
     {
       "Id": "118f61a6-7e85-49d4-ba10-237dcb6fa221",
@@ -157,7 +160,10 @@
       "IsHouseholder": false,
       "ResidenceBuildingId": 0,
       "ResidenceApartmentId": 0,
-      "EVotingEmail": ""
+      "EVotingEmail": "",
+      "Origins": [
+        "Gais (AR)"
+      ]
     }
   ]
 }

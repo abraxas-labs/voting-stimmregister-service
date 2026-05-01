@@ -1,7 +1,7 @@
 ﻿// (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
-using Ech0045_4_0;
+using Ech0045_6_0;
 using Voting.Lib.Common;
 
 namespace Voting.Stimmregister.Adapter.Ech.Mapping;

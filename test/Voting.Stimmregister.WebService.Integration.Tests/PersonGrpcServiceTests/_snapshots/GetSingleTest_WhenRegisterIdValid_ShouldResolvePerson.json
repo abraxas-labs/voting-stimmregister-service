@@ -78,7 +78,10 @@
     "IsHouseholder": true,
     "ResidenceBuildingId": 999999999,
     "ResidenceApartmentId": 999,
-    "EVotingEmail": ""
+    "EVotingEmail": "",
+    "Origins": [
+      "Teufen (AR)"
+    ]
   },
   "LatestDomainOfInfluences": [
     {

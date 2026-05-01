@@ -2,7 +2,7 @@
 // For license information see LICENSE file
 
 using Microsoft.Extensions.DependencyInjection;
-using Voting.Lib.Ech.Ech0045_4_0.DependencyInjection;
+using Voting.Lib.Ech.Ech0045_6_0.DependencyInjection;
 using Voting.Stimmregister.Abstractions.Adapter.Ech;
 using Voting.Stimmregister.Adapter.Ech.Configuration;
 using Voting.Stimmregister.Adapter.Ech.Converter;
@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
         return services
             .AddSingleton(config)
             .AddVotingLibEch(config)
-            .AddEch0045V4()
+            .AddEch0045V6()
             .AddSingleton<IEchService, EchService>()
             .AddSingleton<IPersonVoterMapping, PersonVoterMapping>();
     }

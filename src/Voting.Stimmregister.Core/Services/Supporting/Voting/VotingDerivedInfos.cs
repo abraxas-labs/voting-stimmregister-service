@@ -3,7 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Voting.Stimmregister.Domain.Constants;
+using Voting.Stimmregister.Domain.Enums;
 using Voting.Stimmregister.Domain.Models;
 
 namespace Voting.Stimmregister.Core.Services.Supporting.Voting;
@@ -23,6 +25,7 @@ public class VotingDerivedInfos : IVotingDerivedInfos
         person.IsNationalityValidForVotingRights = IsNationalityValidForVotingRights(person.Country);
         person.IsBirthDateValidForVotingRights = IsBirthDateValidForVotingRights(referenceKeyDate, person.DateOfBirth);
         person.IsVotingAllowed = IsVotingAllowed(person, referenceKeyDate);
+        person.Origins = GetOrigins(person);
     }
 
     private static bool IsNationalityValidForVotingRights(string? country)
@@ -56,5 +59,13 @@ public class VotingDerivedInfos : IVotingDerivedInfos
     private static bool IsReferenceKeyDateBeforeOrEqualDeletedDateOrNotDeleted(DateOnly referenceKeyDate, DateTime? deletedAtDate)
     {
         return deletedAtDate == null || referenceKeyDate.CompareTo(DateOnly.FromDateTime(deletedAtDate.Value)) <= 0;
+    }
+
+    private static List<string> GetOrigins(PersonEntityModel person)
+    {
+        return person.PersonDois
+            .Where(x => x.DomainOfInfluenceType == DomainOfInfluenceType.Og)
+            .Select(x => string.IsNullOrEmpty(x.Canton) ? x.Name : $"{x.Name} ({x.Canton})")
+            .ToList();
     }
 }

@@ -2,6 +2,7 @@
 // For license information see LICENSE file
 
 using System;
+using System.Collections.Generic;
 
 namespace Voting.Stimmregister.Domain.Models;
 
@@ -34,4 +35,10 @@ public class PersonEntityModel : PersonEntity
     /// Gets or sets the actuality date.
     /// </summary>
     public DateTime? ActualityDate { get; set; }
+
+    /// <summary>
+    /// Gets or sets the origins (all domain of influences with type OG)
+    /// Format: '{name} ({canton})'.
+    /// </summary>
+    public List<string> Origins { get; set; } = [];
 }
