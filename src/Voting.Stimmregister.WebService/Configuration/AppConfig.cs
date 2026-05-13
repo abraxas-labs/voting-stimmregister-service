@@ -54,6 +54,11 @@ public class AppConfig
     public Uri? SecureConnectApi { get; set; }
 
     /// <summary>
+    /// Gets or sets the gRPC service configuration.
+    /// </summary>
+    public GrpServiceConfig GrpcService { get; set; } = new();
+
+    /// <summary>
     /// Gets or sets the certificate pinning configuration.
     /// </summary>
     public CertificatePinningConfig CertificatePinning { get; set; } = new();
@@ -63,11 +68,6 @@ public class AppConfig
     /// as this could expose information about the internals of this service.
     /// </summary>
     public bool EnableDetailedErrors { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether grpc-web should be used or plain grpc.
-    /// </summary>
-    public bool EnableGrpcWeb { get; set; }
 
     /// <summary>
     /// Gets or sets a list of paths where language headers are getting ignored.
@@ -118,18 +118,6 @@ public class AppConfig
     /// Gets or sets the ech config.
     /// </summary>
     public EchConfig Ech { get; set; } = new(typeof(AppConfig).Assembly);
-
-    /// <summary>
-    /// Gets or sets the max grpc message size in MB, defaults to 25MB.
-    /// The import service is configured separately.
-    /// </summary>
-    public int MaxGrpcMessageSizeMb { get; set; } = 25;
-
-    /// <summary>
-    /// Gets the max grpc message size in Bytes.
-    /// The import service is configured separately.
-    /// </summary>
-    public int MaxGrpcMessageSizeBytes => MaxGrpcMessageSizeMb * 1024 * 1024;
 
     /// <summary>
     /// Gets or sets filter related configurations.

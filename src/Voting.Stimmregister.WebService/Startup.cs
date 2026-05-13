@@ -98,17 +98,21 @@ public class Startup
                 o.Interceptors.Add<ExceptionInterceptor>();
                 o.Interceptors.Add<LanguageInterceptor>();
                 o.Interceptors.Add<RequestProtoValidatorInterceptor>();
-                o.MaxReceiveMessageSize = AppConfig.MaxGrpcMessageSizeBytes;
+                o.MaxReceiveMessageSize = AppConfig.GrpcService.MaxGrpcMessageSizeBytes;
             });
 
         services.AddGrpcRequestLoggerInterceptor(_environment);
 
-        if (AppConfig.EnableGrpcWeb)
+        if (AppConfig.GrpcService.EnableGrpcWeb)
         {
             services.AddCors(_configuration);
         }
 
-        services.AddGrpcReflection();
+        if (AppConfig.GrpcService.EnableGrpcReflection)
+        {
+            services.AddGrpcReflection();
+        }
+
         services.AddProtoValidators();
         services.AddSwaggerGenerator(_configuration);
 
@@ -127,7 +131,7 @@ public class Startup
         app.UseHttpMetrics();
         app.UseGrpcMetrics();
 
-        if (AppConfig.EnableGrpcWeb)
+        if (AppConfig.GrpcService.EnableGrpcWeb)
         {
             app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
             app.UseCorsFromConfig();
@@ -183,7 +187,12 @@ public class Startup
     private void MapEndpoints(IEndpointRouteBuilder endpoints)
     {
         endpoints.MapControllers();
-        endpoints.MapGrpcReflectionService();
+
+        if (AppConfig.GrpcService.EnableGrpcReflection)
+        {
+            endpoints.MapGrpcReflectionService().RequireAuthorization();
+        }
+
         endpoints.MapGrpcService<PersonGrpcService>();
         endpoints.MapGrpcService<FilterGrpcService>();
         endpoints.MapGrpcService<ImportStatisticGrpcService>();

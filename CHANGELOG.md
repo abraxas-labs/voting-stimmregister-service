@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.31.0`)
+# ✨ Changelog (`v2.31.1`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.31.0
-Previous version ---- v2.28.2
+This version -------- v2.31.1
+Previous version ---- v2.31.0
 Initial version ----- v1.121.5
-Total commits ------- 10
+Total commits ------- 1
 ```
+
+## [v2.31.1] - 2026-05-08
+
+### 🆕 Added
+
+- add additional protection layer for grpc reflection service endpoint
 
 ## [v2.31.0] - 2026-04-28
 
