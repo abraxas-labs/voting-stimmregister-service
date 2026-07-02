@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper.Internal;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Voting.Lib.Iam.SecondFactor.Testing.Mocks;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Domain.Configuration;
@@ -32,6 +33,8 @@ public class CobraTgPersonImportRestTest : BaseImportRestTest
     protected override string ImportEndpointUrl => "v1/import/cobra-tg/persons";
 
     protected override string ValidFileName => "Cobra_Tg_Person_valid.csv";
+
+    protected override string ImportTenantId => VotingIamTenantIds.KTTG;
 
     public override async Task InitializeAsync()
     {
@@ -64,5 +67,27 @@ public class CobraTgPersonImportRestTest : BaseImportRestTest
         _importConfig.SupportedImportSourceSystemByCanton[Canton.TG].Remove(ImportSourceSystem.CobraTg);
         using var response = await PostFile(ManualImporterClient, GetTestFilePath(ValidFileName));
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task ShouldReturnForbiddenWhenSecondFactorTransactionNotVerified()
+    {
+        using var response = await PostFile(
+            TgManualImporterClient,
+            GetTestFilePath(ValidFileName),
+            SecondFactorTransactionServiceMock.UnverifiedTransactionId);
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task ShouldReturnForbiddenWhenReusingSameSecondFactorTransaction()
+    {
+        using (var firstResponse = await PostFile(TgManualImporterClient, GetTestFilePath(ValidFileName)))
+        {
+            firstResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        using var secondResponse = await PostFile(TgManualImporterClient, GetTestFilePath(ValidFileName));
+        secondResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 }

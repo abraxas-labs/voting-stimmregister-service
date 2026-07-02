@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
+using Microsoft.Extensions.Logging.Abstractions;
 using Voting.Stimmregister.WebService.Mapping;
 using Xunit;
 
@@ -13,11 +14,10 @@ public class MappingProfileUnitTests
     [Fact]
     public void WhenDomainOfInfluenceProfileConfigured_ShouldBeValid()
     {
-        var mapperConfiguration = new MapperConfiguration(configuration =>
-        {
-            configuration.EnableEnumMappingValidation();
-            configuration.AddProfile<DomainOfInfluenceProfile>();
-        });
+        var configExpr = new MapperConfigurationExpression();
+        configExpr.EnableEnumMappingValidation();
+        configExpr.AddProfile<DomainOfInfluenceProfile>();
+        var mapperConfiguration = new MapperConfiguration(configExpr, NullLoggerFactory.Instance);
 
         mapperConfiguration.AssertConfigurationIsValid();
     }
@@ -25,13 +25,12 @@ public class MappingProfileUnitTests
     [Fact]
     public void WhenFilterProfileConfigured_ShouldBeValid()
     {
-        var mapperConfiguration = new MapperConfiguration(configuration =>
-        {
-            configuration.EnableEnumMappingValidation();
-            configuration.AddProfile<ConverterProfile>();
-            configuration.AddProfile<FilterProfile>();
-            configuration.AddProfile<AuditInfoProfile>();
-        });
+        var configExpr = new MapperConfigurationExpression();
+        configExpr.EnableEnumMappingValidation();
+        configExpr.AddProfile<ConverterProfile>();
+        configExpr.AddProfile<FilterProfile>();
+        configExpr.AddProfile<AuditInfoProfile>();
+        var mapperConfiguration = new MapperConfiguration(configExpr, NullLoggerFactory.Instance);
 
         mapperConfiguration.AssertConfigurationIsValid();
     }
@@ -39,12 +38,11 @@ public class MappingProfileUnitTests
     [Fact]
     public void WhenImportStatisticProfileConfigured_ShouldBeValid()
     {
-        var mapperConfiguration = new MapperConfiguration(configuration =>
-        {
-            configuration.AddProfile<ConverterProfile>();
-            configuration.AddProfile<ImportStatisticProfile>();
-            configuration.AddProfile<AuditInfoProfile>();
-        });
+        var configExpr = new MapperConfigurationExpression();
+        configExpr.AddProfile<ConverterProfile>();
+        configExpr.AddProfile<ImportStatisticProfile>();
+        configExpr.AddProfile<AuditInfoProfile>();
+        var mapperConfiguration = new MapperConfiguration(configExpr, NullLoggerFactory.Instance);
 
         mapperConfiguration.AssertConfigurationIsValid();
     }
@@ -52,15 +50,14 @@ public class MappingProfileUnitTests
     [Fact]
     public void WhenPersonProfileConfigured_ShouldBeValid()
     {
-        var mapperConfiguration = new MapperConfiguration(configuration =>
-        {
-            configuration.AddProfile<ConverterProfile>();
-            configuration.AddProfile<FilterProfile>();
-            configuration.AddProfile<PersonProfile>();
-            configuration.AddProfile<DomainOfInfluenceProfile>();
-            configuration.AddProfile<AuditInfoProfile>();
-            configuration.AddProfile<ECollectingProfile>();
-        });
+        var configExpr = new MapperConfigurationExpression();
+        configExpr.AddProfile<ConverterProfile>();
+        configExpr.AddProfile<FilterProfile>();
+        configExpr.AddProfile<PersonProfile>();
+        configExpr.AddProfile<DomainOfInfluenceProfile>();
+        configExpr.AddProfile<AuditInfoProfile>();
+        configExpr.AddProfile<ECollectingProfile>();
+        var mapperConfiguration = new MapperConfiguration(configExpr, NullLoggerFactory.Instance);
 
         mapperConfiguration.AssertConfigurationIsValid();
     }
@@ -68,11 +65,10 @@ public class MappingProfileUnitTests
     [Fact]
     public void WhenRegistrationStatisticConfigured_ShouldBeValid()
     {
-        var mapperConfiguration = new MapperConfiguration(configuration =>
-        {
-            configuration.EnableEnumMappingValidation();
-            configuration.AddProfile<RegistrationStatisticProfile>();
-        });
+        var configExpr = new MapperConfigurationExpression();
+        configExpr.EnableEnumMappingValidation();
+        configExpr.AddProfile<RegistrationStatisticProfile>();
+        var mapperConfiguration = new MapperConfiguration(configExpr, NullLoggerFactory.Instance);
 
         mapperConfiguration.AssertConfigurationIsValid();
     }

@@ -4,6 +4,8 @@
 using System.Security.Cryptography;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Voting.Lib.Iam.SecondFactor.Configuration;
+using Voting.Lib.Iam.SecondFactor.DependencyInjection;
 using Voting.Lib.Scheduler;
 using Voting.Stimmregister.Abstractions.Adapter.Models;
 using Voting.Stimmregister.Abstractions.Core.Configuration;
@@ -18,6 +20,7 @@ using Voting.Stimmregister.Core.HostedServices;
 using Voting.Stimmregister.Core.Queues;
 using Voting.Stimmregister.Core.Services;
 using Voting.Stimmregister.Core.Services.Caching;
+using Voting.Stimmregister.Core.Services.SecondFactor;
 using Voting.Stimmregister.Core.Services.Supporting.Signing;
 using Voting.Stimmregister.Core.Services.Supporting.Signing.PayloadBuilder;
 using Voting.Stimmregister.Core.Services.Supporting.Voting;
@@ -112,6 +115,16 @@ public static class ServiceCollectionExtensions
             services.AddScheduledJob<ImportScheduledJob>(importsConfig.Job);
         }
 
+        return services;
+    }
+
+    public static IServiceCollection AddSecondFactorAuthentication(
+        this IServiceCollection services,
+        SecondFactorTransactionConfig config)
+    {
+        services.AddSecondFactorTransactionProvider<SecondFactorTransactionStorageService>(config);
+        services.AddScoped<IManualImportSecondFactorTransactionService, ManualImportSecondFactorService>();
+        services.AddScoped<ISecondFactorTransactionService, SecondFactorTransactionService>();
         return services;
     }
 

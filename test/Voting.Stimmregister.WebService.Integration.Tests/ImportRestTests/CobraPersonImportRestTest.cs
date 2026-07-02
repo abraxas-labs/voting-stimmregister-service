@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper.Internal;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Voting.Lib.Iam.SecondFactor.Testing.Mocks;
 using Voting.Lib.Testing.Utils;
 using Voting.Stimmregister.Abstractions.Adapter.Data.Repositories;
 using Voting.Stimmregister.Domain.Configuration;
@@ -65,5 +66,27 @@ public class CobraPersonImportRestTest : BaseImportRestTest
         _importConfig.SupportedImportSourceSystemByCanton[Canton.SG].Remove(ImportSourceSystem.Cobra);
         using var response = await PostFile(ManualImporterClient, GetTestFilePath(ValidFileName));
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task ShouldReturnForbiddenWhenSecondFactorTransactionNotVerified()
+    {
+        using var response = await PostFile(
+            ManualImporterClient,
+            GetTestFilePath(ValidFileName),
+            SecondFactorTransactionServiceMock.UnverifiedTransactionId);
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task ShouldReturnForbiddenWhenReusingSameSecondFactorTransaction()
+    {
+        using (var firstResponse = await PostFile(ManualImporterClient, GetTestFilePath(ValidFileName)))
+        {
+            firstResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        using var secondResponse = await PostFile(ManualImporterClient, GetTestFilePath(ValidFileName));
+        secondResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 }

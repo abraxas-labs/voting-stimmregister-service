@@ -7,6 +7,7 @@ using AutoMapper;
 using Grpc.Core;
 using Microsoft.AspNetCore.Http;
 using Voting.Lib.Iam.Exceptions;
+using Voting.Lib.Iam.SecondFactor.Exceptions;
 using Voting.Stimmregister.Core.Services.Supporting.Signing.Exceptions;
 using Voting.Stimmregister.Domain.Exceptions;
 
@@ -41,6 +42,9 @@ internal readonly struct ExceptionMapping
             NoDataException _ => new ExceptionMapping(StatusCode.Unavailable, StatusCodes.Status204NoContent),
             NotAuthenticatedException _ => new ExceptionMapping(StatusCode.Unauthenticated, StatusCodes.Status401Unauthorized),
             ForbiddenException _ => new ExceptionMapping(StatusCode.PermissionDenied, StatusCodes.Status403Forbidden),
+            SecondFactorTransactionNotVerifiedException => new ExceptionMapping(StatusCode.PermissionDenied, StatusCodes.Status403Forbidden, true),
+            SecondFactorTransactionDataChangedException => new ExceptionMapping(StatusCode.FailedPrecondition, StatusCodes.Status400BadRequest, true),
+            VerifySecondFactorTimeoutException => new ExceptionMapping(StatusCode.PermissionDenied, StatusCodes.Status403Forbidden, true),
             FluentValidation.ValidationException _ => new ExceptionMapping(StatusCode.InvalidArgument, StatusCodes.Status400BadRequest),
             EntityNotFoundException _ => new ExceptionMapping(StatusCode.NotFound, StatusCodes.Status404NotFound),
             InvalidSearchFilterCriteriaException _ => new ExceptionMapping(StatusCode.InvalidArgument, StatusCodes.Status400BadRequest),

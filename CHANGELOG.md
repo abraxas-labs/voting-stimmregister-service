@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.31.1`)
+# ✨ Changelog (`v2.32.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.31.1
-Previous version ---- v2.31.0
+This version -------- v2.32.0
+Previous version ---- v2.31.1
 Initial version ----- v1.121.5
-Total commits ------- 1
+Total commits ------- 2
 ```
+
+## [v2.32.0] - 2026-06-29
+
+### 🆕 Added
+
+- mfa for manual cobra uploads
+
+## [v2.31.2] - 2026-06-19
+
+### 🆕 Added
+
+- add AutoMapper license management
+
+### 🔄 Changed
+
+- bump AutoMapper version to v15.1.3
 
 ## [v2.31.1] - 2026-05-08
 

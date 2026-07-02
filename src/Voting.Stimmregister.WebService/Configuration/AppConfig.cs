@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Voting.Lib.Common.Net;
 using Voting.Lib.Iam.Configuration;
+using Voting.Lib.Iam.SecondFactor.Configuration;
 using Voting.Stimmregister.Abstractions.Core.Configuration;
 using Voting.Stimmregister.Adapter.Data.Configuration;
 using Voting.Stimmregister.Adapter.Ech.Configuration;
@@ -144,4 +145,14 @@ public class AppConfig
     /// Gets or sets the auth store configuration.
     /// </summary>
     public AuthStoreConfig AuthStore { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the automapper configuration.
+    /// </summary>
+    public AutoMapperConfig AutoMapper { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets second factor authentication settings used for manual file imports.
+    /// </summary>
+    public SecondFactorTransactionConfig SecondFactorAuthentication { get; set; } = new();
 }

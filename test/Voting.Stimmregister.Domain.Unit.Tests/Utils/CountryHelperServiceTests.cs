@@ -1,7 +1,9 @@
 ﻿// (c) Copyright by Abraxas Informatik AG
 // For license information see LICENSE file
 
+using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using Voting.Stimmregister.Domain.Mapping;
 using Voting.Stimmregister.Domain.Utils;
 using Xunit;
@@ -14,7 +16,9 @@ public class CountryHelperServiceTests
 
     public CountryHelperServiceTests()
     {
-        var mapper = new AutoMapper.MapperConfiguration(cfg => cfg.AddProfile<EchMappingProfile>()).CreateMapper();
+        var configExpr = new MapperConfigurationExpression();
+        configExpr.AddProfile<EchMappingProfile>();
+        var mapper = new AutoMapper.MapperConfiguration(configExpr, NullLoggerFactory.Instance).CreateMapper();
         _countryHelperService = new CountryHelperService(mapper);
     }
 

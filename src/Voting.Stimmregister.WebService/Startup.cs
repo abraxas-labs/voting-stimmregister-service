@@ -61,6 +61,7 @@ public class Startup
         services.AddWebServiceServices(AppConfig);
         services.AddDomainServices(AppConfig.Imports);
         services.AddCoreServices(AppConfig.MemoryCache, AppConfig.Filter, AppConfig.Person, AppConfig.Imports, AppConfig.Cleanup);
+        services.AddSecondFactorAuthentication(AppConfig.SecondFactorAuthentication);
         services.AddIamServices(AppConfig.SecureConnect);
         services.AddAdapterDataServices(AppConfig.Database, ConfigureDatabase);
         services.AddAdapterEch(AppConfig.Ech);
@@ -74,6 +75,7 @@ public class Startup
         services.AddAdapterHsmServices(AppConfig.Hsm, AppConfig.EnablePkcs11Mock);
         services.AddVotingLibPrometheusAdapter(new() { Interval = AppConfig.PrometheusAdapterInterval });
         services.AddAutoMapper(
+            cfg => cfg.LicenseKey = AppConfig.AutoMapper.LicenseKey,
             typeof(ArchMarker),
             typeof(Abstractions.Adapter.Markers.ArchMarker),
             typeof(Core.Markers.ArchMarker),
@@ -198,6 +200,7 @@ public class Startup
         endpoints.MapGrpcService<ImportStatisticGrpcService>();
         endpoints.MapGrpcService<RegistrationStatisticGrpcService>();
         endpoints.MapGrpcService<EcollectingGrpcService>();
+        endpoints.MapGrpcService<ImportGrpcService>();
     }
 
     private void ConfigureHealthChecks(IHealthChecksBuilder checks)

@@ -91,6 +91,8 @@ public class DataContext : DbContext, IDataContext
     /// <inheritdoc cref="IDataContext"/>
     public DbSet<BfsStatisticEntity> BfsStatistics { get; set; } = null!;
 
+    public DbSet<SecondFactorTransactionEntity> SecondFactorTransactions { get; set; } = null!;
+
     /// <summary>
     /// Saves changes async by calling <see cref="DbContext.SaveChangesAsync"/>.
     /// </summary>

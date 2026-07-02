@@ -77,6 +77,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPersonDoiRepository, PersonDoiRepository>()
             .AddScoped<ILastSearchParameterRepository, LastSearchParameterRepository>()
             .AddScoped<IBfsStatisticRepository, BfsStatisticRepository>()
+            .AddScoped<ISecondFactorTransactionRepository, SecondFactorTransactionRepository>()
             .AddVotingLibDatabase<DataContext>();
     }
 }

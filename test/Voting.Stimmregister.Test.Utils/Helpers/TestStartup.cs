@@ -29,6 +29,7 @@ public class TestStartup : Startup
             .AddMockedTimeProvider()
             .AddMockedClock()
             .AddVotingLibIamMocks()
+            .AddVotingLibIamSecondFactorMocks()
             .AddVotingLibCryptoProviderMock()
             .RemoveHostedServices()
             .RemoveAll<IAccessControlListDoiHostedService>()
