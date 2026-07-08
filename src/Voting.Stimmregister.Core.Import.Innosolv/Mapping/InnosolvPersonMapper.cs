@@ -118,10 +118,10 @@ internal class InnosolvPersonMapper : BasePersonMapper<PersonInfoType>
                     "BZ" => DomainOfInfluenceType.Bz, // Bezirk / Amt / Verwaltungskreis
                     "MU" => DomainOfInfluenceType.Mu, // Gemeinde
                     "SC" => DomainOfInfluenceType.Sc, // Schulgemeinde
-                    "SCPS" => DomainOfInfluenceType.ScPs, // Primarschulgemeinde
-                    "SCOS" => DomainOfInfluenceType.ScOs, // Oberstufenschulgemeinde
-                    "KIKAT" => DomainOfInfluenceType.KiKat, // Katholische Kirchgemeinde
-                    "KIEVA" => DomainOfInfluenceType.KiEva, // Evangelische Kirchgemeinde
+                    "SC_PS" or "SCPS" => DomainOfInfluenceType.ScPs, // Primarschulgemeinde
+                    "SC_OS" or "SCOS" => DomainOfInfluenceType.ScOs, // Oberstufenschulgemeinde
+                    "KI_KA" or "KIKAT" => DomainOfInfluenceType.KiKat, // Katholische Kirchgemeinde
+                    "KI_EV" or "KIEVA" => DomainOfInfluenceType.KiEva, // Evangelische Kirchgemeinde
                     "OG" => DomainOfInfluenceType.Og, // Ortsbürgergemeinde
                     "KO" => DomainOfInfluenceType.Ko, // Korporation
                     "SK" => DomainOfInfluenceType.Sk, // Stadtkreis

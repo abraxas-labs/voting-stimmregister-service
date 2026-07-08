@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.32.0`)
+# ✨ Changelog (`v2.32.1`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.32.0
-Previous version ---- v2.31.1
+This version -------- v2.32.1
+Previous version ---- v2.32.0
 Initial version ----- v1.121.5
-Total commits ------- 2
+Total commits ------- 1
 ```
+
+## [v2.32.1] - 2026-07-02
+
+### 🔄 Changed
+
+- extend district mapping definitions for innosolv importer
 
 ## [v2.32.0] - 2026-06-29
 
