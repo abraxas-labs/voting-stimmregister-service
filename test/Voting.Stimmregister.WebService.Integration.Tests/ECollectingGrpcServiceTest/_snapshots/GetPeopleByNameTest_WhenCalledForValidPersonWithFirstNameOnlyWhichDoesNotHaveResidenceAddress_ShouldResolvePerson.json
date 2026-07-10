@@ -1,0 +1,69 @@
+{
+  "People": [
+    {
+      "IsVotingAllowed": true,
+      "IsBirthDateValidForVotingRights": true,
+      "IsNationalityValidForVotingRights": true,
+      "RegisterId": "d13ea9e8-ce71-4d8f-9121-05bba13033a8",
+      "OfficialName": "Lavigne",
+      "FirstName": "Natalie",
+      "Sex": 3,
+      "DateOfBirth": {
+        "Seconds": 946512000,
+        "Nanos": 0
+      },
+      "Age": 20,
+      "MunicipalityName": "St. Gallen",
+      "MunicipalityId": 3203,
+      "ResidenceAddressStreet": "",
+      "ResidenceAddressHouseNumber": "",
+      "ResidenceAddressTown": "",
+      "ResidenceAddressZipCode": ""
+    },
+    {
+      "IsVotingAllowed": true,
+      "IsBirthDateValidForVotingRights": true,
+      "IsNationalityValidForVotingRights": true,
+      "RegisterId": "d13ea9e8-ce71-4d8f-9121-05bba13033a8",
+      "OfficialName": "Lavigne",
+      "FirstName": "Natalie",
+      "Sex": 3,
+      "DateOfBirth": {
+        "Seconds": 946512000,
+        "Nanos": 0
+      },
+      "Age": 20,
+      "MunicipalityName": "St. Gallen",
+      "MunicipalityId": 3203,
+      "ResidenceAddressStreet": "Achslenstr.",
+      "ResidenceAddressHouseNumber": "3",
+      "ResidenceAddressTown": "St. Gallen",
+      "ResidenceAddressZipCode": "9016"
+    },
+    {
+      "IsVotingAllowed": false,
+      "IsBirthDateValidForVotingRights": false,
+      "IsNationalityValidForVotingRights": true,
+      "RegisterId": "fdc6cdb4-58b0-4e07-97cd-c52437d2eeff",
+      "OfficialName": "Lavigne",
+      "FirstName": "Natalie",
+      "Sex": 3,
+      "DateOfBirth": {
+        "Seconds": 1451433600,
+        "Nanos": 0
+      },
+      "Age": 0,
+      "MunicipalityName": "St. Gallen",
+      "MunicipalityId": 3203,
+      "ResidenceAddressStreet": "Achslenstr.",
+      "ResidenceAddressHouseNumber": "3",
+      "ResidenceAddressTown": "St. Gallen",
+      "ResidenceAddressZipCode": "9016"
+    }
+  ],
+  "PageInfo": {
+    "PageIndex": 0,
+    "PageSize": 10,
+    "TotalCount": 3
+  }
+}

@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.32.1`)
+# ✨ Changelog (`v2.32.2`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.32.1
-Previous version ---- v2.32.0
+This version -------- v2.32.2
+Previous version ---- v2.32.1
 Initial version ----- v1.121.5
 Total commits ------- 1
 ```
+
+## [v2.32.2] - 2026-07-07
+
+### 🔄 Changed
+
+- allow non-null residence information for e-collecting
 
 ## [v2.32.1] - 2026-07-02
 

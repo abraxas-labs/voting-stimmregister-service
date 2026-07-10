@@ -33,7 +33,8 @@ public class ECollectingProfile : Profile
 
         // domain to proto
         CreateMap<ECollectingPersonEntityModel, EcollectingServiceGetPersonIdByAhvn13Response>();
-        CreateMap<ECollectingPersonEntityModel, EcollectingServicePersonModel>();
+        CreateMap<ECollectingPersonEntityModel, EcollectingServicePersonModel>()
+            .ForAllMembers(opts => opts.Condition((_, _, srcMember) => srcMember != null));
         CreateMap<Page<ECollectingPersonEntityModel>, EcollectingServiceGetPeopleResponse>()
             .ForMember(dest => dest.People, opt => opt.MapFrom(src => src.Items))
             .ForMember(dest => dest.PageInfo, opt => opt.MapFrom(src => src));

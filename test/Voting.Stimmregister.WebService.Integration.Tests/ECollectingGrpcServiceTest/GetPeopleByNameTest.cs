@@ -57,6 +57,20 @@ public class GetPeopleByNameTest : BaseWriteableDbGrpcTest<EcollectingService.Ec
 
     [Fact]
 
+    public async Task WhenCalledForValidPersonWithFirstNameOnlyWhichDoesNotHaveResidenceAddress_ShouldResolvePerson()
+    {
+        var request = new EcollectingServiceGetPeopleByNameRequest
+        {
+            MunicipalityId = PersonMockedData.MunicipalityIdStGallen,
+            FirstName = "natalie",
+            ActualityDate = Timestamp.FromDateTime(new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
+        };
+        var response = await SgReaderClient.EcollectingServiceGetPeopleByNameAsync(request);
+        response.MatchSnapshot();
+    }
+
+    [Fact]
+
     public async Task WhenCalledForValidPersonWithFirstNamePrefixOnly_ShouldResolvePerson()
     {
         var request = new EcollectingServiceGetPeopleByNameRequest
