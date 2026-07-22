@@ -208,7 +208,9 @@ public class PersonRepository : DbRepository<DataContext, PersonEntity>, IPerson
                         (!q.DeletedDate.HasValue || searchModel.ActualityDate <= DateOnly.FromDateTime(q.DeletedDate.Value)) &&
                         (!searchModel.DateOfBirth.HasValue || q.DateOfBirth == searchModel.DateOfBirth) &&
                         (string.IsNullOrWhiteSpace(searchModel.OfficialName) || EF.Functions.ILike(q.OfficialName, $"{searchModel.OfficialName}%")) &&
-                        (string.IsNullOrWhiteSpace(searchModel.FirstName) || EF.Functions.ILike(q.FirstName, $"{searchModel.FirstName}%")) &&
+                        (string.IsNullOrWhiteSpace(searchModel.FirstNameOrCallName) ||
+                            EF.Functions.ILike(q.FirstName, $"{searchModel.FirstNameOrCallName}%") ||
+                            EF.Functions.ILike(q.CallName ?? string.Empty, $"{searchModel.FirstNameOrCallName}%")) &&
                         (string.IsNullOrWhiteSpace(searchModel.AddressStreet) || EF.Functions.ILike(q.ResidenceAddressStreet ?? string.Empty, $"{searchModel.AddressStreet}%")) &&
                         (string.IsNullOrWhiteSpace(searchModel.AddressHouseNumber) || EF.Functions.ILike(q.ResidenceAddressHouseNumber ?? string.Empty, $"{searchModel.AddressHouseNumber}%")));
 

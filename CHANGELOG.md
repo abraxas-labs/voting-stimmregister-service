@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.32.2`)
+# ✨ Changelog (`v2.33.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.32.2
-Previous version ---- v2.32.1
+This version -------- v2.33.0
+Previous version ---- v2.32.2
 Initial version ----- v1.121.5
 Total commits ------- 1
 ```
+
+## [v2.33.0] - 2026-07-21
+
+### 🆕 Added
+
+- ecollecting api: search people by first or call name
 
 ## [v2.32.2] - 2026-07-07
 

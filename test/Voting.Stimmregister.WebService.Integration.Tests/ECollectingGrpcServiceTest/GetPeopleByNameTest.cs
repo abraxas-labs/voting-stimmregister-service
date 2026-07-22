@@ -48,7 +48,7 @@ public class GetPeopleByNameTest : BaseWriteableDbGrpcTest<EcollectingService.Ec
         var request = new EcollectingServiceGetPeopleByNameRequest
         {
             MunicipalityId = PersonMockedData.MunicipalityIdStGallen,
-            FirstName = "meghana",
+            FirstNameOrCallName = "meghana",
             ActualityDate = Timestamp.FromDateTime(new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
         };
         var response = await SgReaderClient.EcollectingServiceGetPeopleByNameAsync(request);
@@ -62,7 +62,7 @@ public class GetPeopleByNameTest : BaseWriteableDbGrpcTest<EcollectingService.Ec
         var request = new EcollectingServiceGetPeopleByNameRequest
         {
             MunicipalityId = PersonMockedData.MunicipalityIdStGallen,
-            FirstName = "natalie",
+            FirstNameOrCallName = "natalie",
             ActualityDate = Timestamp.FromDateTime(new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
         };
         var response = await SgReaderClient.EcollectingServiceGetPeopleByNameAsync(request);
@@ -76,11 +76,25 @@ public class GetPeopleByNameTest : BaseWriteableDbGrpcTest<EcollectingService.Ec
         var request = new EcollectingServiceGetPeopleByNameRequest
         {
             MunicipalityId = PersonMockedData.MunicipalityIdStGallen,
-            FirstName = "megh",
+            FirstNameOrCallName = "megh",
             ActualityDate = Timestamp.FromDateTime(new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
         };
         var response = await SgReaderClient.EcollectingServiceGetPeopleByNameAsync(request);
         response.MatchSnapshot();
+    }
+
+    [Fact]
+
+    public async Task WhenCalledForValidPersonWithCallNamePrefixOnlyShouldResolvePerson()
+    {
+        var request = new EcollectingServiceGetPeopleByNameRequest
+        {
+            MunicipalityId = PersonMockedData.MunicipalityIdStGallen,
+            FirstNameOrCallName = "megg",
+            ActualityDate = Timestamp.FromDateTime(new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
+        };
+        var response = await SgReaderClient.EcollectingServiceGetPeopleByNameAsync(request);
+        response.People.Should().ContainSingle(x => x.FirstName == "Meghana");
     }
 
     [Fact]
@@ -90,7 +104,7 @@ public class GetPeopleByNameTest : BaseWriteableDbGrpcTest<EcollectingService.Ec
         var request = new EcollectingServiceGetPeopleByNameRequest
         {
             MunicipalityId = PersonMockedData.MunicipalityIdStGallen,
-            FirstName = "ghana",
+            FirstNameOrCallName = "ghana",
             ActualityDate = Timestamp.FromDateTime(new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
         };
         var response = await SgReaderClient.EcollectingServiceGetPeopleByNameAsync(request);
@@ -137,7 +151,7 @@ public class GetPeopleByNameTest : BaseWriteableDbGrpcTest<EcollectingService.Ec
         var request = new EcollectingServiceGetPeopleByNameRequest
         {
             MunicipalityId = PersonMockedData.MunicipalityIdStGallen,
-            FirstName = "meghana",
+            FirstNameOrCallName = "meghana",
             OfficialName = "bal",
             DateOfBirth = Timestamp.FromDateTime(new DateTime(1990, 11, 15, 0, 0, 0, DateTimeKind.Utc)),
             AddressStreet = "sturzeneggstr.",

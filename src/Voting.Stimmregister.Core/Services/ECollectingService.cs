@@ -67,12 +67,12 @@ public class ECollectingService : IECollectingService
 
     public async Task<Page<ECollectingPersonEntityModel>> GetPeopleByName(ECollectingPeopleSearchByNameParametersModel searchModel)
     {
-        if (string.IsNullOrWhiteSpace(searchModel.FirstName)
+        if (string.IsNullOrWhiteSpace(searchModel.FirstNameOrCallName)
             && string.IsNullOrWhiteSpace(searchModel.OfficialName)
             && string.IsNullOrWhiteSpace(searchModel.AddressStreet)
             && string.IsNullOrWhiteSpace(searchModel.AddressHouseNumber))
         {
-            throw new ValidationException($"At least one field out of [{nameof(searchModel.FirstName)}, {nameof(searchModel.OfficialName)}, {nameof(searchModel.AddressStreet)}, {nameof(searchModel.AddressHouseNumber)}] is required");
+            throw new ValidationException($"At least one field out of [{nameof(searchModel.FirstNameOrCallName)}, {nameof(searchModel.OfficialName)}, {nameof(searchModel.AddressStreet)}, {nameof(searchModel.AddressHouseNumber)}] is required");
         }
 
         if (searchModel.Pageable?.PageSize > MaxPageSize)

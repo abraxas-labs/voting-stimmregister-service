@@ -12,7 +12,7 @@ public class ECollectingPeopleSearchByNameParametersModel
 
     public string? OfficialName { get; set; }
 
-    public string? FirstName { get; set; }
+    public string? FirstNameOrCallName { get; set; }
 
     public DateOnly? DateOfBirth { get; set; }
 
